@@ -1,0 +1,1 @@
+Ce programme utilise la librairie qt4.

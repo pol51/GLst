@@ -1,0 +1,33 @@
+class Book
+!!!131489.cpp!!!	Book()
+this->auteur = "";
+this->titre = "";
+this->format = FRT_PAPIER;
+this->type = TYPE_BOOK;
+!!!131617.cpp!!!	~Book()
+return;
+!!!133665.cpp!!!	get_firstLetter() : char
+return (this->auteur.c_str())[0];
+!!!132641.cpp!!!	operator=(inout book : const Book*) : const Book*
+this->auteur = book->auteur;
+this->titre = book->titre;
+this->format = book->format;
+this->num = book->num;
+this->date = book->date;
+this->idBoite = book->idBoite;
+this->type = book->type;
+return this;
+!!!132769.cpp!!!	test_auteur(inout auteur : string) : const int
+if (auteur.size() == 0) return 0;
+
+return Utils::test_alpha(auteur);
+!!!132897.cpp!!!	test_titre(inout titre : string) : const int
+if (titre.size() == 0) return 0;
+
+return Utils::test_alpha(titre);
+!!!133025.cpp!!!	cmp_alpha(inout book1 : const Book*, inout book2 : const Book*) : const int
+if (Utils::str_compare(book1->get_auteur(), book2->get_auteur()) == 1)
+	return 1;
+if (Utils::str_compare(book1->get_auteur(), book2->get_auteur()) == 0)
+	return Utils::str_compare(book1->get_titre(), book2->get_titre());
+return -1;

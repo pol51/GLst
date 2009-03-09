@@ -1,0 +1,38 @@
+20060405-1	Premiere version utilisable
+20060407-1	Ajout de la date aux medias
+20060412-1	N° de boîte aux medias
+20060412-2	Qualité aux films
+			Genre aux films
+20060413-1	Modification des boîtes de saisie de dates
+20060413-2	L'affichage des infos sup est optionel
+20060424-1	Optmisation de la sauvegarde
+20060517-1	Ajout d'options (fichier des listes et style)
+20060617-1	Affichage du programme avant la fin du chargement des données
+			Correction d'un bug sur les lignes vides dans le fichier
+20060622-1	Ajout de la gestion des livres
+			Trie des données au chargement
+20060628-1	Réécriture du chargement des listes
+20060629-1	Fonction d'export en HTML
+20060708-1	Affichage des catégories non-vide selement dans l'export HTML
+			Affichage du nombre de media dans l'export HTML
+20060714-1	Ajout d'un index par lettres dans l'export HTML
+20060902-1	Optimisation du trie
+			Remise à zéro complète des formulaire d'ajout à chaque ouverture
+			Trie des éléments insenssible à la casse
+			Ajout d'un bouton de trie
+			Gestion "intelligente" du trie (il ne s'effectue que s'il est utile)
+			Modif du thème d'icones
+20060902-2	Changement d'algorithme de trie (passage au trie fusion) -> rapidité incomparable avec les versions antèrieures
+20060903-1	Inclusion des images dans l'executable
+			Changement de l'arborecence des sources et utilisation des fichiers ressources et projet de QT
+20061113-1	Trie automatique -> suppression du bouton de trie (vu la rapidité...)
+			Mémorisation du trie utilisé dans le fichier de configuration
+			Passage en QT4.2 pour le binaire Windows (nouvelles dll)
+20061216-1	Correction d'un bug dans l'export HTML
+20070812-1	Changement du trie alphabétique (insensible aux accents)
+			Pas de trie des listes lors de l'abandon de la modif
+			Ajout d'un menu contextuel (avec "ajouter à ...")
+			Passage en QT4.3 pour le binaire Windows (nouvelles dll)
+20070813-1	Changement des icones
+			Focus sur le titre lors de l'ajout à un auteur ou un artiste existant
+			Ajout dune boite de dialogue de recherche de fichier pour remplacer la saisie manuelle

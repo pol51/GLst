@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/icons" >
+        <file>button/accept.svg</file>
+        <file>button/cancel.svg</file>
+        <file>button/edit.svg</file>
+        <file>button/add.svg</file>
+        <file>button/remove.svg</file>
+        <file>button/finish.svg</file>
+        <file>button/misc.svg</file>
+        <file>button/www.svg</file>
+        <file>button/file.svg</file>
+    </qresource>
+</RCC>

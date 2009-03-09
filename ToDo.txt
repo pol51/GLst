@@ -1,0 +1,8 @@
++++	Tri insensible aux accents
++	Type de zik
+	Prêts et gestion des utilisateurs
+	Recherche avancée
+-	Statistiques
+--	Scan avec FreeDB (pour éviter la saisie)
+---	Sauvegarde en SQLite
+

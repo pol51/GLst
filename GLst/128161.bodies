@@ -1,0 +1,62 @@
+class Options
+!!!130849.cpp!!!	Options(in filename : string)
+this->filename = filename;
+this->style = "Plastique";
+this->liste = "listes.txt";
+!!!130977.cpp!!!	~Options()
+return;
+!!!131105.cpp!!!	save() : int
+string line;
+
+fstream f(this->filename.c_str(), fstream::out);
+
+if (f == NULL) return 0;
+
+f << "<style> " << this->style.c_str() << "\n";
+f << "<liste> " << this->liste.c_str() << "\n";
+f << "<sort_type> " << this->sortType << "\n";
+
+f.close();
+
+return 1;
+!!!131233.cpp!!!	load() : int
+char buffer[1024];
+char cat[32];
+char value[256];
+
+fstream f(this->filename.c_str(), fstream::in);
+
+if (f == 0) return 0;
+
+int i = 0;
+
+while (!f.eof())
+{
+	f.get(buffer, 1024, '\n');
+	f.ignore();
+	
+	if (sscanf(buffer, "%s %s", cat, value) != 2)
+		continue;
+
+	if (strcmp(cat, "<style>") == 0)
+	{
+		this->style = string(value);
+		i++;
+	}
+	
+	if (strcmp(cat, "<liste>") == 0)
+	{
+		this->liste = string(value);
+		i++;
+	}
+	
+	if (strcmp(cat, "<sort_type>") == 0)
+	{
+		sscanf(value, "%d", &(this->sortType));
+		i++;
+	}	
+}
+
+f.close();
+
+return i;

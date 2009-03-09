@@ -1,0 +1,35 @@
+class Zik
+!!!128432.cpp!!!	Zik()
+this->artiste = "";
+this->titre = "";
+this->nbCd = 0;
+this->type = TYPE_ZIK;
+!!!128560.cpp!!!	~Zik()
+return;
+!!!133537.cpp!!!	get_firstLetter() : char
+return (this->artiste.c_str())[0];
+!!!133424.cpp!!!	operator=(in zik : Zik*) : const Zik*
+this->artiste = zik->artiste;
+this->titre = zik->titre;
+this->nbCd = zik->nbCd;
+this->num = zik->num;
+this->date = zik->date;
+this->idBoite = zik->idBoite;
+this->type = zik->type;
+return this;
+!!!132528.cpp!!!	test_artiste(in artiste : string) : const int
+if (artiste.size() == 0) return 0;
+
+return Utils::test_alpha(artiste);
+!!!132656.cpp!!!	test_titre(in titre : string) : const int
+if (titre.size() == 0) return 0;
+
+return Utils::test_alpha(titre);
+!!!132784.cpp!!!	test_nbCd(in nbCd : int) : const int
+return 1;
+!!!134832.cpp!!!	cmp_alpha(in zik1 : Zik*, in zik2 : Zik*) : const int
+if (Utils::str_compare(zik1->get_artiste(), zik2->get_artiste()) == 1)
+	return 1;
+if (Utils::str_compare(zik1->get_artiste(), zik2->get_artiste()) == 0)
+	return Utils::str_compare(zik1->get_titre(), zik2->get_titre());
+return -1;
