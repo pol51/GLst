@@ -1,5 +1,5 @@
-glst (1.0.0-##DATE##-##DIST##1) ##DIST##; urgency=low
+glst (1.0.0-##DATE##) ##DIST##; urgency=low
 
-  * Initial release (LP: #231731)
+  * Initial release.
 
  -- Paul Labedan <pol51@free.fr>  ##RDATE##
