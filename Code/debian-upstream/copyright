@@ -1,0 +1,25 @@
+This package was debianized by Paul Labedan <pol51 @free.fr> on
+Sun, 27 May 2009 08:12:28 +0200.
+
+It was downloaded from http://www.labedan.fr
+
+Upstream Author: 
+
+   Paul Labedan <pol51@free.fr>
+
+Copyright: 
+
+ Copyright (C) 2009 Paul Labedan <pol51@free.fr>
+ Copyright (C) 1989, 1991 Free Software Foundation, Inc.
+ Copyright (C) 2005-2008 Trolltech ASA. All rights reserved.
+ 
+
+License:
+
+This makes the package is under LGPL:
+
+On Debian systems, the complete text of the GNU General
+Public License can be found in `/usr/share/common-licenses/LGPL'.
+
+The Debian packaging is (C) 2009, Paul Labedan <pol51@free.fr> and
+is licensed under the LGPL, see above.

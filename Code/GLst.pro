@@ -1,5 +1,6 @@
-TEMPLATE =	app
-TARGET =	GLst
+TEMPLATE = app
+TARGET = glst
+include(./install.pri)
 DEPENDPATH =	src \
 	src/gestion \
 	.
@@ -47,12 +48,19 @@ CONFIG +=	release \
 	warn_on \
 	qt
 RESOURCES =	res/res.qrc
-DESTDIR =	bin
+DESTDIR = ./
 MOC_DIR =	build/moc
 UI_DIR =	build/uic
 OBJECTS_DIR =   build/obj
 RCC_DIR =   build/rcc
 RC_FILE =  	GLst.rc
+
+unix {
+    DATADIR = $$PREFIX/share
+    PKGDATADIR = $$DATADIR/glst
+    DEFINES += DATADIR=\\\"$$DATADIR\\\" PKGDATADIR=\\\"$$PKGDATADIR\\\"
+}
+
 QT = 	core \
 	gui \
 	svg \

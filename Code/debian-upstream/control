@@ -1,0 +1,14 @@
+Source: glst
+Section: web
+Priority: extra
+Maintainer: Paul Labedan <pol51@free.fr>
+XSBC-Original-Maintainer: Paul Labedan <pol51@free.fr>
+Build-Depends: debhelper (>= 5), libqt4-dev (>= 4.4)
+Standards-Version: 3.7.3
+Homepage: http://www.labedan.fr
+
+Package: glst
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: Simple cross-platform list manager
+ GLst is a simple list manager using the Qt toolkit.

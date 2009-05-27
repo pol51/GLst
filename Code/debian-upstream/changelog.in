@@ -1,0 +1,5 @@
+glst (1.0.0-##DATE##-##DIST##1) ##DIST##; urgency=low
+
+  * Initial release (LP: #231731)
+
+ -- Paul Labedan <pol51@free.fr>  ##RDATE##
