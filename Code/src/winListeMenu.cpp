@@ -1,6 +1,8 @@
 #include "winListeMenu.h"
 
-#include "winListe.h"
+#include <winListe.h>
+
+#include <gestion/Options.h>
 
 winListeMenu::winListeMenu(winListe *parent)
   :QMenu(parent)
@@ -11,7 +13,7 @@ winListeMenu::winListeMenu(winListe *parent)
   actAdd = addAction(
     QIcon(":/icons/button/add.svg"), "&Ajouter");
   actAddTo = addAction(
-    QIcon(":/icons/button/add.svg"), "A&jouter Ã  ...");
+    QIcon(":/icons/button/add.svg"), "A&jouter à  ...");
   actMod = addAction(
     QIcon(":/icons/button/edit.svg"), "&Modifier");
   actDel = addAction(

@@ -1,33 +1,25 @@
 #include "widgetListe.h"
 
-#include "winListe.h"
-#include "winListeMenu.h"
+#include <winListe.h>
+#include <winListeMenu.h>
+
 #include <QMouseEvent>
 
-widgetListe::widgetListe(QWidget *parent)
-	:QListWidget(parent)
+widgetListe::widgetListe(QWidget *parent) :
+  QListWidget(parent),
+  _ctrl(NULL)
 {
-  this->ctrl = NULL;
-}
-
-widgetListe::~widgetListe()
-{
-}
-
-void widgetListe::setCtrl(winListe *ctrl)
-{
-	this->ctrl = ctrl;
 }
 
 void widgetListe::mousePressEvent(QMouseEvent *event)
 {
-	QListWidget::mousePressEvent(event);
-	
-	// partie spécifique
-	if (ctrl == NULL) return;
+  QListWidget::mousePressEvent(event);
 
-  this->ctrl->Menu->updateMenu();
-	
-	if (event->buttons() & Qt::RightButton)
-		this->ctrl->Menu->exec(event->globalPos());
+  // partie spécifique
+  if (!_ctrl) return;
+
+  _ctrl->Menu->updateMenu();
+
+  if (event->buttons() & Qt::RightButton)
+    _ctrl->Menu->exec(event->globalPos());
 }

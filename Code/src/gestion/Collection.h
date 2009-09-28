@@ -1,8 +1,9 @@
 #ifndef _COLLECTION_H
 #define _COLLECTION_H
 
-#include <QString>
 #include <QVector>
+
+class QString;
 
 class Media;
 class Zik;

@@ -1,8 +1,11 @@
 #include <QtGui>
 #include <QMessageBox>
 
-#include "winListe.h"
-#include "winBook.h"
+#include <winListe.h>
+#include <winBook.h>
+
+#include <gestion/Book.h>
+#include <gestion/Collection.h>
 
 winBook::winBook(winListe *ctrl, QWidget *parent) :
   QWidget(parent),

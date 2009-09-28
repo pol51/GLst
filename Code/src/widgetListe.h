@@ -7,15 +7,19 @@ class winListe;
 
 class widgetListe : public QListWidget
 {
-	Q_OBJECT
-	private:
-		winListe *ctrl;
-	public:
-		widgetListe(QWidget *parent = NULL);
-		virtual ~widgetListe();
-		void setCtrl(winListe *ctrl = NULL);
-	protected:
-		void mousePressEvent(QMouseEvent *event);
+  Q_OBJECT
+
+  private:
+    winListe *_ctrl;
+
+  public:
+    widgetListe(QWidget *parent = NULL);
+    virtual ~widgetListe() {}
+
+    void setCtrl(winListe *ctrl = NULL) { _ctrl = ctrl; }
+
+  protected:
+    void mousePressEvent(QMouseEvent *event);
 };
 
 #endif

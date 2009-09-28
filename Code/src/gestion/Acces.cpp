@@ -10,9 +10,9 @@
 #include <QStringList>
 
 //Constructeur
-Acces::Acces(Collection *collection)
+Acces::Acces(Collection *collection) :
+  _collection(collection)
 {
-  _collection = collection;
 }
 
 //Chargement du fichier
@@ -66,7 +66,7 @@ int Acces::load(const QString &filename)
         break;
     }
   }
-  while (1);
+  while (true);
 
   file.close();
 

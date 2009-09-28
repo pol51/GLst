@@ -1,40 +1,40 @@
-
 #include "Options.h"
 
 #include <QFile>
 #include <QStringList>
 
 //Constructeur
-Options::Options(const QString &filename)
-{
-  this->filename = filename;
-  style = "Plastique";
+Options::Options(const QString &filename) :
+  _filename(filename), _style("Plastique"),
   #ifdef Q_OS_SYMBIAN
-  liste = "E:/GLst/listes.txt";
+  _liste("E:/GLst/listes.txt"),
   #else
-  liste = "listes.txt";
+  _liste("listes.txt"),
   #endif
-  sortType = 2; //SORT_ALPHA
+  _sortType(2) // SORT_ALPHA
+{
 }
+
 //Ecrit le fichier d'options
-int Options::save()
+int Options::save() const
 {
   QString data(QString("<style> %1\n<liste> %2\n<sort_type> %3\n").
-    arg(style).arg(liste).arg(QString::number(sortType)));
+    arg(_style).arg(_liste).arg(QString::number(_sortType)));
 
-  QFile file(filename);
+  QFile file(_filename);
   if (file.open(QIODevice::WriteOnly))
   {
-    file.write(data.toUtf8());
+    file.write(data.toAscii());
     file.close();
     return 1;
   }
   return 0;
 }
+
 //Lit le fichier d'options
 int Options::load()
 {
-  QFile file(filename);
+  QFile file(_filename);
   if (!file.open(QIODevice::ReadOnly))
     return 0;
 
@@ -59,19 +59,19 @@ int Options::load()
 
     if (data.at(0) == "<style>")
     {
-      style = data.at(1).trimmed();
+      _style = data.at(1).trimmed();
       found++;
       continue;
     }
     if (data.at(0) == "<liste>")
     {
-      liste = data.at(1).trimmed();
+      _liste = data.at(1).trimmed();
       found++;
       continue;
     }
     if (data.at(0) == "<sort_type>")
     {
-      sortType = data.at(1).trimmed().toInt();
+      _sortType = data.at(1).trimmed().toInt();
       found++;
       continue;
     }

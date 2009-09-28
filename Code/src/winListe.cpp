@@ -8,16 +8,19 @@
 #include <widgetListe.h>
 
 #include <gestion/Utils.h>
+#include <gestion/Options.h>
+#include <gestion/Collection.h>
+#include <gestion/Acces.h>
+#include <gestion/Acces_HTML.h>
 
 #include <QtGui>
 #include <QMessageBox>
 
-winListe::winListe(QWidget *parent)
-  :QMainWindow(parent), moreInfo(false), currentType(TYPE_FILM)
+winListe::winListe(QWidget *parent) :
+  QMainWindow(parent),
+  moreInfo(false), currentType(TYPE_FILM)
 {
   ui.setupUi(this);
-
-  QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
 
   setWindowTitle("GLst");
 
@@ -188,16 +191,12 @@ int winListe::selectedId()
   int id;
   id = ui.listM->currentRow();
   int idn = 0;
-  Media* tmpM;
-  for (int i = 0; i < Listes->nb_Media(); i++)
-  {
-    tmpM = Listes->get_Media(i);
-    if (tmpM->get_type() == currentType)
+  for (int i = Listes->nb_Media(); --i >= 0; )
+    if (Listes->get_Media(i)->get_type() == currentType)
     {
       if (idn == id) return i;
       idn++;
     }
-  }
   return -1;
 }
 
@@ -208,7 +207,7 @@ void winListe::refreshLst()
 
 bool winListe::canAddToItem()
 {
-  Media * tmpMedia = Listes->get_Media(selectedId());
+  Media *tmpMedia = Listes->get_Media(selectedId());
   if (tmpMedia == NULL)
     return false;
   switch (tmpMedia->get_type())
@@ -239,17 +238,20 @@ void winListe::updateLst(int type)
   ui.actTypeBook->setChecked(currentType == TYPE_BOOK);
 
   Menu->updateMenu();
+  const int nb_Media = Listes->nb_Media();
 
   switch(currentType)
   {
     case TYPE_FILM:
       status.append("Film: ");
-      for (int i = 0; i < Listes->nb_Media(); i++)
+      for (int i = 0; i < nb_Media; i++)
       {
         tmpM = Listes->get_Media(i);
         if (tmpM->get_type() == TYPE_FILM)
         {
           nb_Elem++;
+          nb_Cd += ((Film*)tmpM)->get_nbCd();
+          nb_Dvd += ((Film*)tmpM)->get_nbDvd();
           line = ((Film*)tmpM)->get_nom();
           if (((Film*)tmpM)->get_nbCd() > 0)
             line.append(QString(" (%1CD)").
@@ -303,12 +305,13 @@ void winListe::updateLst(int type)
     case TYPE_ZIK:
       status.append("Zik: ");
       lblStat.setText("Zik: ");
-      for (int i = 0; i < Listes->nb_Media(); i++)
+      for (int i = 0; i < nb_Media; i++)
       {
         tmpM = Listes->get_Media(i);
         if (tmpM->get_type() == TYPE_ZIK)
         {
           nb_Elem++;
+          nb_Cd += ((Zik*)tmpM)->get_nbCd();
           line = ((Zik*)tmpM)->get_artiste();
           line.append(" - ");
           line.append(((Zik*)tmpM)->get_titre());
@@ -329,7 +332,7 @@ void winListe::updateLst(int type)
     case TYPE_BOOK:
       status.append("Livres: ");
       lblStat.setText("Livres: ");
-      for (int i = 0; i < Listes->nb_Media(); i++)
+      for (int i = 0; i < nb_Media; i++)
       {
         tmpM = Listes->get_Media(i);
         if (tmpM->get_type() == TYPE_BOOK)

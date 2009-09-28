@@ -1,7 +1,7 @@
 #ifndef __WINLISTE_H
 #define __WINLISTE_H
 
-#include "ui_Liste.h"
+#include <ui_Liste.h>
 
 #include <QtGui/QMainWindow>
 #include <QtGui/QLabel>
@@ -13,10 +13,10 @@ class winOptions;
 class winListeMenu;
 class widgetListe;
 
-#include <gestion/Options.h>
-#include <gestion/Collection.h>
-#include <gestion/Acces.h>
-#include <gestion/Acces_HTML.h>
+class Options;
+class Collection;
+class Acces;
+class Acces_HTML;
 
 #ifdef Q_OS_SYMBIAN
 # define OPTIONS_FILE "E:/GLst/glst.cfg"
@@ -38,15 +38,15 @@ class winListe : public QMainWindow
     bool moreInfo;
     int currentType;
 
-  private:
-    int selectedId();
-
   public:
     Options *Opt;
     Collection *Listes;
     Acces *ListDE;
     Acces_HTML *ListHTML;
     winListeMenu *Menu;
+
+  private:
+    int selectedId();
 
   private slots:
     void showOptions();

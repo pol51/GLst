@@ -4,6 +4,9 @@
 #include <winListe.h>
 #include <winZik.h>
 
+#include <gestion/Zik.h>
+#include <gestion/Collection.h>
+
 winZik::winZik(winListe *ctrl, QWidget *parent) :
   QWidget(parent),
   _ctrl(ctrl), _modif(-1)

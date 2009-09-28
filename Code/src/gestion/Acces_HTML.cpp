@@ -226,7 +226,7 @@ int Acces_HTML::save(const QString &filename) const
       "\n\t</body>\n</html>");
 
   //ecriture dans le fichier
-  file.write(f.toUtf8());
+  file.write(f.toAscii());
 
   //fermeture du fichier
   file.close();

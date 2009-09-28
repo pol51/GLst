@@ -2,79 +2,74 @@
 #include <QMessageBox>
 #include <QFileDialog>
 
-#include "winOptions.h"
-#include "winListe.h"
+#include <winOptions.h>
+#include <winListe.h>
 
-winOptions::winOptions(winListe *ctrl, QWidget *parent):QWidget(parent)
+#include <gestion/Options.h>
+#include <gestion/Collection.h>
+
+winOptions::winOptions(winListe *ctrl, QWidget *parent) :
+  QWidget(parent),
+  _ctrl(ctrl)
 {
-	this->ui.setupUi(this);
-	this->ctrl = ctrl;
-	
-	//evenements
-	QObject::connect(
-		this->ui.btnCancel, SIGNAL(clicked()),
-		this, SLOT(abandon()));
-	QObject::connect(
-		this->ui.btnOk, SIGNAL(clicked()),
-		this, SLOT(confirm()));
-	QObject::connect(
-		this->ui.btnSearchFile, SIGNAL(clicked()),
-		this, SLOT(searchFile()));
-	QObject::connect(
-		this->ui.cmbStyle, SIGNAL(activated(const QString &)),
-		this->ctrl, SLOT(changeStyle(const QString &)));
-	
-	//affectation des valeurs aux éléments
-	this->ui.cmbStyle->addItems(QStyleFactory::keys());
+  _ui.setupUi(this);
+
+  //evenements
+  connect(_ui.btnCancel, SIGNAL(clicked()),
+          this, SLOT(abandon()));
+  connect(_ui.btnOk, SIGNAL(clicked()),
+          this, SLOT(confirm()));
+  connect(_ui.btnSearchFile, SIGNAL(clicked()),
+          this, SLOT(searchFile()));
+  connect(_ui.cmbStyle, SIGNAL(activated(const QString &)),
+          _ctrl, SLOT(changeStyle(const QString &)));
+
+  //affectation des valeurs aux éléments
+  _ui.cmbStyle->addItems(QStyleFactory::keys());
 }
 
 void winOptions::resetFrm()
 {
-	this->ui.tabOptions->setCurrentIndex(0);
-	this->ui.txtFilename->setText(this->ctrl->Opt->get_liste());
-	
-	//recherche du nom du style dans la liste
-	int i = this->ui.cmbStyle->count();
-	while (
-		(this->ui.cmbStyle->currentText() !=
-		this->ctrl->Opt->get_style())
-		and (i >= 0)
-	)
-		this->ui.cmbStyle->setCurrentIndex(i--);
+  _ui.tabOptions->setCurrentIndex(0);
+  _ui.txtFilename->setText(_ctrl->Opt->get_liste());
+
+  //recherche du nom du style dans la liste
+  int i = _ui.cmbStyle->count();
+  while ((_ui.cmbStyle->currentText() != _ctrl->Opt->get_style()) && (i >= 0))
+    _ui.cmbStyle->setCurrentIndex(i--);
 }
 
 void winOptions::searchFile()
 {
-	QString fileName = "";
-	fileName = QFileDialog::getOpenFileName(this,
-		QObject::tr("Listes"),
-		this->ctrl->Opt->get_liste(),
-		QObject::tr("Fichiers listes (*.txt)"));
-	this->ui.txtFilename->setText(fileName);
+  _ui.txtFilename->setText(
+    QFileDialog::getOpenFileName(this,
+      QObject::tr("Listes"),
+      _ctrl->Opt->get_liste(),
+      QObject::tr("Fichiers listes (*.txt)")));
 }
 
 void winOptions::abandon()
 {
-	this->resetFrm();
-	this->ctrl->refreshStyle();
-	this->close();
+  resetFrm();
+  _ctrl->refreshStyle();
+  close();
 }
 
 void winOptions::confirm()
 {
-	//style
-	this->ctrl->Opt->set_style(this->ui.cmbStyle->currentText());
-	this->ctrl->Opt->save();
-	
-	//fichier
-	if (this->ctrl->Opt->get_liste() != this->ui.txtFilename->text())
-	{
-		this->ctrl->save();
-		this->ctrl->Listes->clear();
-		this->ctrl->Opt->set_liste(this->ui.txtFilename->text());
-		this->ctrl->load();
-		this->ctrl->sortList();
-	}
-	
-	this->abandon();
+  //style
+  _ctrl->Opt->set_style(_ui.cmbStyle->currentText());
+  _ctrl->Opt->save();
+
+  //fichier
+  if (_ctrl->Opt->get_liste() != _ui.txtFilename->text())
+  {
+    _ctrl->save();
+    _ctrl->Listes->clear();
+    _ctrl->Opt->set_liste(_ui.txtFilename->text());
+    _ctrl->load();
+    _ctrl->sortList();
+  }
+
+  abandon();
 }

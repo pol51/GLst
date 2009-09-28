@@ -1,8 +1,11 @@
 #include <QtGui>
 #include <QMessageBox>
 
-#include "winFilm.h"
-#include "winListe.h"
+#include <winFilm.h>
+#include <winListe.h>
+
+#include <gestion/Film.h>
+#include <gestion/Collection.h>
 
 winFilm::winFilm(winListe *ctrl, QWidget *parent) :
   QWidget(parent),
