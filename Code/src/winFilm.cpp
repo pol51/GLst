@@ -4,125 +4,107 @@
 #include "winFilm.h"
 #include "winListe.h"
 
-winFilm::winFilm(winListe *ctrl, QWidget *parent):QWidget(parent)
+winFilm::winFilm(winListe *ctrl, QWidget *parent) :
+  QWidget(parent),
+  _ctrl(ctrl), _modif(-1)
 {
-	this->ui.setupUi(this);
-	this->ctrl = ctrl;
-	QObject::connect(
-		this->ui.cancelButton, SIGNAL(clicked()),
-		this, SLOT(abandon()));
-	QObject::connect(
-		this->ui.okButton, SIGNAL(clicked()),
-		this, SLOT(confirm()));
-	this->resetFrm();
-	
-	//affectation des valeurs aux combobox
-	this->ui.cmbQualite->addItem("DvdRip");
-	this->ui.cmbQualite->addItem("Screener");
-	this->ui.cmbQualite->addItem("Dvd");
-	this->ui.cmbQualite->addItem("TVRip");
-	this->ui.cmbQualite->addItem("Publicitaire");
-	this->ui.cmbQualite->addItem("Dvd Screener");
-	this->ui.cmbQualite->addItem("Vcd");
-	this->ui.cmbGenre->addItem("Film");
-	this->ui.cmbGenre->addItem("Concert");
-	this->ui.cmbGenre->addItem("Spectacle");
-	this->ui.cmbGenre->addItem("Manga");
-	this->ui.cmbGenre->addItem("Dessin Animé");
-	this->ui.cmbGenre->addItem("Serie");
-	this->ui.cmbGenre->addItem("Documentaire");
-	
+  _ui.setupUi(this);
+
+  connect(_ui.cancelButton, SIGNAL(clicked()),
+          this, SLOT(abandon()));
+  connect(_ui.okButton, SIGNAL(clicked()),
+          this, SLOT(confirm()));
+
+  resetFrm();
+
+  //affectation des valeurs aux combobox
+  _ui.cmbQualite->addItem("DvdRip");
+  _ui.cmbQualite->addItem("Screener");
+  _ui.cmbQualite->addItem("Dvd");
+  _ui.cmbQualite->addItem("TVRip");
+  _ui.cmbQualite->addItem("Publicitaire");
+  _ui.cmbQualite->addItem("Dvd Screener");
+  _ui.cmbQualite->addItem("Vcd");
+  _ui.cmbGenre->addItem("Film");
+  _ui.cmbGenre->addItem("Concert");
+  _ui.cmbGenre->addItem("Spectacle");
+  _ui.cmbGenre->addItem("Manga");
+  _ui.cmbGenre->addItem("Dessin Animé");
+  _ui.cmbGenre->addItem("Serie");
+  _ui.cmbGenre->addItem("Documentaire");
 }
 
 void winFilm::resetFrm()
 {
-	this->modif = -1;
-	this->ui.cmbQualite->setCurrentIndex(0);
-	this->ui.cmbGenre->setCurrentIndex(0);
-	this->ui.txtNom->setFocus();
-	this->ui.txtNom->setText("");
-	this->ui.spinNbCd->setValue(1);
-	this->ui.spinNbDvd->setValue(0);
-	this->ui.spinIdBoite->setValue(0);
-	this->ui.date->setDate(QDate::currentDate());
+  _modif = -1;
+  _ui.cmbQualite->setCurrentIndex(0);
+  _ui.cmbGenre->setCurrentIndex(0);
+  _ui.txtNom->setFocus();
+  _ui.txtNom->setText("");
+  _ui.spinNbCd->setValue(1);
+  _ui.spinNbDvd->setValue(0);
+  _ui.spinIdBoite->setValue(0);
+  _ui.date->setDate(QDate::currentDate());
 }
 
 void winFilm::abandon()
 {
-	this->resetFrm();
-	this->close();
+  resetFrm();
+  close();
 }
 
 void winFilm::confirm()
 {
-	//test des valeurs
-	if (Film::test_nom(this->ui.txtNom->text().toStdString()) == 0)
-	{
-		QMessageBox::information(0, "Erreur de saisie", "Nom incorrect");
-		this->ui.txtNom->setFocus();
-		return;
-	}
-	if (Film::test_nbCd(this->ui.spinNbCd->value()) == 0)
-	{
-		QMessageBox::information(0, "Erreur de saisie", "Nombre de CD incorrect");
-		this->ui.spinNbCd->setFocus();
-		return;
-	}
-	if (Film::test_nbDvd(this->ui.spinNbDvd->value()) == 0)
-	{
-		QMessageBox::information(0, "Erreur de saisie", "Nombre de DVD incorrect");
-		this->ui.spinNbDvd->setFocus();
-		return;
-	}
-	if (Media::test_date(this->ui.date->date().toString("yyyyMMdd").toStdString()) == 0)
-	{
-		QMessageBox::information(0, "Erreur de saisie", "Date incorrecte");
-		this->ui.date->setFocus();
-		return;
-	}
-	
-	//affectation des valeurs
-	Film* tmpF;
-	if (this->modif < 0)
-		tmpF = (Film*)this->ctrl->Listes->add_Film();
-	else
-		tmpF = (Film*)this->ctrl->Listes->get_Media(modif);
-	tmpF->set_nom(this->ui.txtNom->text().toStdString());
-	tmpF->set_nbCd(this->ui.spinNbCd->value());
-	tmpF->set_nbDvd(this->ui.spinNbDvd->value());
-	tmpF->set_qualite(this->ui.cmbQualite->currentIndex());
-	tmpF->set_genre(this->ui.cmbGenre->currentIndex());
-	tmpF->set_idBoite(this->ui.spinIdBoite->value());
-	if (this->modif < 0)
-		tmpF->set_num(this->ctrl->Listes->nextref_Media(TYPE_FILM));
-	tmpF->set_date(this->ui.date->date().toString("yyyyMMdd").toStdString());
-    
-    //trie
-	this->ctrl->sortList();
-	
-	//sauvegarde
-    this->ctrl->save();
+  //test des valeurs
+  if (_ui.txtNom->text().isEmpty())
+  {
+    QMessageBox::information(0, "Erreur de saisie", "Nom incorrect");
+    _ui.txtNom->setFocus();
+    return;
+  }
 
-	//effacement et fermeture du formulaire
-	this->abandon();
+  //affectation des valeurs
+  Film* tmpF;
+  if (_modif < 0)
+    tmpF = _ctrl->Listes->add_Film();
+  else
+    tmpF = (Film*)_ctrl->Listes->get_Media(_modif);
+  tmpF->set_nom(_ui.txtNom->text());
+  tmpF->set_nbCd(_ui.spinNbCd->value());
+  tmpF->set_nbDvd(_ui.spinNbDvd->value());
+  tmpF->set_qualite(_ui.cmbQualite->currentIndex());
+  tmpF->set_genre(_ui.cmbGenre->currentIndex());
+  tmpF->set_idBoite(_ui.spinIdBoite->value());
+  if (_modif < 0)
+    tmpF->set_num(_ctrl->Listes->nextref_Media(TYPE_FILM));
+  tmpF->set_date(_ui.date->date().toString("yyyyMMdd"));
+
+    //trie
+  _ctrl->sortList();
+
+  //sauvegarde
+    _ctrl->save();
+
+  //effacement et fermeture du formulaire
+  abandon();
 }
 
-void winFilm::setVals(int idn)
+void winFilm::setVals(const int idn)
 {
-	//verif de l'id
-	if ((idn < 0) or (idn >= this->ctrl->Listes->nb_Media())) return;
-		
-	//recup des infos du media
-	Film* tmpF = (Film*)this->ctrl->Listes->get_Media(idn);
-	this->ui.txtNom->setText(tmpF->get_nom().c_str());
-	this->ui.spinNbCd->setValue(tmpF->get_nbCd());
-	this->ui.spinNbDvd->setValue(tmpF->get_nbDvd());
-	this->ui.spinIdBoite->setValue(tmpF->get_idBoite());
-	this->ui.cmbQualite->setCurrentIndex(tmpF->get_qualite());
-	this->ui.cmbGenre->setCurrentIndex(tmpF->get_genre());
-	QString date = tmpF->get_date().c_str();
-	this->ui.date->setDate(QDate::fromString(date, "yyyyMMdd"));
-	
-	//definition du mode modif
-	this->modif = idn;
+  //verif de l'id
+  if ((idn < 0) or (idn >= _ctrl->Listes->nb_Media())) return;
+
+  //recup des infos du media
+  Film* tmpF = (Film*)_ctrl->Listes->get_Media(idn);
+  _ui.txtNom->setText(tmpF->get_nom());
+  _ui.spinNbCd->setValue(tmpF->get_nbCd());
+  _ui.spinNbDvd->setValue(tmpF->get_nbDvd());
+  _ui.spinIdBoite->setValue(tmpF->get_idBoite());
+  _ui.cmbQualite->setCurrentIndex(tmpF->get_qualite());
+  _ui.cmbGenre->setCurrentIndex(tmpF->get_genre());
+  QString date = tmpF->get_date();
+  _ui.date->setDate(QDate::fromString(date, "yyyyMMdd"));
+
+  //definition du mode modif
+  _modif = idn;
 }

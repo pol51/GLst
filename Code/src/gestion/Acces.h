@@ -1,41 +1,36 @@
 #ifndef _ACCES_H
 #define _ACCES_H
 
-
-#include <string>
-using namespace std;
+#include <QString>
 
 class Collection;
 class Media;
-
-#include <iostream>
-#include <fstream>
-#include <iomanip>
-
-#include "Zik.h"
-#include "Film.h"
-#include "Book.h"
-#include "Media.h"
 
 //Acces aux données externes
 class Acces
 {
   protected:
-	//Collection
-	Collection * collection;
+    //Collection
+    Collection *_collection;
 
   public:
-	//Constructeur
-	Acces(Collection * collection);
-	//Destructeur
-	virtual ~Acces();
-	//Chargement du fichier
-	const int load(string filename);
-	//Sauvegarde du fichier
-	const int save(string filename);
-	//Formatage d'une ligne
-	string code(const Media* media);
-	//Décodage d'une ligne
-	Media* decode(string ligne);
+    //Constructeur
+    Acces(Collection *collection);
+
+    //Destructeur
+    virtual ~Acces() {}
+
+    //Chargement du fichier
+    virtual int load(const QString &filename);
+
+    //Sauvegarde du fichier
+    virtual int save(const QString &filename) const;
+
+  protected:
+    //Formatage d'une ligne
+    static QString code(const Media* media);
+
+    //Décodage d'une ligne
+    static Media* decode(const QString &ligne);
 };
 #endif

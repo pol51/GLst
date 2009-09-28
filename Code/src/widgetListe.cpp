@@ -7,7 +7,7 @@
 widgetListe::widgetListe(QWidget *parent)
 	:QListWidget(parent)
 {
-	this->ctrl = NULL;
+  this->ctrl = NULL;
 }
 
 widgetListe::~widgetListe()
@@ -25,6 +25,8 @@ void widgetListe::mousePressEvent(QMouseEvent *event)
 	
 	// partie spécifique
 	if (ctrl == NULL) return;
+
+  this->ctrl->Menu->updateMenu();
 	
 	if (event->buttons() & Qt::RightButton)
 		this->ctrl->Menu->exec(event->globalPos());

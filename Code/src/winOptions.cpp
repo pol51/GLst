@@ -31,13 +31,13 @@ winOptions::winOptions(winListe *ctrl, QWidget *parent):QWidget(parent)
 void winOptions::resetFrm()
 {
 	this->ui.tabOptions->setCurrentIndex(0);
-	this->ui.txtFilename->setText(this->ctrl->Opt->get_liste().c_str());
+	this->ui.txtFilename->setText(this->ctrl->Opt->get_liste());
 	
 	//recherche du nom du style dans la liste
 	int i = this->ui.cmbStyle->count();
 	while (
 		(this->ui.cmbStyle->currentText() !=
-		this->ctrl->Opt->get_style().c_str())
+		this->ctrl->Opt->get_style())
 		and (i >= 0)
 	)
 		this->ui.cmbStyle->setCurrentIndex(i--);
@@ -48,7 +48,7 @@ void winOptions::searchFile()
 	QString fileName = "";
 	fileName = QFileDialog::getOpenFileName(this,
 		QObject::tr("Listes"),
-		this->ctrl->Opt->get_liste().c_str(),
+		this->ctrl->Opt->get_liste(),
 		QObject::tr("Fichiers listes (*.txt)"));
 	this->ui.txtFilename->setText(fileName);
 }
@@ -63,17 +63,15 @@ void winOptions::abandon()
 void winOptions::confirm()
 {
 	//style
-	this->ctrl->Opt->set_style(this->ui.cmbStyle->currentText().toStdString());
+	this->ctrl->Opt->set_style(this->ui.cmbStyle->currentText());
 	this->ctrl->Opt->save();
 	
 	//fichier
-	if (strcmp(this->ctrl->Opt->get_liste().c_str(),
-		this->ui.txtFilename->text().toStdString().c_str()) != 0)
+	if (this->ctrl->Opt->get_liste() != this->ui.txtFilename->text())
 	{
 		this->ctrl->save();
 		this->ctrl->Listes->clear();
-		this->ctrl->Opt->set_liste(
-			this->ui.txtFilename->text().toStdString().c_str());
+		this->ctrl->Opt->set_liste(this->ui.txtFilename->text());
 		this->ctrl->load();
 		this->ctrl->sortList();
 	}

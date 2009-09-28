@@ -1,84 +1,47 @@
 
 #include "Utils.h"
 
-//Test sur une chaine alphanumérique
-const int Utils::test_alpha(string /*alpha*/)
-{
-	/*for (unsigned int i = 0; i < alpha.size(); i++)
-	{
-		int place = _valid_cars.find(alpha[i]);
-			if ((place < 0) or (place > int(_valid_cars.size()))) return 0;
-	}*/
-	
-	return 1;
-}
 //Test sur une chaine numérique
-const int Utils::test_numeric(string alpha)
+int Utils::test_numeric(const QString &alpha)
 {
-	for (unsigned int i = 0; i < alpha.size(); i++)
-	{
-		int place = _valid_numeric.find(alpha[i]);
-			if ((place < 0) or (place > int(_valid_cars.size()))) return 0;
-	}
-	
-	return 1;
+  bool valid = false;
+  alpha.toInt(&valid);
+
+  return valid?1:0;
 }
 //Mise en majuscule
-string Utils::upcase(string str)
+const QString Utils::upcase(const QString &str)
 {
-	string tmp = str;
-	
-	transform(
-		tmp.begin(),
-		tmp.end(),
-		tmp.begin(),
-		static_cast<int (*)(int)>(toupper));
-	
-	return tmp;
+  QString tmp(str);
+
+  return tmp.toUpper();
 }
+
 //Renvoie le caractère en majuscule
-const char Utils::upchar(char car)
+char Utils::upchar(const char car)
 {
-	if ((car >= 'a') and (car <= 'z'))
-		car -= ('a' - 'A');
-	
-	return car;
+  char tmp = car;
+  if ((car >= 'a') and (car <= 'z'))
+    tmp = car - ('a' - 'A');
+
+  return tmp;
 }
 //Transforme les espaces en underscores
-const string Utils::sp2und(string ligne)
+const QString Utils::sp2und(const QString &ligne)
 {
-	string tmp = ligne;
-	
-	for (int i = 0; i < (int)tmp.size(); i++)
-	{
-		if (tmp[i] == ' ')
-			tmp[i] = '_';
-	}
-	
-	return tmp;
+  QString tmp(ligne);
+
+  return tmp.replace(' ', '_');
 }
 //Transforme les underscores en espaces
-const string Utils::und2sp(string ligne)
+const QString Utils::und2sp(const QString &ligne)
 {
-	string tmp = ligne;
-	
-	for (int i = 0; i < (int)tmp.size(); i++)
-	{
-		if (tmp[i] == '_')
-			tmp[i] = ' ';
-	}
-	
-	return tmp;
+  QString tmp(ligne);
+
+  return tmp.replace('_', ' ');
 }
 //Comparaison lexicographique de deux chaines
-const int Utils::str_compare(string str1, string str2)
+int Utils::str_compare(const QString &str1, const QString &str2)
 {
-	if (str1 == str2)
-		return 0;
-	
-	if (lexicographical_compare(
-		str1.begin(), str1.end(),
-		str2.begin(), str2.end()))
-		return -1;
-	return 1;
+  return QString::compare(str1, str2, Qt::CaseInsensitive);
 }

@@ -3,48 +3,54 @@
 #include "winListe.h"
 
 winListeMenu::winListeMenu(winListe *parent)
-	:QMenu(parent)
+  :QMenu(parent)
 {
-	this->ctrl = parent;
-	
-	this->actAdd = this->addAction(
-		QIcon(":/icons/button/add.svg"), "&Ajouter");
-	this->actAddTo = this->addAction(
-		QIcon(":/icons/button/add.svg"), "&Ajouter à ...");
-	this->actMod = this->addAction(
-		QIcon(":/icons/button/edit.svg"), "&Modifier");
-	this->actDel = this->addAction(
-		QIcon(":/icons/button/remove.svg"), "&Supprimer");
-	
-	QObject::connect(
-		this->actAdd, SIGNAL(triggered()),
-		this->ctrl, SLOT(showAdd()));
-	QObject::connect(
-		this->actAddTo, SIGNAL(triggered()),
-		this->ctrl, SLOT(showAddTo()));
-	QObject::connect(
-		this->actMod, SIGNAL(triggered()),
-		this->ctrl, SLOT(showMod()));
-	QObject::connect(
-		this->actDel, SIGNAL(triggered()),
-		this->ctrl, SLOT(delMedia()));
-}
+  ctrl = parent;
+  setTitle("Media");
 
-winListeMenu::~winListeMenu()
-{
-	return;
+  actAdd = addAction(
+    QIcon(":/icons/button/add.svg"), "&Ajouter");
+  actAddTo = addAction(
+    QIcon(":/icons/button/add.svg"), "A&jouter Ã  ...");
+  actMod = addAction(
+    QIcon(":/icons/button/edit.svg"), "&Modifier");
+  actDel = addAction(
+    QIcon(":/icons/button/remove.svg"), "&Supprimer");
+  actSortByNews = addAction("News");
+  actSortByNews->setCheckable(true);
+  actSortByNews->setChecked(ctrl->Opt->get_sortType() == 2);
+  actDisplayMore = addAction("More Info");
+  actDisplayMore->setCheckable(true);
+
+  QObject::connect(
+    actAdd, SIGNAL(triggered()),
+    ctrl, SLOT(showAdd()));
+  QObject::connect(
+    actAddTo, SIGNAL(triggered()),
+    ctrl, SLOT(showAddTo()));
+  QObject::connect(
+    actMod, SIGNAL(triggered()),
+    ctrl, SLOT(showMod()));
+  QObject::connect(
+    actDel, SIGNAL(triggered()),
+    ctrl, SLOT(delMedia()));
+  QObject::connect(
+    actSortByNews, SIGNAL(triggered(bool)),
+    this, SLOT(sortListByNews(bool)));
+  QObject::connect(
+    actDisplayMore, SIGNAL(triggered(bool)),
+    ctrl, SLOT(displayMoreInfo(bool)));
 }
 
 void winListeMenu::updateMenu()
 {
-	if (this->ctrl->canAddToItem())
-		this->actAddTo->setVisible(true);
-	else
-		this->actAddTo->setVisible(false);
+  if (ctrl->canAddToItem())
+    actAddTo->setVisible(true);
+  else
+    actAddTo->setVisible(false);
 }
 
-QAction * winListeMenu::exec( const QPoint &p, QAction *action)
+void winListeMenu::sortListByNews(bool more)
 {
-	this->updateMenu();
-	return QMenu::exec(p, action);
+  ctrl->sortList(more?2:1);
 }

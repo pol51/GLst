@@ -32,19 +32,6 @@
     <number>9</number>
    </property>
    <item>
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>242</width>
-       <height>16</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item>
     <layout class="QGridLayout" >
      <property name="leftMargin" >
       <number>0</number>
@@ -67,7 +54,7 @@
      <item row="4" column="0" >
       <widget class="QLabel" name="label_2_3_2" >
        <property name="text" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Date&lt;/p>&lt;/body>&lt;/html></string>
+        <string>Date</string>
        </property>
       </widget>
      </item>
@@ -77,21 +64,21 @@
      <item row="0" column="0" >
       <widget class="QLabel" name="label" >
        <property name="text" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg 2; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:MS Shell Dlg;">Auteur&lt;/p>&lt;/body>&lt;/html></string>
+        <string>Auteur</string>
        </property>
       </widget>
      </item>
      <item row="2" column="0" >
       <widget class="QLabel" name="label_2_3" >
        <property name="text" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg 2; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:MS Shell Dlg;">Format&lt;/p>&lt;/body>&lt;/html></string>
+        <string>Format</string>
        </property>
       </widget>
      </item>
      <item row="3" column="0" >
       <widget class="QLabel" name="label_2_4" >
        <property name="text" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">N°Boite&lt;/p>&lt;/body>&lt;/html></string>
+        <string>N°Boite</string>
        </property>
       </widget>
      </item>
@@ -104,7 +91,7 @@
      <item row="1" column="0" >
       <widget class="QLabel" name="label_2" >
        <property name="text" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" color:#000000;">Titre&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
+        <string>Titre</string>
        </property>
       </widget>
      </item>

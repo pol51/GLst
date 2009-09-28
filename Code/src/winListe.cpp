@@ -1,408 +1,385 @@
 #include "winListe.h"
 
-#include "winFilm.h"
-#include "winZik.h"
-#include "winBook.h"
-#include "winOptions.h"
-#include "winListeMenu.h"
-#include "./gestion/Utils.h"
-#include "widgetListe.h"
+#include <winFilm.h>
+#include <winZik.h>
+#include <winBook.h>
+#include <winOptions.h>
+#include <winListeMenu.h>
+#include <widgetListe.h>
+
+#include <gestion/Utils.h>
 
 #include <QtGui>
 #include <QMessageBox>
 
-winListe::winListe(QWidget *parent):QWidget(parent)
+winListe::winListe(QWidget *parent)
+  :QMainWindow(parent), moreInfo(false), currentType(TYPE_FILM)
 {
-	this->ui.setupUi(this);
-	
-	//initialisation des dialogues de saisie
-	frmZik = new winZik(this);
-	frmFilm = new winFilm(this);
-	frmBook = new winBook(this);
-	
-	//initialisation du dialogue d'optionss
-	frmOptions = new winOptions(this);
-	
-	//initialisation des options
-	Opt = new Options(string(OPTIONS_FILE));
-	if (Opt->load() != NB_OPTIONS) Opt->save();
-	
-	//initaialisation de la collection et de son AccessDE
-	Listes = new Collection();
-	ListDE = new Acces(Listes);
-	ListHTML = new Acces_HTML(Listes);
-	
-	//initialisation du menu
-	Menu = new winListeMenu(this);
-	
-	//attribution du controlleur de this->ui.listM
-	this->ui.listM->setCtrl(this);
-	
-	//chargement du style
-	this->refreshStyle();
-	
-	//evenements
-	QObject::connect(
-		this->ui.btnAjout, SIGNAL(clicked()),
-		this, SLOT(showAdd()));
-	QObject::connect(
-		this->ui.btnQuit, SIGNAL(clicked()),
-		this, SLOT(closeAll()));
-	QObject::connect(
-		this->ui.comboType, SIGNAL(activated(int)),
-		this, SLOT(updateLst(int)));
-	QObject::connect(
-		this->ui.btnSuppr, SIGNAL(clicked()),
-		this, SLOT(delMedia()));
-	QObject::connect(
-		this->ui.btnModif, SIGNAL(clicked()),
-		this, SLOT(showMod()));
-	QObject::connect(
-		this->ui.listM, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
-		this, SLOT(showMod()));
-	QObject::connect(
-		this->ui.chkNews, SIGNAL(stateChanged(int)),
-		this, SLOT(sortList(int)));
-	QObject::connect(
-		this->ui.chkInfo, SIGNAL(stateChanged(int)),
-		this, SLOT(refreshLst()));
-	QObject::connect(
-		this->ui.btnOptions, SIGNAL(clicked()),
-		this, SLOT(showOptions()));
-	QObject::connect(
-		this->ui.btnExHTML, SIGNAL(clicked()),
-		this, SLOT(exportHTML()));
-	
-	//affectation des valeurs aux lments
-	originalPalette = QApplication::palette();
-	this->ui.comboType->addItem("Film");
-	this->ui.comboType->addItem("Zik");
-	this->ui.comboType->addItem("Livres");
-	this->ui.lblStat->setText("Chargement...");
-	if (Opt->get_sortType() == SORT_DATE)
-		this->ui.chkNews->setCheckState(Qt::Checked);
+  ui.setupUi(this);
+
+  QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+
+  setWindowTitle("GLst");
+
+  //initialisation des dialogues de saisie
+  frmZik = new winZik(this);
+  frmFilm = new winFilm(this);
+  frmBook = new winBook(this);
+
+  //initialisation du dialogue d'optionss
+  frmOptions = new winOptions(this);
+
+  //initialisation des options
+  Opt = new Options(OPTIONS_FILE);
+  if (Opt->load() != NB_OPTIONS) Opt->save();
+
+  //initaialisation de la collection et de son AccessDE
+  Listes = new Collection();
+  ListDE = new Acces(Listes);
+  ListHTML = new Acces_HTML(Listes);
+
+  //initialisation du menu des medias
+  Menu = new winListeMenu(this);
+  ui.menuBar->addMenu(Menu);
+
+  //attribution du controlleur de ui.listM
+  ui.listM->setCtrl(this);
+
+  //chargement du style
+  refreshStyle();
+
+  //evenements
+  connect(
+    ui.listM, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
+    this, SLOT(showMod()));
+
+  //evenements du menu
+  connect(
+    ui.actOptions, SIGNAL(triggered()),
+    this, SLOT(showOptions()));
+  connect(
+    ui.actExHTML, SIGNAL(triggered()),
+    this, SLOT(exportHTML()));
+  connect(
+    ui.actTypeFilms, SIGNAL(triggered()),
+    this, SLOT(updateLstFromMenu()));
+  connect(
+    ui.actTypeZik, SIGNAL(triggered()),
+    this, SLOT(updateLstFromMenu()));
+  connect(
+    ui.actTypeBook, SIGNAL(triggered()),
+    this, SLOT(updateLstFromMenu()));
+
+  //initialisation de la status bar
+  ui.statusBar->addWidget(&lblStat, 1);
+  lblStat.setText("Chargement...");
+
+  Menu->updateMenu();
 }
 
 void winListe::save()
 {
-	this->ListDE->save(Opt->get_liste().c_str());
+  ListDE->save(Opt->get_liste());
 }
 
 void winListe::load()
 {
-	this->ui.lblStat->setText("Chargement...");
-	this->ListDE->load(Opt->get_liste().c_str());
-	this->refreshLst();
+  lblStat.setText("Chargement...");
+  ListDE->load(Opt->get_liste());
+  refreshLst();
 }
 
 void winListe::exportHTML()
 {
-	this->ListHTML->save("Listes.html");
-	this->refreshLst();
-	this->ui.chkNews->setCheckState(Qt::Unchecked);
+  #ifdef Q_OS_SYMBIAN
+  ListHTML->save("E:/GLst/Listes.html");
+  #else
+  ListHTML->save("Listes.html");
+  #endif
+  refreshLst();
 }
 
 void winListe::changeStyle(const QString &styleName)
 {
-	QApplication::setStyle(QStyleFactory::create(styleName));
-//	QApplication::setPalette(QApplication::style()->standardPalette());
+  QApplication::setStyle(QStyleFactory::create(styleName));
 }
 
 void winListe::refreshStyle()
 {
-    QApplication::setStyle(QStyleFactory::create(Opt->get_style().c_str()));
-    //QApplication::setPalette(QApplication::style()->standardPalette());
+  QApplication::setStyle(QStyleFactory::create(Opt->get_style()));
 }
 
 void winListe::showAdd()
 {
-	closeAll();
-	switch(this->ui.comboType->currentIndex() + 1)
-	{
-		case TYPE_FILM:
-			this->frmFilm->show();
-			break;
-		case TYPE_ZIK:
-			this->frmZik->show();
-			break;
-		case TYPE_BOOK:
-			this->frmBook->show();
-			break;
-	}
+  closeAll();
+  QWidget *Form = NULL;
+  switch(currentType)
+  {
+    case TYPE_FILM: Form = frmFilm; break;
+    case TYPE_ZIK:  Form = frmZik;  break;
+    case TYPE_BOOK: Form = frmBook; break;
+  }
+  if (Form)
+    #ifdef Q_OS_SYMBIAN
+    Form->showMaximized();
+    #else
+    Form->show();
+    #endif
 }
 
 void winListe::showAddTo()
 {
-	closeAll();
-	int id = this->selectedId();
-	switch(this->ui.comboType->currentIndex() + 1)
-	{
-		case TYPE_ZIK:
-			this->frmZik->addTo(id);
-			this->frmZik->show();
-			break;
-		case TYPE_BOOK:
-			this->frmBook->addTo(id);
-			this->frmBook->show();
-			break;
-	}
+  int id = selectedId();
+  if (id < 0) return;
+  switch(currentType)
+  {
+    case TYPE_ZIK:  frmZik->addTo(id);  break;
+    case TYPE_BOOK: frmBook->addTo(id); break;
+  }
+  showAdd();
 }
 
 void winListe::showOptions()
 {
-	closeAll();
-	this->frmOptions->resetFrm();
-	this->frmOptions->show();
+  closeAll();
+  frmOptions->resetFrm();
+  #ifdef Q_OS_SYMBIAN
+  frmOptions->showMaximized();
+  #else
+  frmOptions->show();
+  #endif
 }
 
 void winListe::showMod()
 {
-	int id = this->selectedId();
-	if (id >= 0)
-	{
-		closeAll();
-		switch(this->ui.comboType->currentIndex() + 1)
-		{
-			case TYPE_FILM:
-				this->frmFilm->setVals(id);
-				this->frmFilm->show();
-				break;
-			case TYPE_ZIK:
-				this->frmZik->setVals(id);
-				this->frmZik->show();
-				break;
-			case TYPE_BOOK:
-				this->frmBook->setVals(id);
-				this->frmBook->show();
-				break;
-		}
-	}
+  int id = selectedId();
+  if (id < 0) return;
+
+  switch(currentType)
+  {
+    case TYPE_FILM: frmFilm->setVals(id); break;
+    case TYPE_ZIK:  frmZik->setVals(id);  break;
+    case TYPE_BOOK: frmBook->setVals(id); break;
+  }
+  showAdd();
 }
 
 void winListe::closeAll()
 {
-	this->frmFilm->close();
-	this->frmZik->close();
-	this->frmBook->close();
-	this->frmOptions->close();
+  frmFilm->close();
+  frmZik->close();
+  frmBook->close();
+  frmOptions->close();
 }
 
 void winListe::delMedia()
 {
-    int id = this->selectedId();
-	if (id >= 0)
-	{
-		this->Listes->del_Media(id);
-		this->refreshLst();
-	}
-	this->save();
+  int id = selectedId();
+  if (id >= 0)
+  {
+    Listes->del_Media(id);
+    refreshLst();
+  }
+  save();
 }
 
 int winListe::selectedId()
 {
-	int id;
-	id = this->ui.listM->currentRow();
-	int idn = 0;
-	Media* tmpM;
-	for (int i = 0; i < Listes->nb_Media(); i++)
-	{
-		tmpM = Listes->get_Media(i);
-		if (tmpM->get_type() == (this->ui.comboType->currentIndex() + 1))
-			if (idn == id)
-				return i;
-			else
-				idn++;
-	}
-	return -1;
+  int id;
+  id = ui.listM->currentRow();
+  int idn = 0;
+  Media* tmpM;
+  for (int i = 0; i < Listes->nb_Media(); i++)
+  {
+    tmpM = Listes->get_Media(i);
+    if (tmpM->get_type() == currentType)
+    {
+      if (idn == id) return i;
+      idn++;
+    }
+  }
+  return -1;
 }
 
 void winListe::refreshLst()
 {
-	this->updateLst(this->ui.comboType->currentIndex());
+  updateLst(currentType);
 }
 
 bool winListe::canAddToItem()
 {
-	Media * tmpMedia = Listes->get_Media(this->selectedId());
-	if (tmpMedia == NULL)
-		return false;
-	switch (tmpMedia->get_type())
-	{
-		case TYPE_ZIK:
-		case TYPE_BOOK:
-			return true;
-		case TYPE_FILM:
-		default:
-			return false;
-	}
+  Media * tmpMedia = Listes->get_Media(selectedId());
+  if (tmpMedia == NULL)
+    return false;
+  switch (tmpMedia->get_type())
+  {
+    case TYPE_ZIK:
+    case TYPE_BOOK:
+      return true;
+    case TYPE_FILM:
+    default:
+      return false;
+  }
 }
 
 void winListe::updateLst(int type)
 {
-	int info = 0;
-	if (this->ui.chkInfo->checkState()  == Qt::Checked)
-		info = 1;
-	int nb_Cd = 0;
-	int nb_Dvd = 0;
-	int nb_Elem = 0;
-	ostringstream status;
-	type++;
-	Media* tmpM;
-	this->ui.listM->clear();
-	QString line;
-	switch(type)
-	{
-		case TYPE_FILM:
-			status << "Film: ";
-			for (int i = 0; i < Listes->nb_Media(); i++)
-			{
-				tmpM = Listes->get_Media(i);
-				if (tmpM->get_type() == TYPE_FILM)
-				{
-					nb_Elem++;
-					line = QString(((Film*)tmpM)->get_nom().c_str());
-					if (((Film*)tmpM)->get_nbCd() > 0)
-					{
-						ostringstream tmp;
-						tmp << (((Film*)tmpM)->get_nbCd());
-						nb_Cd += (((Film*)tmpM)->get_nbCd());
-						line += " (";
-						line += tmp.str().c_str();
-						line += "CD)";
-					}
-					if (((Film*)tmpM)->get_nbDvd() > 0)
-					{
-						ostringstream tmp;
-						tmp << (((Film*)tmpM)->get_nbDvd());
-						nb_Dvd += (((Film*)tmpM)->get_nbDvd());
-						line += " (";
-						line += tmp.str().c_str();
-						line += "DVD)";
-					}
-					if (info > 0)
-					{
-						if (tmpM->get_idBoite() > 0)
-						{
-							ostringstream tmp;
-							tmp << (tmpM->get_idBoite());
-							line += " [#";
-							line += tmp.str().c_str();
-							line += "]";
-						}
-						switch(((Film*)tmpM)->get_qualite())
-						{
-							case QLT_DVDRIP:	line += " [DvdRip]";	break;
-							case QLT_SCR:		line += " [Scr]";		break;
-							case QLT_DVD:		line += " [Dvd]";		break;
-							case QLT_TVRIP:		line += " [TvRip]";		break;
-							case QLT_PUB:		line += " [Pub]";		break;
-							case QLT_DVDSCR:	line += " [DvdScr]";	break;
-							case QLT_VCD:		line += " [Vcd]";		break;
-						}
-						switch(((Film*)tmpM)->get_genre())
-						{
-							case GNR_FILM:		line += " <Film>";			break;
-							case GNR_LIVE:		line += " <Concert>";		break;
-							case GNR_SPECTACLE:	line += " <Spectacle>";		break;
-							case GNR_MANGA:		line += " <Manga>";			break;
-							case GNR_DESSIN_A:	line += " <Dessin Anim>";	break;
-							case GNR_SERIE:		line += " <Srie>";			break;
-							case GNR_DOC:		line += " <Documentaire>";	break;
-						}
-					}
-					this->ui.listM->addItem(line);
-				}
-			}
-			status << nb_Elem << " => " << nb_Cd << "CD + " << nb_Dvd << "DVD";
-			this->ui.lblStat->setText(status.str().c_str());
+  currentType = type;
+  int nb_Cd = 0;
+  int nb_Dvd = 0;
+  int nb_Elem = 0;
+  QString status;
+  Media* tmpM;
+  ui.listM->clear();
+  QString line;
+
+  //checkbox behaviour as options :)
+  ui.actTypeFilms->setChecked(currentType == TYPE_FILM);
+  ui.actTypeZik->setChecked(currentType == TYPE_ZIK);
+  ui.actTypeBook->setChecked(currentType == TYPE_BOOK);
+
+  Menu->updateMenu();
+
+  switch(currentType)
+  {
+    case TYPE_FILM:
+      status.append("Film: ");
+      for (int i = 0; i < Listes->nb_Media(); i++)
+      {
+        tmpM = Listes->get_Media(i);
+        if (tmpM->get_type() == TYPE_FILM)
+        {
+          nb_Elem++;
+          line = ((Film*)tmpM)->get_nom();
+          if (((Film*)tmpM)->get_nbCd() > 0)
+            line.append(QString(" (%1CD)").
+              arg(QString::number(((Film*)tmpM)->get_nbCd())));
+          if (((Film*)tmpM)->get_nbDvd() > 0)
+            line.append(QString(" (%1DVD)").
+              arg(QString::number(((Film*)tmpM)->get_nbDvd())));
+          if (moreInfo)
+          {
+            if (tmpM->get_idBoite() > 0)
+              line.append(QString(" [#%1]").
+                arg(QString::number(
+                ((Film*)tmpM)->get_idBoite())));
+            switch(((Film*)tmpM)->get_qualite())
+            {
+              case QLT_DVDRIP: line.append(" [DvdRip]"); break;
+              case QLT_SCR:    line.append(" [Scr]");    break;
+              case QLT_DVD:    line.append(" [Dvd]");    break;
+              case QLT_TVRIP:  line.append(" [TvRip]");  break;
+              case QLT_PUB:    line.append(" [Pub]");    break;
+              case QLT_DVDSCR: line.append(" [DvdScr]"); break;
+              case QLT_VCD:    line.append(" [Vcd]");    break;
+            }
+            switch(((Film*)tmpM)->get_genre())
+            {
+              case GNR_FILM:
+                line.append(" <Film>");         break;
+              case GNR_LIVE:
+                line.append(" <Concert>");      break;
+              case GNR_SPECTACLE:
+                line.append(" <Spectacle>");    break;
+              case GNR_MANGA:
+                line.append(" <Manga>");        break;
+              case GNR_DESSIN_A:
+                line.append(" <Dessin Anime>"); break;
+              case GNR_SERIE:
+                line.append(" <Serie>");        break;
+              case GNR_DOC:
+                line.append(" <Documentaire>"); break;
+            }
+          }
+          ui.listM->addItem(line);
+        }
+      }
+      status.append(QString("%1 => %2CD + %3DVD").
+        arg(QString::number(nb_Elem)).
+        arg(QString::number(nb_Cd)).
+        arg(QString::number(nb_Dvd)));
+      lblStat.setText(status);
             break;
-		case TYPE_ZIK:
-			status << "Zik: ";
-			this->ui.lblStat->setText("Zik: ");
-			for (int i = 0; i < Listes->nb_Media(); i++)
-			{
-				tmpM = Listes->get_Media(i);
-				if (tmpM->get_type() == TYPE_ZIK)
-				{
-					nb_Elem++;
-					line = QString(((Zik*)tmpM)->get_artiste().c_str());
-					line += " - ";
-					line += QString(((Zik*)tmpM)->get_titre().c_str());
-					if (((Zik*)tmpM)->get_nbCd() > 0)
-					{
-						ostringstream tmp;
-						tmp << (((Zik*)tmpM)->get_nbCd());
-						nb_Cd += (((Zik*)tmpM)->get_nbCd());
-						line += " (";
-						line += tmp.str().c_str();
-						line += "CD)";
-					}
-					if (info > 0)
-						if (tmpM->get_idBoite() > 0)
-						{
-							ostringstream tmp;
-							tmp << (tmpM->get_idBoite());
-							line += " [#";
-							line += tmp.str().c_str();
-							line += "]";
-						}
-					this->ui.listM->addItem(line);
-				}
-			}
-			status << nb_Elem << " => " << nb_Cd << "CD";
-			this->ui.lblStat->setText(status.str().c_str());
+    case TYPE_ZIK:
+      status.append("Zik: ");
+      lblStat.setText("Zik: ");
+      for (int i = 0; i < Listes->nb_Media(); i++)
+      {
+        tmpM = Listes->get_Media(i);
+        if (tmpM->get_type() == TYPE_ZIK)
+        {
+          nb_Elem++;
+          line = ((Zik*)tmpM)->get_artiste();
+          line.append(" - ");
+          line.append(((Zik*)tmpM)->get_titre());
+          if (((Zik*)tmpM)->get_nbCd() > 0)
+            line.append(QString(" (%1CD)").
+              arg(QString::number(((Zik*)tmpM)->get_nbCd())));
+          if (moreInfo && tmpM->get_idBoite() > 0)
+            line.append(QString(" [#%1]").
+              arg(QString::number(((Zik*)tmpM)->get_idBoite())));
+          ui.listM->addItem(line);
+        }
+      }
+      status.append(QString("%1 => %2CD").
+        arg(QString::number(nb_Elem)).
+        arg(QString::number(nb_Cd)));
+      lblStat.setText(status);
             break;
-		case TYPE_BOOK:
-			status << "Livres: ";
-			this->ui.lblStat->setText("Livres: ");
-			for (int i = 0; i < Listes->nb_Media(); i++)
-			{
-				tmpM = Listes->get_Media(i);
-				if (tmpM->get_type() == TYPE_BOOK)
-				{
-					nb_Elem++;
-					line = QString(((Book*)tmpM)->get_auteur().c_str());
-					line += " - ";
-					line += QString(((Book*)tmpM)->get_titre().c_str());
-					if (info > 0)
-						switch (((Book*)tmpM)->get_format())
-						{
-							case FRT_PAPIER:
-								line += QString(" [papier]");
-								break;
-							case FRT_NUMERIC:
-								line += QString(" [e-book]");
-								break;
-						}
-					this->ui.listM->addItem(line);
-				}
-			}
-			status << nb_Elem;
-			this->ui.lblStat->setText(status.str().c_str());
-            break;
-	}
+    case TYPE_BOOK:
+      status.append("Livres: ");
+      lblStat.setText("Livres: ");
+      for (int i = 0; i < Listes->nb_Media(); i++)
+      {
+        tmpM = Listes->get_Media(i);
+        if (tmpM->get_type() == TYPE_BOOK)
+        {
+          nb_Elem++;
+          line = ((Book*)tmpM)->get_auteur();
+          line.append(" - ");
+          line.append(((Book*)tmpM)->get_titre());
+          if (moreInfo)
+            switch (((Book*)tmpM)->get_format())
+            {
+              case FRT_PAPIER:  line.append(" [papier]"); break;
+              case FRT_NUMERIC: line.append(" [e-book]"); break;
+            }
+          ui.listM->addItem(line);
+        }
+      }
+      status.append(QString::number(nb_Elem));
+      lblStat.setText(status);
+      break;
+  }
+  Menu->updateMenu();
+}
+
+void winListe::updateLstFromMenu()
+{
+  const QObject *Sender = sender();
+  if (Sender == ui.actTypeFilms)
+    updateLst(TYPE_FILM);
+  if (Sender == ui.actTypeZik)
+    updateLst(TYPE_ZIK);
+  if (Sender == ui.actTypeBook)
+    updateLst(TYPE_BOOK);
 }
 
 void winListe::sortList()
 {
-	sortList(-1);
+  sortList(-1);
 }
 
 void winListe::sortList(int type)
 {
-	if (type != SORT_ALPHA && type != SORT_DATE);
-		type = this->ui.chkNews->checkState();
-	
-	if (type == Qt::Checked)
-		type = SORT_DATE;
-	else
-		type = SORT_ALPHA;
-	
-	// trie de la liste
-	this->Listes->sort_Media(type);
-	this->refreshLst();
-	
-	//sauvegarde dans les options
-	this->Opt->set_sortType(type);
-	this->Opt->save();
+  if (type < 0)
+    type = Opt->get_sortType();
+
+  // trie de la liste
+  Listes->sort_Media(type);
+  refreshLst();
+
+  //sauvegarde dans les options
+  Opt->set_sortType(type);
+  Opt->save();
 }

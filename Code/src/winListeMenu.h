@@ -7,19 +7,24 @@ class winListe;
 
 class winListeMenu : public QMenu
 {
-	Q_OBJECT
-	private:
-		winListe *ctrl;
-		QAction *actAdd;
-		QAction *actAddTo;
-		QAction *actDel;
-		QAction *actMod;
-	
-	public:
-		winListeMenu(winListe *parent);
-		virtual ~winListeMenu();
-		void updateMenu();
-		QAction *exec(const QPoint &p, QAction *action = 0);
+  Q_OBJECT
+
+  protected:
+    winListe *ctrl;
+    QAction *actAdd;
+    QAction *actAddTo;
+    QAction *actDel;
+    QAction *actMod;
+    QAction *actSortByNews;
+    QAction *actDisplayMore;
+
+  public:
+    winListeMenu(winListe *parent);
+    ~winListeMenu() {}
+    void updateMenu();
+
+  private slots:
+    void sortListByNews(bool value);
 };
 
 #endif

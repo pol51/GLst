@@ -37,13 +37,13 @@ void winZik::abandon()
 void winZik::confirm()
 {
 	//test des valeurs
-	if (Zik::test_artiste(this->ui.txtArtiste->text().toStdString()) == 0)
+	if (Zik::test_artiste(this->ui.txtArtiste->text()) == 0)
 	{
 		QMessageBox::information(0, "Erreur de saisie", "Artiste incorrect");
 		this->ui.txtArtiste->setFocus();
 		return;
 	}
-	if (Zik::test_titre(this->ui.txtTitre->text().toStdString()) == 0)
+	if (Zik::test_titre(this->ui.txtTitre->text()) == 0)
 	{
 		QMessageBox::information(0, "Erreur de saisie", "Titre incorrect");
 		this->ui.txtTitre->setFocus();
@@ -55,7 +55,7 @@ void winZik::confirm()
 		this->ui.spinNbCd->setFocus();
 		return;
 	}
-	if (Media::test_date(this->ui.date->date().toString("yyyyMMdd").toStdString()) == 0)
+	if (Media::test_date(this->ui.date->date().toString("yyyyMMdd")) == 0)
 	{
 		QMessageBox::information(0, "Erreur de saisie", "Date incorrecte");
 		this->ui.date->setFocus();
@@ -68,13 +68,13 @@ void winZik::confirm()
 		tmpZ = (Zik*)this->ctrl->Listes->add_Zik();
 	else
 		tmpZ = (Zik*)this->ctrl->Listes->get_Media(modif);
-	tmpZ->set_artiste(this->ui.txtArtiste->text().toStdString());
-	tmpZ->set_titre(this->ui.txtTitre->text().toStdString());
+	tmpZ->set_artiste(this->ui.txtArtiste->text());
+	tmpZ->set_titre(this->ui.txtTitre->text());
 	tmpZ->set_nbCd(this->ui.spinNbCd->value());
 	tmpZ->set_idBoite(this->ui.spinIdBoite->value());
 	if (this->modif < 0)
 		tmpZ->set_num(this->ctrl->Listes->nextref_Media(TYPE_ZIK));
-	tmpZ->set_date(this->ui.date->date().toString("yyyyMMdd").toStdString());
+	tmpZ->set_date(this->ui.date->date().toString("yyyyMMdd"));
 
 	//trie
 	this->ctrl->sortList();
@@ -93,11 +93,11 @@ void winZik::setVals(int idn)
 		
 	//recup des infos du media
 	Zik* tmpZ = (Zik*)this->ctrl->Listes->get_Media(idn);
-	this->ui.txtArtiste->setText(tmpZ->get_artiste().c_str());
-	this->ui.txtTitre->setText(tmpZ->get_titre().c_str());
+	this->ui.txtArtiste->setText(tmpZ->get_artiste());
+	this->ui.txtTitre->setText(tmpZ->get_titre());
 	this->ui.spinNbCd->setValue(tmpZ->get_nbCd());
 	this->ui.spinIdBoite->setValue(tmpZ->get_idBoite());
-	QString date = tmpZ->get_date().c_str();
+	QString date = tmpZ->get_date();
 	this->ui.date->setDate(QDate::fromString(date, "yyyyMMdd"));
 	
 	//definition du mode modif
@@ -111,7 +111,7 @@ void winZik::addTo(int idn)
 		
 	//recup des infos du media
 	Zik* tmpZ = (Zik*)this->ctrl->Listes->get_Media(idn);
-	this->ui.txtArtiste->setText(tmpZ->get_artiste().c_str());
+	this->ui.txtArtiste->setText(tmpZ->get_artiste());
 
 	// focus
 	this->ui.txtTitre->setFocus();

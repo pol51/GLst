@@ -1,56 +1,62 @@
 #ifndef _BOOK_H
 #define _BOOK_H
 
-
-#include "Media.h"
-#include <string>
-using namespace std;
+#include <gestion/Media.h>
 
 #define TYPE_BOOK 3
 
 typedef enum
 {
-	FRT_PAPIER,
-	FRT_NUMERIC
+  FRT_PAPIER,
+  FRT_NUMERIC
 } FRT;
 
 //Item de livre
 class Book : public Media
 {
   protected:
-	//Nom de l'auteur
-	string auteur;
-	//Titre du livre
-	string titre;
-	//Format du livre
-	int format;
+    //Nom de l'auteur
+    QString _auteur;
+    //Titre du livre
+    QString _titre;
+    //Format du livre
+    int _format;
 
   public:
-	//Constructeur
-	Book();
-	//Destructeur
-	~Book();
-	//Accesseur en lecture sur l'auteur
-	const string get_auteur() const;
-	//Accesseur en lecture sur le titre
-	const string get_titre() const;
-	//Accesseur en lecture sur le format
-	const int get_format() const;
-	//Renvoie la première lettre caractéristique du média
-	virtual char get_firstLetter();
-	//Accesseur en ecriture sur l'auteur
-	void set_auteur(string value);
-	//Accesseur en ecriture sur le titre
-	void set_titre(string value);
-	//Accesseur en ecriture sur le format
-	void set_format(int value);
-	//Operateur d'affectation
-	const Book* operator=(const Book* book);
-	//Test de l'auteur
-	static const int test_auteur(string auteur);
-	//Test du titre
-	static const int test_titre(string titre);
-	//Comparaison de 2 livres par leur auteur/titre
-	static const int cmp_alpha(const Book* book1, const Book* book2);
+    //Constructeur
+    Book();
+
+    //Destructeur
+    virtual ~Book() {}
+
+    //Accesseur en lecture sur l'auteur
+    const QString &get_auteur() const { return _auteur; }
+
+    //Accesseur en lecture sur le titre
+    const QString &get_titre() const { return _titre; }
+
+    //Accesseur en lecture sur le format
+    int get_format() const { return _format; }
+
+    //Renvoie la première lettre caractéristique du média
+    virtual char get_firstLetter() const { return _auteur[0].cell(); }
+
+    //Accesseur en ecriture sur l'auteur
+    void set_auteur(const QString &value) { _auteur = value; }
+
+    //Accesseur en ecriture sur le titre
+    void set_titre(const QString &value) { _titre = value; }
+
+    //Accesseur en ecriture sur le format
+    void set_format(int value) { _format = value; }
+
+    //Test de l'auteur
+    static int test_auteur(const QString &auteur);
+
+    //Test du titre
+    static int test_titre(const QString &titre);
+
+    //Comparaison de 2 livres par leur auteur/titre
+    static int cmp_alpha(const Book* book1, const Book* book2);
 };
 #endif

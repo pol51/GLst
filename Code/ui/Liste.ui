@@ -1,208 +1,119 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>mwListe</class>
- <widget class="QWidget" name="mwListe" >
-  <property name="geometry" >
+ <widget class="QMainWindow" name="mwListe">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>607</width>
-    <height>415</height>
+    <width>473</width>
+    <height>361</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>GLst</string>
+  <property name="windowTitle">
+   <string>MainWindow</string>
   </property>
-  <property name="windowIcon" >
-   <iconset/>
+  <property name="windowIcon">
+   <iconset resource="../res/res.qrc">
+    <normaloff>:/icons/button/edit.svg</normaloff>:/icons/button/edit.svg</iconset>
   </property>
-  <layout class="QVBoxLayout" >
-   <property name="spacing" >
-    <number>6</number>
-   </property>
-   <property name="leftMargin" >
-    <number>8</number>
-   </property>
-   <property name="topMargin" >
-    <number>8</number>
-   </property>
-   <property name="rightMargin" >
-    <number>8</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>8</number>
-   </property>
-   <item>
-    <layout class="QHBoxLayout" >
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QComboBox" name="comboType" />
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnAjout" >
-       <property name="text" >
-        <string>&amp;Ajouter</string>
-       </property>
-       <property name="icon" >
-        <iconset resource="../res/res.qrc" >:/icons/button/add.svg</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnSuppr" >
-       <property name="text" >
-        <string>&amp;Supprimer</string>
-       </property>
-       <property name="icon" >
-        <iconset resource="../res/res.qrc" >:/icons/button/remove.svg</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnModif" >
-       <property name="text" >
-        <string>&amp;Modifier</string>
-       </property>
-       <property name="icon" >
-        <iconset resource="../res/res.qrc" >:/icons/button/edit.svg</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="chkNews" >
-       <property name="text" >
-        <string>News</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QCheckBox" name="chkInfo" >
-       <property name="text" >
-        <string>Infos +</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>49</width>
-         <height>26</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnExHTML" >
-       <property name="text" >
-        <string>&amp;Exporter</string>
-       </property>
-       <property name="icon" >
-        <iconset resource="../res/res.qrc" >:/icons/button/www.svg</iconset>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="widgetListe" name="listM" >
-     <property name="cursor" stdset="0" >
-      <cursorShape>ArrowCursor</cursorShape>
-     </property>
-     <property name="alternatingRowColors" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" >
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QLabel" name="lblStat" >
-       <property name="text" >
-        <string>::</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType" >
-        <enum>QSizePolicy::Expanding</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnOptions" >
-       <property name="text" >
-        <string>&amp;Options</string>
-       </property>
-       <property name="icon" >
-        <iconset resource="../res/res.qrc" >:/icons/button/misc.svg</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnQuit" >
-       <property name="text" >
-        <string>&amp;Quitter</string>
-       </property>
-       <property name="icon" >
-        <iconset resource="../res/res.qrc" >:/icons/button/finish.svg</iconset>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-  </layout>
-  <widget class="QWidget" native="1" name="widget" >
-   <property name="geometry" >
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="widgetListe" name="listM">
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
+      <property name="sortingEnabled">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>377</y>
-     <width>621</width>
-     <height>28</height>
+     <x>0</x>
+     <y>0</y>
+     <width>473</width>
+     <height>23</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>&amp;Fichier</string>
+    </property>
+    <addaction name="actOptions"/>
+    <addaction name="actExHTML"/>
+    <addaction name="actQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>&amp;Affichage</string>
+    </property>
+    <addaction name="actTypeFilms"/>
+    <addaction name="actTypeZik"/>
+    <addaction name="actTypeBook"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuView"/>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actOptions">
+   <property name="icon">
+    <iconset resource="../res/res.qrc">
+     <normaloff>:/icons/button/misc.svg</normaloff>:/icons/button/misc.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Options</string>
+   </property>
+  </action>
+  <action name="actQuit">
+   <property name="icon">
+    <iconset resource="../res/res.qrc">
+     <normaloff>:/icons/button/finish.svg</normaloff>:/icons/button/finish.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Quitter</string>
+   </property>
+  </action>
+  <action name="actExHTML">
+   <property name="icon">
+    <iconset resource="../res/res.qrc">
+     <normaloff>:/icons/button/www.svg</normaloff>:/icons/button/www.svg</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Exporter</string>
+   </property>
+  </action>
+  <action name="actTypeFilms">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Films</string>
+   </property>
+  </action>
+  <action name="actTypeZik">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Musique</string>
+   </property>
+  </action>
+  <action name="actTypeBook">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Livres</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -211,35 +122,23 @@
    <header>src/widgetListe.h</header>
   </customwidget>
  </customwidgets>
- <tabstops>
-  <tabstop>listM</tabstop>
-  <tabstop>comboType</tabstop>
-  <tabstop>btnAjout</tabstop>
-  <tabstop>btnSuppr</tabstop>
-  <tabstop>btnModif</tabstop>
-  <tabstop>chkNews</tabstop>
-  <tabstop>chkInfo</tabstop>
-  <tabstop>btnExHTML</tabstop>
-  <tabstop>btnOptions</tabstop>
-  <tabstop>btnQuit</tabstop>
- </tabstops>
  <resources>
-  <include location="../res/res.qrc" />
+  <include location="../res/res.qrc"/>
  </resources>
  <connections>
   <connection>
-   <sender>btnQuit</sender>
-   <signal>clicked()</signal>
+   <sender>actQuit</sender>
+   <signal>triggered()</signal>
    <receiver>mwListe</receiver>
    <slot>close()</slot>
    <hints>
-    <hint type="sourcelabel" >
-     <x>564</x>
-     <y>382</y>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
     </hint>
-    <hint type="destinationlabel" >
-     <x>260</x>
-     <y>236</y>
+    <hint type="destinationlabel">
+     <x>270</x>
+     <y>210</y>
     </hint>
    </hints>
   </connection>

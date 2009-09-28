@@ -4,110 +4,103 @@
 #include "winListe.h"
 #include "winBook.h"
 
-winBook::winBook(winListe *ctrl, QWidget *parent):QWidget(parent)
+winBook::winBook(winListe *ctrl, QWidget *parent) :
+  QWidget(parent), _ctrl(ctrl), _modif(-1)
 {
-	this->ui.setupUi(this);
-	this->ctrl = ctrl;
-	QObject::connect(
-		this->ui.cancelButton, SIGNAL(clicked()),
-		this, SLOT(abandon()));
-	QObject::connect(
-		this->ui.okButton, SIGNAL(clicked()),
-		this, SLOT(confirm()));
-	this->resetFrm();
-	
-	//affectation des valeurs aux combobox
-	this->ui.cmbFormat->addItem("Papier");
-	this->ui.cmbFormat->addItem("E-Book");
+  _ui.setupUi(this);
+
+  connect(_ui.cancelButton, SIGNAL(clicked()),
+          this, SLOT(abandon()));
+  connect(_ui.okButton, SIGNAL(clicked()),
+          this, SLOT(confirm()));
+
+  resetFrm();
+
+  //affectation des valeurs aux combobox
+  _ui.cmbFormat->addItem("Papier");
+  _ui.cmbFormat->addItem("E-Book");
 }
 
 void winBook::resetFrm()
 {
-	this->modif = -1;
-	this->ui.cmbFormat->setCurrentIndex(0);
-	this->ui.txtAuteur->setFocus();
-	this->ui.txtAuteur->setText("");
-	this->ui.txtTitre->setText("");
-	this->ui.date->setDate(QDate::currentDate());
+  _ui.cmbFormat->setCurrentIndex(0);
+  _ui.txtAuteur->setFocus();
+  _ui.txtAuteur->setText("");
+  _ui.txtTitre->setText("");
+  _ui.date->setDate(QDate::currentDate());
 }
 
 void winBook::abandon()
 {
-	this->resetFrm();
-	this->close();
+  resetFrm();
+  close();
 }
 
 void winBook::confirm()
 {
-	//test des valeurs
-	if (Book::test_auteur(this->ui.txtAuteur->text().toStdString()) == 0)
-	{
-		QMessageBox::information(0, "Erreur de saisie", "Auteur incorrect");
-		this->ui.txtAuteur->setFocus();
-		return;
-	}
-	if (Book::test_titre(this->ui.txtTitre->text().toStdString()) == 0)
-	{
-		QMessageBox::information(0, "Erreur de saisie", "Titre incorrect");
-		this->ui.txtTitre->setFocus();
-		return;
-	}
-	if (Media::test_date(this->ui.date->date().toString("yyyyMMdd").toStdString()) == 0)
-	{
-		QMessageBox::information(0, "Erreur de saisie", "Date incorrecte");
-		this->ui.date->setFocus();
-		return;
-	}
-	
-	//affectation des valeurs
-	Book* tmpB;
-	if (this->modif < 0)
-		tmpB = (Book*)this->ctrl->Listes->add_Book();
-	else
-		tmpB = (Book*)this->ctrl->Listes->get_Media(modif);
-	tmpB->set_auteur(this->ui.txtAuteur->text().toStdString());
-	tmpB->set_titre(this->ui.txtTitre->text().toStdString());
-	tmpB->set_format(this->ui.cmbFormat->currentIndex());
-	if (this->modif < 0)
-		tmpB->set_num(this->ctrl->Listes->nextref_Media(TYPE_BOOK));
-	tmpB->set_date(this->ui.date->date().toString("yyyyMMdd").toStdString());
-	
-	//trie
-	this->ctrl->sortList();
-	
-	//sauvegarde
-    this->ctrl->save();
+  //test des valeurs
+  if (_ui.txtAuteur->text().isEmpty())
+  {
+    QMessageBox::information(0, "Erreur de saisie", "Auteur incorrect");
+    _ui.txtAuteur->setFocus();
+    return;
+  }
+  if (_ui.txtTitre->text().isEmpty())
+  {
+    QMessageBox::information(0, "Erreur de saisie", "Titre incorrect");
+    _ui.txtTitre->setFocus();
+    return;
+  }
 
-	//effacement et fermeture du formulaire
-	this->abandon();
+  //affectation des valeurs
+  Book* tmpB;
+  if (_modif < 0)
+    tmpB = (Book*)_ctrl->Listes->add_Book();
+  else
+    tmpB = (Book*)_ctrl->Listes->get_Media(_modif);
+  tmpB->set_auteur(_ui.txtAuteur->text());
+  tmpB->set_titre(_ui.txtTitre->text());
+  tmpB->set_format(_ui.cmbFormat->currentIndex());
+  if (_modif < 0)
+    tmpB->set_num(_ctrl->Listes->nextref_Media(TYPE_BOOK));
+  tmpB->set_date(_ui.date->date().toString("yyyyMMdd"));
+
+  //trie
+  _ctrl->sortList();
+
+  //sauvegarde
+  _ctrl->save();
+
+  //effacement et fermeture du formulaire
+  abandon();
 }
 
-void winBook::setVals(int idn)
+void winBook::setVals(const int idn)
 {
-	//verif de l'id
-	if ((idn < 0) or (idn >= this->ctrl->Listes->nb_Media())) return;
-	
-	//recup des infos du media
-	Book* tmpB = (Book*)this->ctrl->Listes->get_Media(idn);
-	this->ui.txtAuteur->setText(tmpB->get_auteur().c_str());
-	this->ui.txtTitre->setText(tmpB->get_titre().c_str());
-	this->ui.cmbFormat->setCurrentIndex(tmpB->get_format());
-	QString date = tmpB->get_date().c_str();
-	this->ui.date->setDate(QDate::fromString(date, "yyyyMMdd"));
-	
-	//definition du mode modif
-	this->modif = idn;
+  //verif de l'id
+  if ((idn < 0) or (idn >= _ctrl->Listes->nb_Media())) return;
+
+  //recup des infos du media
+  Book* tmpB = (Book*)_ctrl->Listes->get_Media(idn);
+  _ui.txtAuteur->setText(tmpB->get_auteur());
+  _ui.txtTitre->setText(tmpB->get_titre());
+  _ui.cmbFormat->setCurrentIndex(tmpB->get_format());
+  QString date = tmpB->get_date();
+  _ui.date->setDate(QDate::fromString(date, "yyyyMMdd"));
+
+  //definition du mode modif
+  _modif = idn;
 }
 
-void winBook::addTo(int idn)
+void winBook::addTo(const int idn)
 {
-	//verif de l'id
-	if ((idn < 0) or (idn >= this->ctrl->Listes->nb_Media())) return;
-	
-	//recup des infos du media
-	Book* tmpB = (Book*)this->ctrl->Listes->get_Media(idn);
-	this->ui.txtAuteur->setText(tmpB->get_auteur().c_str());
-	
-	// focus
-	this->ui.txtTitre->setFocus();
+  //verif de l'id
+  if ((idn < 0) or (idn >= _ctrl->Listes->nb_Media())) return;
+
+  //recup des infos du media
+  Book* tmpB = (Book*)_ctrl->Listes->get_Media(idn);
+  _ui.txtAuteur->setText(tmpB->get_auteur());
+
+  // focus
+  _ui.txtTitre->setFocus();
 }
