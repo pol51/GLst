@@ -1,7 +1,6 @@
 TEMPLATE = app
 TARGET = GLst
 DEPENDPATH += src \
-    src/gestion \
     .
 INCLUDEPATH += src \
     .
@@ -55,6 +54,7 @@ QT += core \
     gui \
     svg \
     xml
+
 symbian:TARGET.UID3 = 0xE6A388CF
 
 unix {

@@ -34,7 +34,7 @@ int Acces::load(const QString &filename)
     if (readSize == 0) continue;
     line = buffer;
 
-    //récupération du résultat de la ligne
+    //rÃ©cupÃ©ration du rÃ©sultat de la ligne
     med_src = decode(line);
 
     //test de ligne correcte
@@ -101,7 +101,7 @@ QString Acces::code(const Media* media)
     arg(QString::number(media->get_type())).
     arg(media->get_num());
 
-  //infos spécifiques
+  //infos spÃ©cifiques
   switch (media->get_type())
   {
     case TYPE_ZIK:
@@ -126,14 +126,14 @@ QString Acces::code(const Media* media)
       break;
   }
 
-  line.append(QString(" %1 %2").
+  line.append(QString(" %1 %2\n").
     arg(QString::number(media->get_idBoite())).
     arg(media->get_date()));
 
   return line;
 }
 
-//Décodage d'une ligne
+//DÃ©codage d'une ligne
 Media* Acces::decode(const QString &ligne)
 {
   //media temporaire
@@ -150,7 +150,7 @@ Media* Acces::decode(const QString &ligne)
   {
     case TYPE_ZIK:
       {
-        //test et récup
+        //test et rÃ©cup
         if (data.count() != 7)                        return NULL;
 
         const QString &num = data.at(1);
@@ -166,7 +166,7 @@ Media* Acces::decode(const QString &ligne)
         const QString &date = data.at(6);
         if (Media::test_date(date.trimmed()) != 1)		return NULL;
 
-        //création du media
+        //crÃ©ation du media
         tmpMed = new Zik();
 
         //affectation des valeurs au media
@@ -180,7 +180,7 @@ Media* Acces::decode(const QString &ligne)
       break;
     case TYPE_FILM:
       {
-        //test et récup
+        //test et rÃ©cup
         if (data.count() != 9)                        return NULL;
 
         const QString &num = data.at(1);
@@ -200,7 +200,7 @@ Media* Acces::decode(const QString &ligne)
         const QString &date = data.at(8);
         if (Media::test_date(date.trimmed()) != 1)		return NULL;
 
-        //création du media
+        //crÃ©ation du media
         tmpMed = new Film();
 
         //affectation des valeurs au media
@@ -216,7 +216,7 @@ Media* Acces::decode(const QString &ligne)
       break;
     case TYPE_BOOK:
       {
-        //test et récup
+        //test et rÃ©cup
         if (data.count() != 7)                        return NULL;
 
         const QString &num = data.at(1);
@@ -232,7 +232,7 @@ Media* Acces::decode(const QString &ligne)
         const QString &date = data.at(6);
         if (Media::test_date(date.trimmed()) != 1)		return NULL;
 
-        //création du media
+        //crÃ©ation du media
         tmpMed = new Book();
 
         //affectation des valeurs au media

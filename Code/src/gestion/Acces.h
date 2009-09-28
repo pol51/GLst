@@ -6,7 +6,7 @@
 class Collection;
 class Media;
 
-//Acces aux données externes
+//Acces aux donnÃ©es externes
 class Acces
 {
   protected:
@@ -30,7 +30,7 @@ class Acces
     //Formatage d'une ligne
     static QString code(const Media* media);
 
-    //Décodage d'une ligne
+    //DÃ©codage d'une ligne
     static Media* decode(const QString &ligne);
 };
 #endif
