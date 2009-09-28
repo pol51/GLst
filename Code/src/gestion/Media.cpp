@@ -73,6 +73,6 @@ const QString Media::make_num_2(const int nbr)
 int Media::cmp_date(const Media* med1, const Media* med2)
 {
   const int res = QString::compare(med1->get_date(), med2->get_date());
-  if (res) return res;
-  return QString::compare(med1->get_num(), med2->get_num());
+  if (res) return -res;
+  return -QString::compare(med1->get_num(), med2->get_num());
 }
