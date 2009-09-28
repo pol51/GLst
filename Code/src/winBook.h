@@ -1,7 +1,7 @@
 #ifndef __WINBOOK_H
 #define __WINBOOK_H
 
-#include "ui_Book.h"
+#include <ui_Book.h>
 
 #include <gestion/Book.h>
 
@@ -10,6 +10,7 @@ class winListe;
 class winBook : public QWidget
 {
   Q_OBJECT
+
   private:
     Ui_dialogAjoutBook _ui;
     winListe *_ctrl;

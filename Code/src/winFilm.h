@@ -2,6 +2,7 @@
 #define __WINFILM_H
 
 #include <ui_Film.h>
+
 #include <gestion/Film.h>
 
 class winListe;
@@ -9,6 +10,7 @@ class winListe;
 class winFilm : public QWidget
 {
   Q_OBJECT
+
   private:
     Ui_dialogAjoutFilm _ui;
     winListe *_ctrl;

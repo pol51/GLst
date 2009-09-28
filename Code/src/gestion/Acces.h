@@ -1,12 +1,12 @@
 #ifndef _ACCES_H
 #define _ACCES_H
 
-#include <QString>
+class QString;
 
 class Collection;
 class Media;
 
-//Acces aux donnÃ©es externes
+//Acces aux données externes
 class Acces
 {
   protected:
@@ -30,7 +30,7 @@ class Acces
     //Formatage d'une ligne
     static QString code(const Media* media);
 
-    //DÃ©codage d'une ligne
+    //Décodage d'une ligne
     static Media* decode(const QString &ligne);
 };
 #endif

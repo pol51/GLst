@@ -5,11 +5,9 @@
 #include <QVector>
 
 class Media;
-
-#include <gestion/Media.h>
-#include <gestion/Zik.h>
-#include <gestion/Book.h>
-#include <gestion/Film.h>
+class Zik;
+class Book;
+class Film;
 
 #define SORT_ALPHA	1
 #define SORT_DATE	  2

@@ -2,6 +2,9 @@
 
 #include <gestion/Collection.h>
 #include <gestion/Media.h>
+#include <gestion/Book.h>
+#include <gestion/Film.h>
+#include <gestion/Zik.h>
 
 #include <QFile>
 

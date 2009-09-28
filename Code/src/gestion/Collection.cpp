@@ -3,9 +3,11 @@
 #include <cmath>
 
 #include <gestion/Media.h>
+#include <gestion/Book.h>
+#include <gestion/Film.h>
+#include <gestion/Zik.h>
 
 #include <QTextCodec>
-
 
 //Constructeur
 Collection::Collection() :

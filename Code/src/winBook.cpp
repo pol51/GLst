@@ -5,7 +5,8 @@
 #include "winBook.h"
 
 winBook::winBook(winListe *ctrl, QWidget *parent) :
-  QWidget(parent), _ctrl(ctrl), _modif(-1)
+  QWidget(parent),
+  _ctrl(ctrl), _modif(-1)
 {
   _ui.setupUi(this);
 
@@ -55,7 +56,7 @@ void winBook::confirm()
   //affectation des valeurs
   Book* tmpB;
   if (_modif < 0)
-    tmpB = (Book*)_ctrl->Listes->add_Book();
+    tmpB = _ctrl->Listes->add_Book();
   else
     tmpB = (Book*)_ctrl->Listes->get_Media(_modif);
   tmpB->set_auteur(_ui.txtAuteur->text());
