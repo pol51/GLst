@@ -191,7 +191,8 @@ int winListe::selectedId()
   int id;
   id = ui.listM->currentRow();
   int idn = 0;
-  for (int i = Listes->nb_Media(); --i >= 0; )
+  const int nb_Media = Listes->nb_Media();
+  for (int i = 0; i < nb_Media; i++)
     if (Listes->get_Media(i)->get_type() == currentType)
     {
       if (idn == id) return i;
