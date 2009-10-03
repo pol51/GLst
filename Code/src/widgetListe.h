@@ -13,7 +13,7 @@ class widgetListe : public QListWidget
     winListe *_ctrl;
 
   public:
-    widgetListe(QWidget *parent = NULL);
+    widgetListe(QWidget *parent = NULL) : QListWidget(parent), _ctrl(NULL) {}
     virtual ~widgetListe() {}
 
     void setCtrl(winListe *ctrl = NULL) { _ctrl = ctrl; }

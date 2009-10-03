@@ -4,55 +4,46 @@
 
 #include <gestion/Options.h>
 
-winListeMenu::winListeMenu(winListe *parent)
-  :QMenu(parent)
+winListeMenu::winListeMenu(winListe *parent) :
+  QMenu(parent),
+  _ctrl(parent)
 {
-  ctrl = parent;
   setTitle("Media");
 
-  actAdd = addAction(
+  _actAdd = addAction(
     QIcon(":/icons/button/add.svg"), "&Ajouter");
-  actAddTo = addAction(
+  _actAddTo = addAction(
     QIcon(":/icons/button/add.svg"), "A&jouter à  ...");
-  actMod = addAction(
+  _actMod = addAction(
     QIcon(":/icons/button/edit.svg"), "&Modifier");
-  actDel = addAction(
+  _actDel = addAction(
     QIcon(":/icons/button/remove.svg"), "&Supprimer");
-  actSortByNews = addAction("News");
-  actSortByNews->setCheckable(true);
-  actSortByNews->setChecked(ctrl->Opt->get_sortType() == 2);
-  actDisplayMore = addAction("More Info");
-  actDisplayMore->setCheckable(true);
+  _actSortByNews = addAction("News");
+  _actSortByNews->setCheckable(true);
+  _actSortByNews->setChecked(_ctrl->_opt->get_sortType() == 2);
+  _actDisplayMore = addAction("More Info");
+  _actDisplayMore->setCheckable(true);
 
-  QObject::connect(
-    actAdd, SIGNAL(triggered()),
-    ctrl, SLOT(showAdd()));
-  QObject::connect(
-    actAddTo, SIGNAL(triggered()),
-    ctrl, SLOT(showAddTo()));
-  QObject::connect(
-    actMod, SIGNAL(triggered()),
-    ctrl, SLOT(showMod()));
-  QObject::connect(
-    actDel, SIGNAL(triggered()),
-    ctrl, SLOT(delMedia()));
-  QObject::connect(
-    actSortByNews, SIGNAL(triggered(bool)),
-    this, SLOT(sortListByNews(bool)));
-  QObject::connect(
-    actDisplayMore, SIGNAL(triggered(bool)),
-    ctrl, SLOT(displayMoreInfo(bool)));
+  connect(_actAdd, SIGNAL(triggered()),
+          _ctrl, SLOT(showAdd()));
+  connect(_actAddTo, SIGNAL(triggered()),
+          _ctrl, SLOT(showAddTo()));
+  connect(_actMod, SIGNAL(triggered()),
+          _ctrl, SLOT(showMod()));
+  connect(_actDel, SIGNAL(triggered()),
+          _ctrl, SLOT(delMedia()));
+  connect(_actSortByNews, SIGNAL(triggered(bool)),
+          this, SLOT(sortListByNews(bool)));
+  connect(_actDisplayMore, SIGNAL(triggered(bool)),
+          _ctrl, SLOT(displayMoreInfo(bool)));
 }
 
 void winListeMenu::updateMenu()
 {
-  if (ctrl->canAddToItem())
-    actAddTo->setVisible(true);
-  else
-    actAddTo->setVisible(false);
+  _actAddTo->setVisible(_ctrl->canAddToItem());
 }
 
 void winListeMenu::sortListByNews(bool more)
 {
-  ctrl->sortList(more?2:1);
+  _ctrl->sortList(more?2:1);
 }

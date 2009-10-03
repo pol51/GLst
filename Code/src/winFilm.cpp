@@ -67,26 +67,24 @@ void winFilm::confirm()
   }
 
   //affectation des valeurs
-  Film* tmpF;
+  Film* TmpF = (_modif < 0)
+               ? _ctrl->_listes->add_Film()
+               : (Film*)_ctrl->_listes->get_Media(_modif);
+  TmpF->set_nom(_ui.txtNom->text());
+  TmpF->set_nbCd(_ui.spinNbCd->value());
+  TmpF->set_nbDvd(_ui.spinNbDvd->value());
+  TmpF->set_qualite(_ui.cmbQualite->currentIndex());
+  TmpF->set_genre(_ui.cmbGenre->currentIndex());
+  TmpF->set_idBoite(_ui.spinIdBoite->value());
   if (_modif < 0)
-    tmpF = _ctrl->Listes->add_Film();
-  else
-    tmpF = (Film*)_ctrl->Listes->get_Media(_modif);
-  tmpF->set_nom(_ui.txtNom->text());
-  tmpF->set_nbCd(_ui.spinNbCd->value());
-  tmpF->set_nbDvd(_ui.spinNbDvd->value());
-  tmpF->set_qualite(_ui.cmbQualite->currentIndex());
-  tmpF->set_genre(_ui.cmbGenre->currentIndex());
-  tmpF->set_idBoite(_ui.spinIdBoite->value());
-  if (_modif < 0)
-    tmpF->set_num(_ctrl->Listes->nextref_Media(TYPE_FILM));
-  tmpF->set_date(_ui.date->date().toString("yyyyMMdd"));
+    TmpF->set_num(_ctrl->_listes->nextref_Media(TYPE_FILM));
+  TmpF->set_date(_ui.date->date().toString("yyyyMMdd"));
 
     //trie
   _ctrl->sortList();
 
   //sauvegarde
-    _ctrl->save();
+  _ctrl->save();
 
   //effacement et fermeture du formulaire
   abandon();
@@ -95,18 +93,17 @@ void winFilm::confirm()
 void winFilm::setVals(const int idn)
 {
   //verif de l'id
-  if ((idn < 0) or (idn >= _ctrl->Listes->nb_Media())) return;
+  if ((idn < 0) or (idn >= _ctrl->_listes->nb_Media())) return;
 
   //recup des infos du media
-  Film* tmpF = (Film*)_ctrl->Listes->get_Media(idn);
-  _ui.txtNom->setText(tmpF->get_nom());
-  _ui.spinNbCd->setValue(tmpF->get_nbCd());
-  _ui.spinNbDvd->setValue(tmpF->get_nbDvd());
-  _ui.spinIdBoite->setValue(tmpF->get_idBoite());
-  _ui.cmbQualite->setCurrentIndex(tmpF->get_qualite());
-  _ui.cmbGenre->setCurrentIndex(tmpF->get_genre());
-  QString date = tmpF->get_date();
-  _ui.date->setDate(QDate::fromString(date, "yyyyMMdd"));
+  Film* TmpF = (Film*)_ctrl->_listes->get_Media(idn);
+  _ui.txtNom->setText(TmpF->get_nom());
+  _ui.spinNbCd->setValue(TmpF->get_nbCd());
+  _ui.spinNbDvd->setValue(TmpF->get_nbDvd());
+  _ui.spinIdBoite->setValue(TmpF->get_idBoite());
+  _ui.cmbQualite->setCurrentIndex(TmpF->get_qualite());
+  _ui.cmbGenre->setCurrentIndex(TmpF->get_genre());
+  _ui.date->setDate(QDate::fromString(TmpF->get_date(), "yyyyMMdd"));
 
   //definition du mode modif
   _modif = idn;

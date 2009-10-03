@@ -44,15 +44,6 @@ class Zik : public Media
     //Accesseur en ecriture sur le nombre de cd
     void set_nbCd(int value) { _nbCd = value; }
 
-    //Test de l'artiste
-    static int test_artiste(const QString &artiste);
-
-    //Test du titre
-    static int test_titre(const QString &titre);
-
-    //Test du nombre de cd
-    static int test_nbCd(const int /*nbCd*/);
-
     //Comparaison de 2 album par leur artiste/titre
     static int cmp_alpha(const Zik* zik1, const Zik* zik2);
 };

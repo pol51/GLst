@@ -7,22 +7,6 @@ Book::Book() :
 {
 }
 
-//Test de l'auteur
-int Book::test_auteur(const QString &auteur)
-{
-  if (!auteur.isEmpty()) return 1;
-
-  return 0;
-}
-
-//Test du titre
-int Book::test_titre(const QString &titre)
-{
-  if (!titre.isEmpty()) return 1;
-
-  return 0;
-}
-
 //Comparaison de 2 livres par leur auteur/titre
 int Book::cmp_alpha(const Book* book1, const Book* book2)
 {

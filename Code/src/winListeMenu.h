@@ -10,17 +10,18 @@ class winListeMenu : public QMenu
   Q_OBJECT
 
   protected:
-    winListe *ctrl;
-    QAction *actAdd;
-    QAction *actAddTo;
-    QAction *actDel;
-    QAction *actMod;
-    QAction *actSortByNews;
-    QAction *actDisplayMore;
+    winListe *_ctrl;
+    QAction *_actAdd;
+    QAction *_actAddTo;
+    QAction *_actDel;
+    QAction *_actMod;
+    QAction *_actSortByNews;
+    QAction *_actDisplayMore;
 
   public:
     winListeMenu(winListe *parent);
-    ~winListeMenu() {}
+    virtual ~winListeMenu() {}
+
     void updateMenu();
 
   private slots:

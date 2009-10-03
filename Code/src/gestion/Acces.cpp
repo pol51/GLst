@@ -136,8 +136,7 @@ QString Acces::code(const Media* media)
 //Décodage d'une ligne
 Media* Acces::decode(const QString &ligne)
 {
-  //media temporaire
-  Media* tmpMed = NULL;
+  Media *TmpMed;
 
   //test de la longueur de la ligne
   if (ligne.length() < 1)
@@ -154,28 +153,29 @@ Media* Acces::decode(const QString &ligne)
         if (data.count() != 7)                        return NULL;
 
         const QString &num = data.at(1);
-        if (Media::test_num(num) != 1)                return NULL;
+        if (!Media::test_num(num))                    return NULL;
         const QString &artiste = data.at(2);
-        if (Zik::test_artiste(artiste) != 1)          return NULL;
+        if (artiste.isEmpty())                        return NULL;
         const QString &titre = data.at(3);
-        if (Zik::test_titre(titre) != 1)              return NULL;
+        if (titre.isEmpty())                          return NULL;
         const int nbCd = data.at(4).toInt(&valid);
         if (!valid)                                   return NULL;
         const int idBoite = data.at(5).toInt(&valid);
         if (!valid)                                   return NULL;
         const QString &date = data.at(6);
-        if (Media::test_date(date.trimmed()) != 1)		return NULL;
+        if (!Media::test_date(date.trimmed()))	    	return NULL;
 
         //création du media
-        tmpMed = new Zik();
+        Zik *TmpZik = new Zik();
 
         //affectation des valeurs au media
-        ((Zik*)tmpMed)->set_artiste(Utils::und2sp(artiste));
-        ((Zik*)tmpMed)->set_titre(Utils::und2sp(titre));
-        ((Zik*)tmpMed)->set_nbCd(nbCd);
-        ((Zik*)tmpMed)->set_num(num);
-        ((Zik*)tmpMed)->set_idBoite(idBoite);
-        ((Zik*)tmpMed)->set_date(date);
+        TmpZik->set_artiste(Utils::und2sp(artiste));
+        TmpZik->set_titre(Utils::und2sp(titre));
+        TmpZik->set_nbCd(nbCd);
+        TmpZik->set_num(num);
+        TmpZik->set_idBoite(idBoite);
+        TmpZik->set_date(date);
+        TmpMed = TmpZik;
       }
       break;
     case TYPE_FILM:
@@ -184,9 +184,9 @@ Media* Acces::decode(const QString &ligne)
         if (data.count() != 9)                        return NULL;
 
         const QString &num = data.at(1);
-        if (Media::test_num(num) != 1)                return NULL;
+        if (!Media::test_num(num))                    return NULL;
         const QString &nom = data.at(2);
-        if (Film::test_nom(nom) != 1)                 return NULL;
+        if (nom.isEmpty())                            return NULL;
         const int nbCd = data.at(3).toInt(&valid);
         if (!valid)                                   return NULL;
         const int nbDvd = data.at(4).toInt(&valid);
@@ -198,20 +198,21 @@ Media* Acces::decode(const QString &ligne)
         const int idBoite = data.at(7).toInt(&valid);
         if (!valid)                                   return NULL;
         const QString &date = data.at(8);
-        if (Media::test_date(date.trimmed()) != 1)		return NULL;
+        if (!Media::test_date(date.trimmed()))	    	return NULL;
 
         //création du media
-        tmpMed = new Film();
+        Film *TmpFilm = new Film();
 
         //affectation des valeurs au media
-        ((Film*)tmpMed)->set_nom(Utils::und2sp(nom));
-        ((Film*)tmpMed)->set_nbCd(nbCd);
-        ((Film*)tmpMed)->set_nbDvd(nbDvd);
-        ((Film*)tmpMed)->set_qualite(qualite);
-        ((Film*)tmpMed)->set_genre(genre);
-        ((Film*)tmpMed)->set_num(num);
-        ((Film*)tmpMed)->set_idBoite(idBoite);
-        ((Film*)tmpMed)->set_date(date);
+        TmpFilm->set_nom(Utils::und2sp(nom));
+        TmpFilm->set_nbCd(nbCd);
+        TmpFilm->set_nbDvd(nbDvd);
+        TmpFilm->set_qualite(qualite);
+        TmpFilm->set_genre(genre);
+        TmpFilm->set_num(num);
+        TmpFilm->set_idBoite(idBoite);
+        TmpFilm->set_date(date);
+        TmpMed = TmpFilm;
       }
       break;
     case TYPE_BOOK:
@@ -220,33 +221,34 @@ Media* Acces::decode(const QString &ligne)
         if (data.count() != 7)                        return NULL;
 
         const QString &num = data.at(1);
-        if (Media::test_num(num) != 1)                return NULL;
+        if (!Media::test_num(num))                    return NULL;
         const QString &auteur = data.at(2);
-        if (Book::test_auteur(auteur) != 1)           return NULL;
+        if (auteur.isEmpty())                         return NULL;
         const QString &titre = data.at(3);
-        if (Book::test_titre(titre) != 1)             return NULL;
+        if (titre.isEmpty())                          return NULL;
         const int format = data.at(4).toInt(&valid);
         if (!valid)                                   return NULL;
         const int idBoite = data.at(5).toInt(&valid);
         if (!valid)                                   return NULL;
         const QString &date = data.at(6);
-        if (Media::test_date(date.trimmed()) != 1)		return NULL;
+        if (!Media::test_date(date.trimmed()))		    return NULL;
 
         //création du media
-        tmpMed = new Book();
+        Book *TmpBook = new Book();
 
         //affectation des valeurs au media
-        ((Book*)tmpMed)->set_auteur(Utils::und2sp(auteur));
-        ((Book*)tmpMed)->set_titre(Utils::und2sp(titre));
-        ((Book*)tmpMed)->set_format(format);
-        ((Book*)tmpMed)->set_num(num);
-        ((Book*)tmpMed)->set_idBoite(idBoite);
-        ((Book*)tmpMed)->set_date(date);
+        TmpBook->set_auteur(Utils::und2sp(auteur));
+        TmpBook->set_titre(Utils::und2sp(titre));
+        TmpBook->set_format(format);
+        TmpBook->set_num(num);
+        TmpBook->set_idBoite(idBoite);
+        TmpBook->set_date(date);
+        TmpMed = TmpBook;
       }
       break;
     default:
       return NULL;
   }
 
-  return tmpMed;
+  return TmpMed;
 }

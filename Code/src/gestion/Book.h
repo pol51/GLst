@@ -50,12 +50,6 @@ class Book : public Media
     //Accesseur en ecriture sur le format
     void set_format(int value) { _format = value; }
 
-    //Test de l'auteur
-    static int test_auteur(const QString &auteur);
-
-    //Test du titre
-    static int test_titre(const QString &titre);
-
     //Comparaison de 2 livres par leur auteur/titre
     static int cmp_alpha(const Book* book1, const Book* book2);
 };

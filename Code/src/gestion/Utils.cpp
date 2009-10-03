@@ -1,4 +1,3 @@
-
 #include "Utils.h"
 
 //Test sur une chaine numérique
@@ -9,6 +8,7 @@ int Utils::test_numeric(const QString &alpha)
 
   return valid?1:0;
 }
+
 //Mise en majuscule
 const QString Utils::upcase(const QString &str)
 {
@@ -26,6 +26,7 @@ char Utils::upchar(const char car)
 
   return tmp;
 }
+
 //Transforme les espaces en underscores
 const QString Utils::sp2und(const QString &ligne)
 {
@@ -33,6 +34,7 @@ const QString Utils::sp2und(const QString &ligne)
 
   return tmp.replace(' ', '_');
 }
+
 //Transforme les underscores en espaces
 const QString Utils::und2sp(const QString &ligne)
 {
@@ -40,6 +42,7 @@ const QString Utils::und2sp(const QString &ligne)
 
   return tmp.replace('_', ' ');
 }
+
 //Comparaison lexicographique de deux chaines
 int Utils::str_compare(const QString &str1, const QString &str2)
 {

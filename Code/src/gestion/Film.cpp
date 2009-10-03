@@ -7,14 +7,6 @@ Film::Film() :
 {
 }
 
-//Test du nom
-int Film::test_nom(const QString &nom)
-{
-  if (!nom.isEmpty()) return 1;
-
-  return 0;
-}
-
 //Comparaison de 2 films par leur nom
 int Film::cmp_alpha(const Film* film1, const Film* film2)
 {

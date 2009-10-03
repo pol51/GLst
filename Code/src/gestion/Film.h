@@ -82,9 +82,6 @@ class Film : public Media
     //Accesseur en ecriture sur le genre
     void set_genre(const int value) { _genre = value; }
 
-    //Test du nom
-    static int test_nom(const QString &nom);
-
     //Comparaison de 2 films par leur nom
     static int cmp_alpha(const Film* film1, const Film* film2);
 };

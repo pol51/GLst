@@ -16,25 +16,25 @@ void Media::set_num(int nbr)
 }
 
 //Test de la référence
-int Media::test_num(const QString &num)
+bool Media::test_num(const QString &num)
 {
   int size = num.size();
 
-  if (size != NUM_SIZE) return 0;
+  if (size != NUM_SIZE) return false;
 
-  if (num[NUM_SEP_POS] != NUM_SEP_CAR) return 0;
+  if (num[NUM_SEP_POS] != NUM_SEP_CAR) return false;
 
   bool valid = false;
   num.left(NUM_SEP_POS).toInt(&valid);
-  if (!valid) return 0;
+  if (!valid) return false;
 
   num.right(NUM_SIZE - NUM_SEP_POS - 1).toInt(&valid);
-  if (!valid) return 0;
+  if (!valid) return false;
 
-  return 1;
+  return true;
 }
 
-int Media::test_date(const QString &date)
+bool Media::test_date(const QString &date)
 {
   if (date.count() != 8) return 0;
 

@@ -5,12 +5,6 @@
 
 #include <QMouseEvent>
 
-widgetListe::widgetListe(QWidget *parent) :
-  QListWidget(parent),
-  _ctrl(NULL)
-{
-}
-
 void widgetListe::mousePressEvent(QMouseEvent *event)
 {
   QListWidget::mousePressEvent(event);
@@ -18,8 +12,8 @@ void widgetListe::mousePressEvent(QMouseEvent *event)
   // partie spécifique
   if (!_ctrl) return;
 
-  _ctrl->Menu->updateMenu();
+  _ctrl->_menu->updateMenu();
 
   if (event->buttons() & Qt::RightButton)
-    _ctrl->Menu->exec(event->globalPos());
+    _ctrl->_menu->exec(event->globalPos());
 }

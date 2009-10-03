@@ -29,24 +29,24 @@ class winListe : public QMainWindow
   Q_OBJECT
 
   private:
-    Ui_mwListe ui;
-    winZik *frmZik;
-    winFilm *frmFilm;
-    winBook *frmBook;
-    winOptions *frmOptions;
-    QLabel lblStat;
-    bool moreInfo;
-    int currentType;
+    Ui_mwListe _ui;
+    winZik *_frmZik;
+    winFilm *_frmFilm;
+    winBook *_frmBook;
+    winOptions *_frmOptions;
+    QLabel _lblStat;
+    bool _moreInfo;
+    int _currentType;
 
   public:
-    Options *Opt;
-    Collection *Listes;
-    Acces *ListDE;
-    Acces_HTML *ListHTML;
-    winListeMenu *Menu;
+    Options *_opt;
+    Collection *_listes;
+    Acces *_listDE;
+    Acces_HTML *_listHTML;
+    winListeMenu *_menu;
 
   private:
-    int selectedId();
+    int selectedId() const;
 
   private slots:
     void showOptions();
@@ -58,20 +58,20 @@ class winListe : public QMainWindow
 
   public:
     winListe(QWidget *parent = 0);
-    bool canAddToItem();
+    bool canAddToItem() const;
 
   public slots:
-    void updateLst(int type);
+    void updateLst(const int type);
     void updateLstFromMenu();
     void refreshLst();
     void sortList();
-    void sortList(int type);
+    void sortList(const int type);
     void changeStyle(const QString &styleName);
     void refreshStyle();
     void exportHTML();
     void save();
     void load();
-    void displayMoreInfo(const bool value) { moreInfo = value; refreshLst(); }
+    void displayMoreInfo(const bool value) { _moreInfo = value; refreshLst(); }
 };
 
 #endif

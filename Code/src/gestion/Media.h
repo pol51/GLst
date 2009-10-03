@@ -58,8 +58,8 @@ class Media
     void set_idBoite(const int value) { _idBoite = value; }
 
     //Test de la référence
-    static int test_num(const QString &num);
-    static int test_date(const QString &date);
+    static bool test_num(const QString &num);
+    static bool test_date(const QString &date);
 
     //Création de la première partie de la référence
     static const QString make_num_1(const int type);

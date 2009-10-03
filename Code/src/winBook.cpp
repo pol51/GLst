@@ -59,14 +59,14 @@ void winBook::confirm()
   //affectation des valeurs
   Book* tmpB;
   if (_modif < 0)
-    tmpB = _ctrl->Listes->add_Book();
+    tmpB = _ctrl->_listes->add_Book();
   else
-    tmpB = (Book*)_ctrl->Listes->get_Media(_modif);
+    tmpB = (Book*)_ctrl->_listes->get_Media(_modif);
   tmpB->set_auteur(_ui.txtAuteur->text());
   tmpB->set_titre(_ui.txtTitre->text());
   tmpB->set_format(_ui.cmbFormat->currentIndex());
   if (_modif < 0)
-    tmpB->set_num(_ctrl->Listes->nextref_Media(TYPE_BOOK));
+    tmpB->set_num(_ctrl->_listes->nextref_Media(TYPE_BOOK));
   tmpB->set_date(_ui.date->date().toString("yyyyMMdd"));
 
   //trie
@@ -82,10 +82,10 @@ void winBook::confirm()
 void winBook::setVals(const int idn)
 {
   //verif de l'id
-  if ((idn < 0) or (idn >= _ctrl->Listes->nb_Media())) return;
+  if ((idn < 0) or (idn >= _ctrl->_listes->nb_Media())) return;
 
   //recup des infos du media
-  Book* tmpB = (Book*)_ctrl->Listes->get_Media(idn);
+  Book* tmpB = (Book*)_ctrl->_listes->get_Media(idn);
   _ui.txtAuteur->setText(tmpB->get_auteur());
   _ui.txtTitre->setText(tmpB->get_titre());
   _ui.cmbFormat->setCurrentIndex(tmpB->get_format());
@@ -99,10 +99,10 @@ void winBook::setVals(const int idn)
 void winBook::addTo(const int idn)
 {
   //verif de l'id
-  if ((idn < 0) or (idn >= _ctrl->Listes->nb_Media())) return;
+  if ((idn < 0) or (idn >= _ctrl->_listes->nb_Media())) return;
 
   //recup des infos du media
-  Book* tmpB = (Book*)_ctrl->Listes->get_Media(idn);
+  Book* tmpB = (Book*)_ctrl->_listes->get_Media(idn);
   _ui.txtAuteur->setText(tmpB->get_auteur());
 
   // focus
