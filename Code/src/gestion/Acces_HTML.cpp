@@ -12,10 +12,10 @@
 int Acces_HTML::save(const QString &filename) const
 {
   QString lettres;		//utilise pour les index
-  int type = 0;			//type actuel du media
-  Media* tmpM;			//media temporaire
-  char firstcar = 0;		//premier caractère du media précédent
-  char newcar = 0;		//premier caractère du media courant
+  int type = 0;       //type actuel du media
+  Media* tmpM;        //media temporaire
+  QChar firstcar(0);	//premier caractère du media précédent
+  QChar newcar(0);		//premier caractère du media courant
 
   //vérification de listes non-vides
   if (_collection->nb_Media() == 0)
@@ -109,11 +109,9 @@ int Acces_HTML::save(const QString &filename) const
       "\n\t\t\t\t");
   for (int i = 0; i < 4; i++) //adaptation du script en fonction des types presents
     if (nb_media[i] > 0)
-    {
-      f.append(QString("\n\t\t\t\tHideDiv('l%1');").arg(QString::number(i)));
-      f.append(QString("\n\t\t\t\tHideDiv('c%1');").arg(QString::number(i)));
-      f.append(QString("\n\t\t\t\tHideDiv('m%1');").arg(QString::number(i)));
-    }
+      f.append(QString("\n\t\t\t\tHideDiv('l%1');").arg(QString::number(i))).
+        append(QString("\n\t\t\t\tHideDiv('c%1');").arg(QString::number(i))).
+        append(QString("\n\t\t\t\tHideDiv('m%1');").arg(QString::number(i)));
   f.append("\n\t\t\t\tdocument.getElementById('l' + obj).style.visibility = 'visible';"
       "\n\t\t\t\tdocument.getElementById('c' + obj).style.visibility = 'visible';"
       "\n\t\t\t\tdocument.getElementById('m' + obj).style.visibility = 'visible';"
@@ -141,9 +139,9 @@ int Acces_HTML::save(const QString &filename) const
     if (nb_media[i] > 0)
       f.append(QString(
         "\n\t\t\t<span id=\"c%1\" class=\"nombres\">%2: %3</span>").
-        arg(QString::number(i).
+        arg(QString::number(i)).
         arg(nom_media[i]).
-        arg(QString::number(nb_media[i]))));
+        arg(QString::number(nb_media[i])));
 
   f.append("\n\t\t</div>");
 
@@ -159,14 +157,11 @@ int Acces_HTML::save(const QString &filename) const
     {
       //si pas premier enregistrement
       if (type != 0)
-      {
-        f.append("\n\t\t\t</ul>");
-        f.append("\n\t\t</div>");
-        f.append(QString("\n\t\t<div class=\"lettres\" id=\"m%1\" >").
-          arg(QString::number(type)));
-        f.append(lettres);
-        f.append("\n\t\t</div>");
-      }
+        f.append("\n\t\t\t</ul>\n\t\t</div>").
+          append(QString("\n\t\t<div class=\"lettres\" id=\"m%1\" >").
+            arg(QString::number(type))).
+          append(lettres).
+          append("\n\t\t</div>");
 
       //nouveau type
       type = tmpM->get_type();
@@ -179,12 +174,11 @@ int Acces_HTML::save(const QString &filename) const
 
       //nouveau div portant l'id correspondent au type
       f.append(QString("\n\t\t<div class=\"liste\" id=\"l%1\" >").
-        arg(QString::number(type)));
-      f.append("\n\t\t\t<ul>");
+        arg(QString::number(type))).append("\n\t\t\t<ul>");
     }
 
     //récup du premier caractère
-    newcar = Utils::upchar(tmpM->get_firstLetter());
+    newcar = tmpM->get_firstLetter().toUpper();
 
     //regroupement des premières caractères non-lettres
     if (newcar < 'A') newcar = '0';
@@ -203,7 +197,7 @@ int Acces_HTML::save(const QString &filename) const
         arg(firstcar));
 
       //ancre des index (type/lettre)
-      f.append(QString("\n\t\t\t<a id=\"#%1%2\"></a>").
+      f.append(QString("\n\t\t\t<a id=\"%1%2\"></a>").
         arg(QString::number(type)).
         arg(firstcar));
     }
@@ -234,7 +228,7 @@ int Acces_HTML::save(const QString &filename) const
   return 1;
 }
 //Formatage d'une ligne
-QString Acces_HTML::code(const Media* media)
+const QString Acces_HTML::code(const Media* media)
 {
   QString line;
 

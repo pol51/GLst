@@ -64,7 +64,7 @@ void winBook::confirm()
     tmpB = (Book*)_ctrl->_listes->get_Media(_modif);
   tmpB->set_auteur(_ui.txtAuteur->text());
   tmpB->set_titre(_ui.txtTitre->text());
-  tmpB->set_format(_ui.cmbFormat->currentIndex());
+  tmpB->set_format((Book::EFormat)_ui.cmbFormat->currentIndex());
   if (_modif < 0)
     tmpB->set_num(_ctrl->_listes->nextref_Media(TYPE_BOOK));
   tmpB->set_date(_ui.date->date().toString("yyyyMMdd"));

@@ -63,7 +63,7 @@ class winListe : public QMainWindow
   public slots:
     void updateLst(const int type);
     void updateLstFromMenu();
-    void refreshLst();
+    void refreshLst() { updateLst(_currentType); }
     void sortList();
     void sortList(const int type);
     void changeStyle(const QString &styleName);

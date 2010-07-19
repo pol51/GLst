@@ -1,12 +1,6 @@
 
 #include "Media.h"
 
-//Constructeur
-Media::Media(const int type) :
-  _type(type), _idBoite(0), _num(""), _date("20000101")
-{
-}
-
 //Accesseur en ecriture sur la référence par un entier
 void Media::set_num(int nbr)
 {
@@ -37,8 +31,9 @@ bool Media::test_num(const QString &num)
 bool Media::test_date(const QString &date)
 {
   if (date.count() != 8) return 0;
-
-  return Utils::test_numeric(date);
+  bool result;
+  date.toInt(&result);
+  return result;
 }
 
 //Création de la première partie de la référence

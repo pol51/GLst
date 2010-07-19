@@ -55,6 +55,8 @@ winListe::winListe(QWidget *parent) :
   connect(_ui.listM, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
           this, SLOT(showMod()));
 
+  _ui.actFind->setVisible(false);
+
   //evenements du menu
   connect(_ui.actOptions, SIGNAL(triggered()),
           this, SLOT(showOptions()));
@@ -184,21 +186,11 @@ void winListe::delMedia()
 
 int winListe::selectedId() const
 {
-  int Id = _ui.listM->currentRow();
-  int Idn = 0;
-  const int Nb_Media = _listes->nb_Media();
-  for (int i = 0; i < Nb_Media; i++)
-    if (_listes->get_Media(i)->get_type() == _currentType)
-    {
-      if (Idn == Id) return i;
-      Idn++;
-    }
+  const int Id = _ui.listM->currentRow();
+  int Idn = _ui.listM->count();
+  for (int i = _listes->nb_Media(); --i >= 0; )
+    if (_listes->get_Media(i)->get_type() == _currentType && --Idn == Id) return i;
   return -1;
-}
-
-void winListe::refreshLst()
-{
-  updateLst(_currentType);
 }
 
 bool winListe::canAddToItem() const
@@ -264,29 +256,29 @@ void winListe::updateLst(const int type)
                   TmpFilm->get_idBoite())));
               switch (TmpFilm->get_qualite())
               {
-                case QLT_DVDRIP: Line.append(" [DvdRip]"); break;
-                case QLT_SCR:    Line.append(" [Scr]");    break;
-                case QLT_DVD:    Line.append(" [Dvd]");    break;
-                case QLT_TVRIP:  Line.append(" [TvRip]");  break;
-                case QLT_PUB:    Line.append(" [Pub]");    break;
-                case QLT_DVDSCR: Line.append(" [DvdScr]"); break;
-                case QLT_VCD:    Line.append(" [Vcd]");    break;
+                case Film::eDVDRip:       Line.append(" [DvdRip]"); break;
+                case Film::eScreener:     Line.append(" [Scr]");    break;
+                case Film::eDVD:          Line.append(" [Dvd]");    break;
+                case Film::eTVRip:        Line.append(" [TvRip]");  break;
+                case Film::ePub:          Line.append(" [Pub]");    break;
+                case Film::eDVDScreener:  Line.append(" [DvdScr]"); break;
+                case Film::eVCD:          Line.append(" [Vcd]");    break;
               }
               switch (TmpFilm->get_genre())
               {
-                case GNR_FILM:
+                case Film::eFilm:
                   Line.append(" <Film>");         break;
-                case GNR_LIVE:
+                case Film::eLive:
                   Line.append(" <Concert>");      break;
-                case GNR_SPECTACLE:
+                case Film::eSpectacle:
                   Line.append(" <Spectacle>");    break;
-                case GNR_MANGA:
+                case Film::eManga:
                   Line.append(" <Manga>");        break;
-                case GNR_DESSIN_A:
+                case Film::eAnime:
                   Line.append(" <Dessin Anime>"); break;
-                case GNR_SERIE:
+                case Film::eSerie:
                   Line.append(" <Serie>");        break;
-                case GNR_DOC:
+                case Film::eDocumentaire:
                   Line.append(" <Documentaire>"); break;
               }
             }
@@ -347,8 +339,8 @@ void winListe::updateLst(const int type)
             if (_moreInfo)
               switch (TmpBook->get_format())
               {
-                case FRT_PAPIER:  Line.append(" [papier]"); break;
-                case FRT_NUMERIC: Line.append(" [e-book]"); break;
+                case Book::ePapier:  Line.append(" [papier]"); break;
+                case Book::eNumeric: Line.append(" [e-book]"); break;
               }
             _ui.listM->addItem(Line);
           }

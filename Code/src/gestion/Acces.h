@@ -15,7 +15,7 @@ class Acces
 
   public:
     //Constructeur
-    Acces(Collection *collection);
+    Acces(Collection *collection) : _collection(collection) {}
 
     //Destructeur
     virtual ~Acces() {}
@@ -28,7 +28,7 @@ class Acces
 
   protected:
     //Formatage d'une ligne
-    static QString code(const Media* media);
+    static const QString code(const Media* media);
 
     //Décodage d'une ligne
     static Media* decode(const QString &ligne);

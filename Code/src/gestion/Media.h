@@ -24,7 +24,7 @@ class Media
 
   public:
     //Constructeur
-    Media(const int type);
+    Media(const int type) : _type(type), _idBoite(0), _date("20000101") {}
 
     //Destructeur
     virtual ~Media() {}
@@ -42,7 +42,7 @@ class Media
     int get_idBoite() const { return _idBoite; }
 
     //Renvoie la première lettre caractéristique du média
-    virtual char get_firstLetter() const = 0;
+    virtual QChar get_firstLetter() const = 0;
 
     //Accesseur en ecriture sur la référence
     void set_num(const QString &value) { _num = value; }

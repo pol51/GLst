@@ -9,12 +9,6 @@
 #include <QString>
 #include <QStringList>
 
-//Constructeur
-Acces::Acces(Collection *collection) :
-  _collection(collection)
-{
-}
-
 //Chargement du fichier
 int Acces::load(const QString &filename)
 {
@@ -92,7 +86,7 @@ int Acces::save(const QString &filename) const
 }
 
 //Formatage d'une ligne
-QString Acces::code(const Media* media)
+const QString Acces::code(const Media* media)
 {
   QString line;
 
@@ -207,8 +201,8 @@ Media* Acces::decode(const QString &ligne)
         TmpFilm->set_nom(Utils::und2sp(nom));
         TmpFilm->set_nbCd(nbCd);
         TmpFilm->set_nbDvd(nbDvd);
-        TmpFilm->set_qualite(qualite);
-        TmpFilm->set_genre(genre);
+        TmpFilm->set_qualite((Film::EQualite)qualite);
+        TmpFilm->set_genre((Film::EGenre)genre);
         TmpFilm->set_num(num);
         TmpFilm->set_idBoite(idBoite);
         TmpFilm->set_date(date);
@@ -239,7 +233,7 @@ Media* Acces::decode(const QString &ligne)
         //affectation des valeurs au media
         TmpBook->set_auteur(Utils::und2sp(auteur));
         TmpBook->set_titre(Utils::und2sp(titre));
-        TmpBook->set_format(format);
+        TmpBook->set_format((Book::EFormat)format);
         TmpBook->set_num(num);
         TmpBook->set_idBoite(idBoite);
         TmpBook->set_date(date);

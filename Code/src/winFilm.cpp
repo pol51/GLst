@@ -73,8 +73,8 @@ void winFilm::confirm()
   TmpF->set_nom(_ui.txtNom->text());
   TmpF->set_nbCd(_ui.spinNbCd->value());
   TmpF->set_nbDvd(_ui.spinNbDvd->value());
-  TmpF->set_qualite(_ui.cmbQualite->currentIndex());
-  TmpF->set_genre(_ui.cmbGenre->currentIndex());
+  TmpF->set_qualite((Film::EQualite)_ui.cmbQualite->currentIndex());
+  TmpF->set_genre((Film::EGenre)_ui.cmbGenre->currentIndex());
   TmpF->set_idBoite(_ui.spinIdBoite->value());
   if (_modif < 0)
     TmpF->set_num(_ctrl->_listes->nextref_Media(TYPE_FILM));

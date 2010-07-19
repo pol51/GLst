@@ -18,6 +18,7 @@ winListeMenu::winListeMenu(winListe *parent) :
     QIcon(":/icons/button/edit.svg"), "&Modifier");
   _actDel = addAction(
     QIcon(":/icons/button/remove.svg"), "&Supprimer");
+  addSeparator();
   _actSortByNews = addAction("News");
   _actSortByNews->setCheckable(true);
   _actSortByNews->setChecked(_ctrl->_opt->get_sortType() == 2);

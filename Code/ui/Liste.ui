@@ -40,15 +40,18 @@
      <x>0</x>
      <y>0</y>
      <width>473</width>
-     <height>23</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>&amp;Fichier</string>
     </property>
-    <addaction name="actOptions"/>
+    <addaction name="actFind"/>
     <addaction name="actExHTML"/>
+    <addaction name="separator"/>
+    <addaction name="actOptions"/>
+    <addaction name="separator"/>
     <addaction name="actQuit"/>
    </widget>
    <widget class="QMenu" name="menuView">
@@ -112,6 +115,11 @@
    </property>
    <property name="text">
     <string>Livres</string>
+   </property>
+  </action>
+  <action name="actFind">
+   <property name="text">
+    <string>&amp;Rechercher</string>
    </property>
   </action>
  </widget>

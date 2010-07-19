@@ -5,26 +5,27 @@
 
 #define TYPE_BOOK 3
 
-typedef enum
-{
-  FRT_PAPIER,
-  FRT_NUMERIC
-} FRT;
-
 //Item de livre
 class Book : public Media
 {
+  public:
+    typedef enum
+    {
+      ePapier,
+      eNumeric
+    } EFormat;
+
   protected:
     //Nom de l'auteur
     QString _auteur;
     //Titre du livre
     QString _titre;
     //Format du livre
-    int _format;
+    EFormat _format;
 
   public:
     //Constructeur
-    Book();
+    Book() : Media(TYPE_BOOK), _format(ePapier) {}
 
     //Destructeur
     virtual ~Book() {}
@@ -36,10 +37,10 @@ class Book : public Media
     const QString &get_titre() const { return _titre; }
 
     //Accesseur en lecture sur le format
-    int get_format() const { return _format; }
+    EFormat get_format() const { return _format; }
 
     //Renvoie la première lettre caractéristique du média
-    virtual char get_firstLetter() const { return _auteur[0].cell(); }
+    virtual QChar get_firstLetter() const { return _auteur[0]; }
 
     //Accesseur en ecriture sur l'auteur
     void set_auteur(const QString &value) { _auteur = value; }
@@ -48,7 +49,7 @@ class Book : public Media
     void set_titre(const QString &value) { _titre = value; }
 
     //Accesseur en ecriture sur le format
-    void set_format(int value) { _format = value; }
+    void set_format(EFormat value) { _format = value; }
 
     //Comparaison de 2 livres par leur auteur/titre
     static int cmp_alpha(const Book* book1, const Book* book2);

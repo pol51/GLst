@@ -26,6 +26,6 @@ class Acces_HTML : public Acces
 
   protected:
     //Formatage d'une ligne
-    static QString code(const Media* media);
+    static const QString code(const Media* media);
 };
 #endif

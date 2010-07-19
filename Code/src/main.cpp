@@ -8,7 +8,7 @@ int main(int argc, char * argv[])
 
   winListe *myListe = new winListe();
 
-  #ifdef Q_OS_SYMBIAN
+  #if defined Q_WS_S60 || defined Q_WS_MAEMO_5
   myListe->showMaximized();
   #else
   myListe->show();

@@ -18,7 +18,7 @@ class Zik : public Media
 
   public:
     //Constructeur
-    Zik();
+    Zik() : Media(TYPE_ZIK), _nbCd(0) {}
 
     //Destructeur
     virtual ~Zik() {}
@@ -33,7 +33,7 @@ class Zik : public Media
     int get_nbCd() const { return _nbCd; }
 
     //Renvoie la première lettre caractéristique du média
-    virtual char get_firstLetter() const { return _artiste[0].cell(); }
+    virtual QChar get_firstLetter() const { return _artiste[0]; }
 
     //Accesseur en ecriture sur l'artiste
     void set_artiste(const QString &value) { _artiste = value; }
