@@ -1,138 +1,124 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>dialogAjoutFilm</class>
- <widget class="QWidget" name="dialogAjoutFilm" >
-  <property name="geometry" >
+ <widget class="QWidget" name="dialogAjoutFilm">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>300</width>
-    <height>180</height>
+    <height>285</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>Ajout -> Film</string>
+  <property name="windowTitle">
+   <string>Ajout -&gt; Film</string>
   </property>
-  <property name="windowIcon" >
-   <iconset/>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff/>
+   </iconset>
   </property>
-  <layout class="QVBoxLayout" >
-   <property name="spacing" >
+  <layout class="QVBoxLayout">
+   <property name="spacing">
     <number>6</number>
    </property>
-   <property name="leftMargin" >
-    <number>9</number>
-   </property>
-   <property name="topMargin" >
-    <number>9</number>
-   </property>
-   <property name="rightMargin" >
-    <number>9</number>
-   </property>
-   <property name="bottomMargin" >
+   <property name="margin">
     <number>9</number>
    </property>
    <item>
-    <layout class="QGridLayout" >
-     <property name="leftMargin" >
+    <layout class="QGridLayout">
+     <property name="margin">
       <number>0</number>
      </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
-      <number>0</number>
-     </property>
-     <property name="horizontalSpacing" >
+     <property name="spacing">
       <number>6</number>
      </property>
-     <property name="verticalSpacing" >
-      <number>6</number>
-     </property>
-     <item row="1" column="0" >
-      <widget class="QLabel" name="label_2" >
-       <property name="text" >
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
         <string>Nombre de CD</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="1" >
-      <widget class="QComboBox" name="cmbQualite" />
+     <item row="3" column="1">
+      <widget class="QComboBox" name="cmbQualite"/>
      </item>
-     <item row="5" column="0" >
-      <widget class="QLabel" name="label_2_4" >
-       <property name="text" >
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_2_4">
+       <property name="text">
         <string>N°Boite</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1" >
-      <widget class="QLineEdit" name="txtNom" />
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="txtNom"/>
      </item>
-     <item row="2" column="1" >
-      <widget class="QSpinBox" name="spinNbDvd" />
+     <item row="2" column="1">
+      <widget class="QSpinBox" name="spinNbDvd"/>
      </item>
-     <item row="5" column="1" >
-      <widget class="QSpinBox" name="spinIdBoite" />
+     <item row="5" column="1">
+      <widget class="QSpinBox" name="spinIdBoite">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
-     <item row="3" column="0" >
-      <widget class="QLabel" name="label_2_5" >
-       <property name="text" >
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_2_5">
+       <property name="text">
         <string>Qualité</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1" >
-      <widget class="QSpinBox" name="spinNbCd" />
+     <item row="1" column="1">
+      <widget class="QSpinBox" name="spinNbCd"/>
      </item>
-     <item row="4" column="0" >
-      <widget class="QLabel" name="label_2_6" >
-       <property name="text" >
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_2_6">
+       <property name="text">
         <string>Genre</string>
        </property>
       </widget>
      </item>
-     <item row="6" column="0" >
-      <widget class="QLabel" name="label_2_3_2" >
-       <property name="text" >
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_2_3_2">
+       <property name="text">
         <string>Date</string>
        </property>
       </widget>
      </item>
-     <item row="6" column="1" >
-      <widget class="QDateEdit" name="date" >
-       <property name="displayFormat" >
+     <item row="6" column="1">
+      <widget class="QDateEdit" name="date">
+       <property name="displayFormat">
         <string>dd/MM/yyyy</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="0" >
-      <widget class="QLabel" name="label" >
-       <property name="text" >
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
         <string>Nom</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0" >
-      <widget class="QLabel" name="label_2_3" >
-       <property name="text" >
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_2_3">
+       <property name="text">
         <string>Nombre de DVD</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="1" >
-      <widget class="QComboBox" name="cmbGenre" />
+     <item row="4" column="1">
+      <widget class="QComboBox" name="cmbGenre"/>
      </item>
     </layout>
    </item>
    <item>
     <spacer>
-     <property name="orientation" >
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>262</width>
        <height>31</height>
@@ -141,28 +127,19 @@
     </spacer>
    </item>
    <item>
-    <layout class="QHBoxLayout" >
-     <property name="spacing" >
+    <layout class="QHBoxLayout">
+     <property name="spacing">
       <number>6</number>
      </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin">
       <number>0</number>
      </property>
      <item>
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>131</width>
          <height>31</height>
@@ -171,22 +148,24 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="okButton" >
-       <property name="text" >
+      <widget class="QPushButton" name="okButton">
+       <property name="text">
         <string>&amp;OK</string>
        </property>
-       <property name="icon" >
-        <iconset resource="../res/res.qrc" >:/icons/button/accept.svg</iconset>
+       <property name="icon">
+        <iconset resource="../res/res.qrc">
+         <normaloff>:/icons/button/accept.svg</normaloff>:/icons/button/accept.svg</iconset>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="cancelButton" >
-       <property name="text" >
+      <widget class="QPushButton" name="cancelButton">
+       <property name="text">
         <string>&amp;Annuler</string>
        </property>
-       <property name="icon" >
-        <iconset resource="../res/res.qrc" >:/icons/button/cancel.svg</iconset>
+       <property name="icon">
+        <iconset resource="../res/res.qrc">
+         <normaloff>:/icons/button/cancel.svg</normaloff>:/icons/button/cancel.svg</iconset>
        </property>
       </widget>
      </item>
@@ -203,7 +182,7 @@
   <tabstop>cancelButton</tabstop>
  </tabstops>
  <resources>
-  <include location="../res/res.qrc" />
+  <include location="../res/res.qrc"/>
  </resources>
  <connections/>
 </ui>
