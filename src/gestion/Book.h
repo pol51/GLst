@@ -39,7 +39,7 @@ class Book : public Media
     //Accesseur en lecture sur le format
     EFormat get_format() const { return _format; }
 
-    //Renvoie la première lettre caractéristique du média
+    //Renvoie la premiÃ¨re lettre caractÃ©ristique du mÃ©dia
     virtual QChar get_firstLetter() const { return _auteur[0]; }
 
     //Accesseur en ecriture sur l'auteur

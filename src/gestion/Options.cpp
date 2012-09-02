@@ -1,16 +1,12 @@
 #include "Options.h"
 
-#include <QFile>
-#include <QStringList>
+#include <QtCore/QFile>
+#include <QtCore/QStringList>
 
 //Constructeur
 Options::Options(const QString &filename) :
   _filename(filename), _style("Plastique"),
-  #ifdef Q_OS_SYMBIAN
-  _liste("E:/GLst/listes.txt"),
-  #else
   _liste("listes.txt"),
-  #endif
   _sortType(2) // SORT_ALPHA
 {
 }

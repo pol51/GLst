@@ -15,9 +15,9 @@ class Media
   protected:
     int _type;
     //Date d'enregistrement du media
-    //Numéro du contenant du media
+    //NumÃ©ro du contenant du media
     int _idBoite;
-    //Reférénce du media
+    //RefÃ©rÃ©nce du media
     QString _num;
     //Type du media
     QString _date;
@@ -29,7 +29,7 @@ class Media
     //Destructeur
     virtual ~Media() {}
 
-    //Accesseur en lecture sur la référence
+    //Accesseur en lecture sur la rÃ©fÃ©rence
     const QString &get_num() const { return _num; }
 
     //Accesseur en lecture sur le type
@@ -41,13 +41,13 @@ class Media
     //Accesseur en lecture sur le numero de la boite
     int get_idBoite() const { return _idBoite; }
 
-    //Renvoie la première lettre caractéristique du média
+    //Renvoie la premiÃ¨re lettre caractÃ©ristique du mÃ©dia
     virtual QChar get_firstLetter() const = 0;
 
-    //Accesseur en ecriture sur la référence
+    //Accesseur en ecriture sur la rÃ©fÃ©rence
     void set_num(const QString &value) { _num = value; }
 
-    //Accesseur en ecriture sur la référence par un entier
+    //Accesseur en ecriture sur la rÃ©fÃ©rence par un entier
     void set_num(const int nbr);
 
   public:
@@ -57,14 +57,14 @@ class Media
     //Accesseur en ecriture sur le numero de boite
     void set_idBoite(const int value) { _idBoite = value; }
 
-    //Test de la référence
+    //Test de la rÃ©fÃ©rence
     static bool test_num(const QString &num);
     static bool test_date(const QString &date);
 
-    //Création de la première partie de la référence
+    //CrÃ©ation de la premiÃ¨re partie de la rÃ©fÃ©rence
     static const QString make_num_1(const int type);
 
-    //Création de la seconde partie de la référence
+    //CrÃ©ation de la seconde partie de la rÃ©fÃ©rence
     static const QString make_num_2(const int nbr);
     static int cmp_date(const Media* med1, const Media* med2);
 };

@@ -5,19 +5,19 @@
 
 #include <gestion/Book.h>
 
-class winListe;
+class WinListe;
 
-class winBook : public QWidget
+class WinBook : public QWidget
 {
   Q_OBJECT
 
   private:
     Ui_dialogAjoutBook _ui;
-    winListe *_ctrl;
+    WinListe *_ctrl;
     int _modif;
 
   public:
-    winBook(winListe *ctrl, QWidget *parent = NULL);
+    WinBook(WinListe *ctrl, QWidget *parent = NULL);
 
   public slots:
     void resetFrm();

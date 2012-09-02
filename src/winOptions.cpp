@@ -1,6 +1,7 @@
-#include <QtGui>
-#include <QMessageBox>
-#include <QFileDialog>
+#include <QtWidgets/QStyleFactory>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QFileDialog>
+#include <qt5/QtWidgets/QComboBox>
 
 #include <winOptions.h>
 #include <winListe.h>
@@ -8,27 +9,23 @@
 #include <gestion/Options.h>
 #include <gestion/Collection.h>
 
-winOptions::winOptions(winListe *ctrl, QWidget *parent) :
+WinOptions::WinOptions(WinListe *ctrl, QWidget *parent) :
   QWidget(parent),
   _ctrl(ctrl)
 {
   _ui.setupUi(this);
 
   //evenements
-  connect(_ui.btnCancel, SIGNAL(clicked()),
-          this, SLOT(abandon()));
-  connect(_ui.btnOk, SIGNAL(clicked()),
-          this, SLOT(confirm()));
-  connect(_ui.btnSearchFile, SIGNAL(clicked()),
-          this, SLOT(searchFile()));
-  connect(_ui.cmbStyle, SIGNAL(activated(const QString &)),
-          _ctrl, SLOT(changeStyle(const QString &)));
+  connect(_ui.btnCancel,      &QPushButton::clicked, this,  &WinOptions::abandon);
+  connect(_ui.btnOk,          &QPushButton::clicked, this,  &WinOptions::confirm);
+  connect(_ui.btnSearchFile,  &QPushButton::clicked, this,  &WinOptions::searchFile);
+  connect(_ui.cmbStyle,       static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::activated), _ctrl, &WinListe::changeStyle);
 
-  //affectation des valeurs aux éléments
+  //affectation des valeurs aux Ã©lÃ©ments
   _ui.cmbStyle->addItems(QStyleFactory::keys());
 }
 
-void winOptions::resetFrm()
+void WinOptions::resetFrm()
 {
   _ui.tabOptions->setCurrentIndex(0);
   _ui.txtFilename->setText(_ctrl->_opt->get_liste());
@@ -39,7 +36,7 @@ void winOptions::resetFrm()
     _ui.cmbStyle->setCurrentIndex(i--);
 }
 
-void winOptions::searchFile()
+void WinOptions::searchFile()
 {
   _ui.txtFilename->setText(
     QFileDialog::getOpenFileName(this, tr("Listes"),
@@ -47,14 +44,14 @@ void winOptions::searchFile()
                                  tr("Fichiers listes (*.txt)")));
 }
 
-void winOptions::abandon()
+void WinOptions::abandon()
 {
   resetFrm();
   _ctrl->refreshStyle();
   close();
 }
 
-void winOptions::confirm()
+void WinOptions::confirm()
 {
   //style
   _ctrl->_opt->set_style(_ui.cmbStyle->currentText());

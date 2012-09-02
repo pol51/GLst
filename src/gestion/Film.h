@@ -38,7 +38,7 @@ class Film : public Media
     int _nbCd;
     //Nombre de dvd
     int _nbDvd;
-    //Qualité du film
+    //QualitÃ© du film
     EQualite _qualite;
     //Genre du film
     EGenre _genre;
@@ -60,13 +60,13 @@ class Film : public Media
     //Accesseur en lecture sur le nombre de dvd
     int get_nbDvd() const { return _nbDvd; }
 
-    //Accesseur en lecture sur la qualité
+    //Accesseur en lecture sur la qualitÃ©
     EQualite get_qualite() const { return _qualite; }
 
     //Accesseur en lecture sur le genre
     EGenre get_genre() const { return _genre; }
 
-    //Renvoie la première lettre caractéristique du média
+    //Renvoie la premiÃ¨re lettre caractÃ©ristique du mÃ©dia
     virtual QChar get_firstLetter() const { return _nom[0]; }
 
     //Accesseur en ecriture sur le nom
@@ -78,7 +78,7 @@ class Film : public Media
     //Accesseur en ecriture sur le nombre de dvd
     void set_nbDvd(const int value) { _nbDvd = value; }
 
-    //Accesseur en ecriture sur la qualité
+    //Accesseur en ecriture sur la qualitÃ©
     void set_qualite(const EQualite value) { _qualite = value; }
 
     //Accesseur en ecriture sur le genre

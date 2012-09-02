@@ -29,10 +29,10 @@ class Collection
     //Destructeur
     virtual ~Collection() { clear(); }
 
-    //Permet de savoir si la collection est actuellement triée de cette manière.
+    //Permet de savoir si la collection est actuellement triÃ©e de cette maniÃ¨re.
     bool isSorted(int type) { return (type == _sort); }
 
-    //Définie la collection comme "non-triée"
+    //DÃ©finie la collection comme "non-triÃ©e"
     void setUnsorted() { _sort = -1; }
 
     //Vide la collection
@@ -50,34 +50,34 @@ class Collection
     //Suppresision d'un media de la collection
     int del_Media(const unsigned int id);
 
-    //Recupère un media dans la collection
+    //RecupÃ¨re un media dans la collection
     Media* get_Media(const unsigned int id);
 
-    //Recupère un media dans la collection (const)
+    //RecupÃ¨re un media dans la collection (const)
     const Media* get_Media(const unsigned int id) const;
 
-    //Recherche l'id d'un media par sa référence
+    //Recherche l'id d'un media par sa rÃ©fÃ©rence
     int find_Media(const QString &num) const;
 
     //Renvoie le nombre de media dans la collection
     int nb_Media() const;
 
-    //Renvoie le nombre de media d'un type donné dans la collection
+    //Renvoie le nombre de media d'un type donnÃ© dans la collection
     int nb_Media(const int type) const;
 
-    //Renvoie le prochain nombre attribuable à un media de type donné
+    //Renvoie le prochain nombre attribuable Ã  un media de type donnÃ©
     int nextref_Media(const int type) const;
 
     //Trie la collection (par fusion)
-    //SORT_ALPHA  -> trie alphabétique
+    //SORT_ALPHA  -> trie alphabÃ©tique
     //SORT_DATE -> trie par date (news)
     void sort_Media(const int type);
 
   protected:
-    //Utilisée par le trie fusion alphabétique
+    //UtilisÃ©e par le trie fusion alphabÃ©tique
     void fusionAlpha(Media** vTmp, int de1, int vers1, int de2, int vers2, int count, int posInB);
 
-    //Utilisée par le trie fusion par date
+    //UtilisÃ©e par le trie fusion par date
     void fusionDate(Media** vTmp, int de1, int vers1, int de2, int vers2, int count, int posInB);
 };
 #endif

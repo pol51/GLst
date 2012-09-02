@@ -3,37 +3,33 @@
 
 #include <ui_Liste.h>
 
-#include <QtGui/QMainWindow>
-#include <QtGui/QLabel>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QLabel>
 
-class winFilm;
-class winZik;
-class winBook;
-class winOptions;
-class winListeMenu;
-class widgetListe;
+class WinFilm;
+class WinZik;
+class WinBook;
+class WinOptions;
+class WinListeMenu;
+class WidgetListe;
 
 class Options;
 class Collection;
 class Acces;
 class Acces_HTML;
 
-#ifdef Q_OS_SYMBIAN
-# define OPTIONS_FILE "E:/GLst/glst.cfg"
-#else
-# define OPTIONS_FILE "glst.cfg"
-#endif
+#define OPTIONS_FILE "glst.cfg"
 
-class winListe : public QMainWindow
+class WinListe : public QMainWindow
 {
   Q_OBJECT
 
   private:
     Ui_mwListe _ui;
-    winZik *_frmZik;
-    winFilm *_frmFilm;
-    winBook *_frmBook;
-    winOptions *_frmOptions;
+    WinZik *_frmZik;
+    WinFilm *_frmFilm;
+    WinBook *_frmBook;
+    WinOptions *_frmOptions;
     QLabel _lblStat;
     bool _moreInfo;
     int _currentType;
@@ -43,12 +39,13 @@ class winListe : public QMainWindow
     Collection *_listes;
     Acces *_listDE;
     Acces_HTML *_listHTML;
-    winListeMenu *_menu;
+    WinListeMenu *_menu;
 
   private:
     int selectedId() const;
 
   private slots:
+    friend class WinListeMenu;
     void showOptions();
     void showAdd();
     void showAddTo();
@@ -57,7 +54,7 @@ class winListe : public QMainWindow
     void delMedia();
 
   public:
-    winListe(QWidget *parent = 0);
+    WinListe(QWidget *parent = 0);
     bool canAddToItem() const;
 
   public slots:

@@ -5,19 +5,19 @@
 
 #include <gestion/Zik.h>
 
-class winListe;
+class WinListe;
 
-class winZik : public QWidget
+class WinZik : public QWidget
 {
   Q_OBJECT
 
   private:
     Ui_dialogAjoutZik _ui;
-    winListe *_ctrl;
+    WinListe *_ctrl;
     int _modif;
 
   public:
-    winZik(winListe *ctrl, QWidget *parent = 0);
+    WinZik(WinListe *ctrl, QWidget *parent = 0);
 
   public slots:
     void resetFrm();

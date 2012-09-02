@@ -3,13 +3,13 @@
 #include <winListe.h>
 #include <winListeMenu.h>
 
-#include <QMouseEvent>
+#include <QtGui/QMouseEvent>
 
-void widgetListe::mousePressEvent(QMouseEvent *event)
+void WidgetListe::mousePressEvent(QMouseEvent *event)
 {
   QListWidget::mousePressEvent(event);
 
-  // partie spécifique
+  // partie spÃ©cifique
   if (!_ctrl) return;
 
   _ctrl->_menu->updateMenu();

@@ -1,7 +1,7 @@
 
 #include "Media.h"
 
-//Accesseur en ecriture sur la référence par un entier
+//Accesseur en ecriture sur la rÃ©fÃ©rence par un entier
 void Media::set_num(int nbr)
 {
   if (nbr < 0) return;
@@ -9,7 +9,7 @@ void Media::set_num(int nbr)
   _num = make_num_1(_type) + NUM_SEP_CAR + make_num_2(nbr);
 }
 
-//Test de la référence
+//Test de la rÃ©fÃ©rence
 bool Media::test_num(const QString &num)
 {
   int size = num.size();
@@ -36,29 +36,29 @@ bool Media::test_date(const QString &date)
   return result;
 }
 
-//Création de la première partie de la référence
+//CrÃ©ation de la premiÃ¨re partie de la rÃ©fÃ©rence
 const QString Media::make_num_1(const int type)
 {
-  //création de la chaine
+  //crÃ©ation de la chaine
   QString num_1(QString::number(type));
 
-  //complément à la taile désirée
+  //complÃ©ment Ã  la taile dÃ©sirÃ©e
   while ((num_1.length()) < NUM_SEP_POS)
     num_1.insert(0, '0');
 
   return num_1;
 }
 
-//Création de la seconde partie de la référence
+//CrÃ©ation de la seconde partie de la rÃ©fÃ©rence
 const QString Media::make_num_2(const int nbr)
 {
   //calcul de la taille de la seconde partie
   int num_2_size = NUM_SIZE - (NUM_SEP_POS + 1);
 
-  //création de la chaine
+  //crÃ©ation de la chaine
   QString num_2(QString::number(nbr));
 
-  //complément à la taile désirée
+  //complÃ©ment Ã  la taile dÃ©sirÃ©e
   while ((num_2.length()) < num_2_size)
     num_2.insert(0, '0');
 

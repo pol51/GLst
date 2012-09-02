@@ -11,11 +11,11 @@ class Options
   protected:
     //Nom du fichier des options
     QString _filename;
-    //Style (thème)
+    //Style (thÃ¨me)
     QString _style;
     //Nom du fichier contenant les listes
     QString _liste;
-    //Type de trie utilisé
+    //Type de trie utilisÃ©
     int _sortType;
 
   public:
@@ -34,7 +34,7 @@ class Options
     //Accesseur en lecture sur le nom du fichier des listes
     const QString &get_liste() const { return _liste; }
 
-    //Accesseur en lecture sur le type de trie utilisé
+    //Accesseur en lecture sur le type de trie utilisÃ©
     int get_sortType() const { return _sortType; }
 
     //Accesseur en ecriture sur le nom du fichier
@@ -46,7 +46,7 @@ class Options
     //Accesseur en ecriture sur le nom du fichier des listes
     void set_liste(const QString &value) { _liste = value; }
 
-    //Accesseur en écriture sur le type de trie utilisé
+    //Accesseur en Ã©criture sur le type de trie utilisÃ©
     void set_sortType(const int value) { _sortType = value; }
 
     //Ecrit le fichier d'options

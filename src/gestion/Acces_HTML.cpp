@@ -6,7 +6,7 @@
 #include <gestion/Film.h>
 #include <gestion/Zik.h>
 
-#include <QFile>
+#include <QtCore/QFile>
 
 //Sauvegarde du fichier
 int Acces_HTML::save(const QString &filename) const
@@ -14,17 +14,17 @@ int Acces_HTML::save(const QString &filename) const
   QString lettres;		//utilise pour les index
   int type = 0;       //type actuel du media
   Media* tmpM;        //media temporaire
-  QChar firstcar(0);	//premier caractère du media précédent
-  QChar newcar(0);		//premier caractère du media courant
+  QChar firstcar(0);	//premier caractÃ¨re du media prÃ©cÃ©dent
+  QChar newcar(0);		//premier caractÃ¨re du media courant
 
-  //vérification de listes non-vides
+  //vÃ©rification de listes non-vides
   if (_collection->nb_Media() == 0)
     return 0;
 
   QFile file(filename);
   QString f;
 
-  //tri par ordre alphabétique
+  //tri par ordre alphabÃ©tique
   _collection->sort_Media(SORT_ALPHA);
 
   if (!file.open(QIODevice::WriteOnly)) return 0;
@@ -42,8 +42,9 @@ int Acces_HTML::save(const QString &filename) const
   char nom_zik[]  = "Musique";	nom_media[2] = nom_zik;
   char nom_book[] = "Livres";		nom_media[3] = nom_book;
 
-  //en-tête de document
-  f.append("<html>\n\t<head>\n\t\t<title>Listes (Export GLst)</title>"
+  //en-tÃªte de document
+  f.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+      "\n<html>\n\t<head>\n\t\t<title>Listes (Export GLst)</title>"
       "\n\t\t<style>"
       "\n\t\t\tbody {"
       "\n\t\t\t\tfont: 1em verdana, tahoma, ms sans serif, arial;"
@@ -124,7 +125,7 @@ int Acces_HTML::save(const QString &filename) const
       "\n\t</head>"
       "\n\t<body onload=\"javascript::ShowDiv('0')\">"
       "\n\t\t<div class=\"categorie\">");
-  bool addSep = false; //flag d'ajout de séparateur des catégories
+  bool addSep = false; //flag d'ajout de sÃ©parateur des catÃ©gories
   for (int i = 1; i < 4; i++) //adaptation des liens en fonction des types presents
     if (nb_media[i] > 0)
     {
@@ -148,11 +149,11 @@ int Acces_HTML::save(const QString &filename) const
   const int nb_Media = _collection->nb_Media();
   for (int i = 0; i < nb_Media; i++)
   {
-    //récupération du media
+    //rÃ©cupÃ©ration du media
     tmpM = _collection->get_Media(i);
     if (tmpM == NULL) continue;
 
-    //détection du changement de type
+    //dÃ©tection du changement de type
     if (type != tmpM->get_type())
     {
       //si pas premier enregistrement
@@ -166,10 +167,10 @@ int Acces_HTML::save(const QString &filename) const
       //nouveau type
       type = tmpM->get_type();
 
-      //raz première lettre
+      //raz premiÃ¨re lettre
       firstcar = 0;
 
-      //raz liste des premières lettres (index)
+      //raz liste des premiÃ¨res lettres (index)
       lettres.clear();
 
       //nouveau div portant l'id correspondent au type
@@ -177,19 +178,19 @@ int Acces_HTML::save(const QString &filename) const
         arg(QString::number(type))).append("\n\t\t\t<ul>");
     }
 
-    //récup du premier caractère
+    //rÃ©cup du premier caractÃ¨re
     newcar = tmpM->get_firstLetter().toUpper();
 
-    //regroupement des premières caractères non-lettres
+    //regroupement des premiÃ¨res caractÃ¨res non-lettres
     if (newcar < 'A') newcar = '0';
     else if (newcar > 'Z') newcar = '1';
 
-    //test du premier caractère
+    //test du premier caractÃ¨re
     if (firstcar != newcar)
     {
-      if (firstcar != 0)	//saut de ligne si pas tête de liste
+      if (firstcar != 0)	//saut de ligne si pas tÃªte de liste
         f.append("\n\t\t\t\t<br />");
-      firstcar = newcar;	//attribution du nouveau caractère
+      firstcar = newcar;	//attribution du nouveau caractÃ¨re
 
       //index (type/lettre)
       lettres.append(QString("\n\t\t\t<a href=\"#%1%2\">%2</a>").
@@ -202,11 +203,11 @@ int Acces_HTML::save(const QString &filename) const
         arg(firstcar));
     }
 
-    //écriture d'une ligne
+    //Ã©criture d'une ligne
     f.append(QString("\n\t\t\t\t<li>%1</li>").arg(code(tmpM)));
   }
 
-  //clotûre de la dernière liste
+  //clotÃ»re de la derniÃ¨re liste
   f.append("\n\t\t\t</ul>\n\t\t</div>");
 
   //dernier index des lettres
@@ -220,7 +221,7 @@ int Acces_HTML::save(const QString &filename) const
       "\n\t</body>\n</html>");
 
   //ecriture dans le fichier
-  file.write(f.toAscii());
+  file.write(f.toUtf8());
 
   //fermeture du fichier
   file.close();
@@ -232,7 +233,7 @@ const QString Acces_HTML::code(const Media* media)
 {
   QString line;
 
-  //infos spécifiques
+  //infos spÃ©cifiques
   switch (media->get_type())
   {
     case TYPE_ZIK:
@@ -265,7 +266,7 @@ const QString Acces_HTML::code(const Media* media)
 
   //id boite
   if (media->get_idBoite() > 0)
-    line.append(QString(" [n°%1]").arg(media->get_idBoite()));
+    line.append(QString(" [nÂ°%1]").arg(media->get_idBoite()));
 
   return line;
 }

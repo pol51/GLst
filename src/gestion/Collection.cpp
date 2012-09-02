@@ -1,19 +1,16 @@
 #include "Collection.h"
 
-#include <cmath>
-
 #include <gestion/Media.h>
 #include <gestion/Book.h>
 #include <gestion/Film.h>
 #include <gestion/Zik.h>
 
-#include <QTextCodec>
+#include <QtCore/QtCore>
 
 //Constructeur
 Collection::Collection() :
   _sort(-1)
 {
-  QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 }
 
 //Vide la collection
@@ -66,13 +63,13 @@ int Collection::del_Media(const unsigned int id)
   for (unsigned int i = id; i < newCount; i++)
     _vMedia[i] = _vMedia[i + 1];
 
-  //suppression du dernier élément
+  //suppression du dernier Ã©lÃ©ment
   _vMedia.pop_back();
 
   return 1;
 }
 
-//Recupère un media dans la collection
+//RecupÃ¨re un media dans la collection
 Media* Collection::get_Media(const unsigned int id)
 {
   if (id < (unsigned int)_vMedia.size())
@@ -81,7 +78,7 @@ Media* Collection::get_Media(const unsigned int id)
   return NULL;
 }
 
-//Recupère un media dans la collection (const)
+//RecupÃ¨re un media dans la collection (const)
 const Media* Collection::get_Media(const unsigned int id) const
 {
   if (id < (unsigned int)_vMedia.size())
@@ -90,7 +87,7 @@ const Media* Collection::get_Media(const unsigned int id) const
   return NULL;
 }
 
-//Recherche l'id d'un media par sa référence
+//Recherche l'id d'un media par sa rÃ©fÃ©rence
 int Collection::find_Media(const QString &num) const
 {
   for (int i = _vMedia.size(); --i >= 0; )
@@ -105,7 +102,7 @@ int Collection::nb_Media() const
   return _vMedia.count();
 }
 
-//Renvoie le nombre de media d'un type donné dans la collection
+//Renvoie le nombre de media d'un type donnÃ© dans la collection
 int Collection::nb_Media(const int type) const
 {
   int cp = 0; // compteur
@@ -117,12 +114,12 @@ int Collection::nb_Media(const int type) const
   return cp;
 }
 
-//Renvoie le prochain nombre attribuable à un media de type donné
+//Renvoie le prochain nombre attribuable Ã  un media de type donnÃ©
 int Collection::nextref_Media(const int type) const
 {
   if (type < 1) return -1;
 
-  //génération 1ère partie
+  //gÃ©nÃ©ration 1Ã¨re partie
   QString num_1 = Media::make_num_1(type);
 
   //nombre maximal
@@ -130,15 +127,15 @@ int Collection::nextref_Media(const int type) const
 
   int nbr = 0;
 
-  QString tmp_num;	//référence temporaire
+  QString tmp_num;	//rÃ©fÃ©rence temporaire
 
   while (nbr < max_nbr)
   {
-    //génération de la seconde partie
+    //gÃ©nÃ©ration de la seconde partie
     QString num_2 = Media::make_num_2(nbr);
-    //concaténation des 2 parties
+    //concatÃ©nation des 2 parties
     tmp_num = num_1 + NUM_SEP_CAR + num_2;
-    //recherche de l'existance de la référence
+    //recherche de l'existance de la rÃ©fÃ©rence
     if (find_Media(tmp_num) >= 0) nbr++;
     else return nbr;
   }
@@ -146,11 +143,11 @@ int Collection::nextref_Media(const int type) const
   return -1;
 }
 //Trie la collection (par fusion)
-//SORT_ALPHA  -> trie alphabétique
+//SORT_ALPHA  -> trie alphabÃ©tique
 //SORT_DATE -> trie par date (news)
 void Collection::sort_Media(const int type)
 {
-  //déja trié?
+  //dÃ©ja triÃ©?
   if (_sort == type)
     return;
 
@@ -192,7 +189,7 @@ void Collection::sort_Media(const int type)
   _sort = type;
 }
 
-//Utilisée par le trie fusion alphabétique
+//UtilisÃ©e par le trie fusion alphabÃ©tique
 void Collection::fusionAlpha(Media** vTmp, int de1, int vers1, int de2, int vers2, int count, int posInB)
 {
   for (int i = 0; i < count; i++)
@@ -232,7 +229,7 @@ void Collection::fusionAlpha(Media** vTmp, int de1, int vers1, int de2, int vers
   }
 }
 
-//Utilisée par le trie fusion par date
+//UtilisÃ©e par le trie fusion par date
 void Collection::fusionDate(Media** vTmp, int de1, int vers1, int de2, int vers2, int count, int posInB)
 {
   for (int i = 0; i < count; i++)

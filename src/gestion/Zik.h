@@ -32,7 +32,7 @@ class Zik : public Media
     //Accesseur en lecture sur le nombre de cd
     int get_nbCd() const { return _nbCd; }
 
-    //Renvoie la première lettre caractéristique du média
+    //Renvoie la premiÃ¨re lettre caractÃ©ristique du mÃ©dia
     virtual QChar get_firstLetter() const { return _artiste[0]; }
 
     //Accesseur en ecriture sur l'artiste

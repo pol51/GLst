@@ -1,22 +1,22 @@
 #ifndef __WIDGETLISTE_H
 #define __WIDGETLISTE_H
 
-#include <QListWidget>
+#include <QtWidgets/QListWidget>
 
-class winListe;
+class WinListe;
 
-class widgetListe : public QListWidget
+class WidgetListe : public QListWidget
 {
   Q_OBJECT
 
   private:
-    winListe *_ctrl;
+    WinListe *_ctrl;
 
   public:
-    widgetListe(QWidget *parent = NULL) : QListWidget(parent), _ctrl(NULL) {}
-    virtual ~widgetListe() {}
+    WidgetListe(QWidget *parent = NULL) : QListWidget(parent), _ctrl(NULL) {}
+    virtual ~WidgetListe() {}
 
-    void setCtrl(winListe *ctrl = NULL) { _ctrl = ctrl; }
+    void setCtrl(WinListe *ctrl = NULL) { _ctrl = ctrl; }
 
   protected:
     void mousePressEvent(QMouseEvent *event);

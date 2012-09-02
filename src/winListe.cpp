@@ -13,10 +13,10 @@
 #include <gestion/Acces.h>
 #include <gestion/Acces_HTML.h>
 
-#include <QtGui>
-#include <QMessageBox>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QStyleFactory>
 
-winListe::winListe(QWidget *parent) :
+WinListe::WinListe(QWidget *parent) :
   QMainWindow(parent),
   _moreInfo(false), _currentType(TYPE_FILM)
 {
@@ -25,12 +25,12 @@ winListe::winListe(QWidget *parent) :
   setWindowTitle("GLst");
 
   //initialisation des dialogues de saisie
-  _frmZik = new winZik(this);
-  _frmFilm = new winFilm(this);
-  _frmBook = new winBook(this);
+  _frmZik = new WinZik(this);
+  _frmFilm = new WinFilm(this);
+  _frmBook = new WinBook(this);
 
   //initialisation du dialogue d'optionss
-  _frmOptions = new winOptions(this);
+  _frmOptions = new WinOptions(this);
 
   //initialisation des options
   _opt = new Options(OPTIONS_FILE);
@@ -42,7 +42,7 @@ winListe::winListe(QWidget *parent) :
   _listHTML = new Acces_HTML(_listes);
 
   //initialisation du menu des medias
-  _menu = new winListeMenu(this);
+  _menu = new WinListeMenu(this);
   _ui.menuBar->addMenu(_menu);
 
   //attribution du controlleur de ui.listM
@@ -58,16 +58,11 @@ winListe::winListe(QWidget *parent) :
   _ui.actFind->setVisible(false);
 
   //evenements du menu
-  connect(_ui.actOptions, SIGNAL(triggered()),
-          this, SLOT(showOptions()));
-  connect(_ui.actExHTML, SIGNAL(triggered()),
-          this, SLOT(exportHTML()));
-  connect(_ui.actTypeFilms, SIGNAL(triggered()),
-          this, SLOT(updateLstFromMenu()));
-  connect(_ui.actTypeZik, SIGNAL(triggered()),
-          this, SLOT(updateLstFromMenu()));
-  connect(_ui.actTypeBook, SIGNAL(triggered()),
-          this, SLOT(updateLstFromMenu()));
+  connect(_ui.actOptions,   &QAction::triggered,  this, &WinListe::showOptions);
+  connect(_ui.actExHTML,    &QAction::triggered,  this, &WinListe::exportHTML);
+  connect(_ui.actTypeFilms, &QAction::triggered,  this, &WinListe::updateLstFromMenu);
+  connect(_ui.actTypeZik,   &QAction::triggered,  this, &WinListe::updateLstFromMenu);
+  connect(_ui.actTypeBook,  &QAction::triggered,  this, &WinListe::updateLstFromMenu);
 
   //initialisation de la status bar
   _ui.statusBar->addWidget(&_lblStat, 1);
@@ -76,39 +71,35 @@ winListe::winListe(QWidget *parent) :
   _menu->updateMenu();
 }
 
-void winListe::save()
+void WinListe::save()
 {
   _listDE->save(_opt->get_liste());
 }
 
-void winListe::load()
+void WinListe::load()
 {
   _lblStat.setText("Chargement...");
   _listDE->load(_opt->get_liste());
   refreshLst();
 }
 
-void winListe::exportHTML()
+void WinListe::exportHTML()
 {
-  #ifdef Q_OS_SYMBIAN
-  _listHTML->save("E:/GLst/Listes.html");
-  #else
   _listHTML->save("Listes.html");
-  #endif
   refreshLst();
 }
 
-void winListe::changeStyle(const QString &styleName)
+void WinListe::changeStyle(const QString &styleName)
 {
   QApplication::setStyle(QStyleFactory::create(styleName));
 }
 
-void winListe::refreshStyle()
+void WinListe::refreshStyle()
 {
   QApplication::setStyle(QStyleFactory::create(_opt->get_style()));
 }
 
-void winListe::showAdd()
+void WinListe::showAdd()
 {
   closeAll();
   QWidget *Form = NULL;
@@ -127,7 +118,7 @@ void winListe::showAdd()
     #endif
 }
 
-void winListe::showAddTo()
+void WinListe::showAddTo()
 {
   int Id = selectedId();
   if (Id < 0) return;
@@ -140,7 +131,7 @@ void winListe::showAddTo()
   showAdd();
 }
 
-void winListe::showOptions()
+void WinListe::showOptions()
 {
   closeAll();
   _frmOptions->resetFrm();
@@ -151,7 +142,7 @@ void winListe::showOptions()
   #endif
 }
 
-void winListe::showMod()
+void WinListe::showMod()
 {
   int Id = selectedId();
   if (Id < 0) return;
@@ -165,7 +156,7 @@ void winListe::showMod()
   showAdd();
 }
 
-void winListe::closeAll()
+void WinListe::closeAll()
 {
   _frmFilm->close();
   _frmZik->close();
@@ -173,7 +164,7 @@ void winListe::closeAll()
   _frmOptions->close();
 }
 
-void winListe::delMedia()
+void WinListe::delMedia()
 {
   int Id = selectedId();
   if (Id >= 0)
@@ -184,7 +175,7 @@ void winListe::delMedia()
   save();
 }
 
-int winListe::selectedId() const
+int WinListe::selectedId() const
 {
   const int Id = _ui.listM->currentRow();
   int Idn = _ui.listM->count();
@@ -193,7 +184,7 @@ int winListe::selectedId() const
   return -1;
 }
 
-bool winListe::canAddToItem() const
+bool WinListe::canAddToItem() const
 {
   Media *TmpMedia = _listes->get_Media(selectedId());
   if (TmpMedia == NULL)
@@ -209,7 +200,7 @@ bool winListe::canAddToItem() const
   }
 }
 
-void winListe::updateLst(const int type)
+void WinListe::updateLst(const int type)
 {
   _currentType = type;
   int Nb_Cd = 0;
@@ -355,7 +346,7 @@ void winListe::updateLst(const int type)
   _menu->updateMenu();
 }
 
-void winListe::updateLstFromMenu()
+void WinListe::updateLstFromMenu()
 {
   const QObject *Sender = sender();
   if (Sender == _ui.actTypeFilms)
@@ -366,12 +357,12 @@ void winListe::updateLstFromMenu()
     updateLst(TYPE_BOOK);
 }
 
-void winListe::sortList()
+void WinListe::sortList()
 {
   sortList(-1);
 }
 
-void winListe::sortList(const int type)
+void WinListe::sortList(const int type)
 {
   const int Type = (type >= 0) ? type : _opt->get_sortType();
 

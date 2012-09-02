@@ -1,38 +1,38 @@
 20060405-1	Premiere version utilisable
 20060407-1	Ajout de la date aux medias
-20060412-1	N∞ de boÓte aux medias
-20060412-2	QualitÈ aux films
+20060412-1	N¬∞ de bo√Æte aux medias
+20060412-2	Qualit√© aux films
 			Genre aux films
-20060413-1	Modification des boÓtes de saisie de dates
+20060413-1	Modification des bo√Ætes de saisie de dates
 20060413-2	L'affichage des infos sup est optionel
 20060424-1	Optmisation de la sauvegarde
 20060517-1	Ajout d'options (fichier des listes et style)
-20060617-1	Affichage du programme avant la fin du chargement des donnÈes
+20060617-1	Affichage du programme avant la fin du chargement des donn√©es
 			Correction d'un bug sur les lignes vides dans le fichier
 20060622-1	Ajout de la gestion des livres
-			Trie des donnÈes au chargement
-20060628-1	RÈÈcriture du chargement des listes
+			Trie des donn√©es au chargement
+20060628-1	R√©√©criture du chargement des listes
 20060629-1	Fonction d'export en HTML
-20060708-1	Affichage des catÈgories non-vide selement dans l'export HTML
+20060708-1	Affichage des cat√©gories non-vide selement dans l'export HTML
 			Affichage du nombre de media dans l'export HTML
 20060714-1	Ajout d'un index par lettres dans l'export HTML
 20060902-1	Optimisation du trie
-			Remise ‡ zÈro complËte des formulaire d'ajout ‡ chaque ouverture
-			Trie des ÈlÈments insenssible ‡ la casse
+			Remise √† z√©ro compl√®te des formulaire d'ajout √† chaque ouverture
+			Trie des √©l√©ments insenssible √† la casse
 			Ajout d'un bouton de trie
 			Gestion "intelligente" du trie (il ne s'effectue que s'il est utile)
-			Modif du thËme d'icones
-20060902-2	Changement d'algorithme de trie (passage au trie fusion) -> rapiditÈ incomparable avec les versions antËrieures
+			Modif du th√®me d'icones
+20060902-2	Changement d'algorithme de trie (passage au trie fusion) -> rapidit√© incomparable avec les versions ant√®rieures
 20060903-1	Inclusion des images dans l'executable
 			Changement de l'arborecence des sources et utilisation des fichiers ressources et projet de QT
-20061113-1	Trie automatique -> suppression du bouton de trie (vu la rapiditÈ...)
-			MÈmorisation du trie utilisÈ dans le fichier de configuration
+20061113-1	Trie automatique -> suppression du bouton de trie (vu la rapidit√©...)
+			M√©morisation du trie utilis√© dans le fichier de configuration
 			Passage en QT4.2 pour le binaire Windows (nouvelles dll)
 20061216-1	Correction d'un bug dans l'export HTML
-20070812-1	Changement du trie alphabÈtique (insensible aux accents)
+20070812-1	Changement du trie alphab√©tique (insensible aux accents)
 			Pas de trie des listes lors de l'abandon de la modif
-			Ajout d'un menu contextuel (avec "ajouter ‡ ...")
+			Ajout d'un menu contextuel (avec "ajouter √† ...")
 			Passage en QT4.3 pour le binaire Windows (nouvelles dll)
 20070813-1	Changement des icones
-			Focus sur le titre lors de l'ajout ‡ un auteur ou un artiste existant
+			Focus sur le titre lors de l'ajout √† un auteur ou un artiste existant
 			Ajout dune boite de dialogue de recherche de fichier pour remplacer la saisie manuelle

@@ -1,16 +1,16 @@
 #ifndef __WINLISTEMENU_H
 #define __WINLISTEMENU_H
 
-#include <QMenu>
+#include <QtWidgets/QMenu>
 
-class winListe;
+class WinListe;
 
-class winListeMenu : public QMenu
+class WinListeMenu : public QMenu
 {
   Q_OBJECT
 
   protected:
-    winListe *_ctrl;
+    WinListe *_ctrl;
     QAction *_actAdd;
     QAction *_actAddTo;
     QAction *_actDel;
@@ -19,8 +19,8 @@ class winListeMenu : public QMenu
     QAction *_actDisplayMore;
 
   public:
-    winListeMenu(winListe *parent);
-    virtual ~winListeMenu() {}
+    WinListeMenu(WinListe *parent);
+    virtual ~WinListeMenu() {}
 
     void updateMenu();
 

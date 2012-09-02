@@ -5,19 +5,19 @@
 
 #include <gestion/Film.h>
 
-class winListe;
+class WinListe;
 
-class winFilm : public QWidget
+class WinFilm : public QWidget
 {
   Q_OBJECT
 
   private:
     Ui_dialogAjoutFilm _ui;
-    winListe *_ctrl;
+    WinListe *_ctrl;
     int _modif;
 
   public:
-    winFilm(winListe *ctrl, QWidget *parent = NULL);
+    WinFilm(WinListe *ctrl, QWidget *parent = NULL);
 
   public slots:
     void resetFrm();

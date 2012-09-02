@@ -1,5 +1,4 @@
-#include <QtGui>
-#include <QMessageBox>
+#include <QtWidgets/QMessageBox>
 
 #include <winListe.h>
 #include <winBook.h>
@@ -7,16 +6,14 @@
 #include <gestion/Book.h>
 #include <gestion/Collection.h>
 
-winBook::winBook(winListe *ctrl, QWidget *parent) :
+WinBook::WinBook(WinListe *ctrl, QWidget *parent) :
   QWidget(parent),
   _ctrl(ctrl), _modif(-1)
 {
   _ui.setupUi(this);
 
-  connect(_ui.cancelButton, SIGNAL(clicked()),
-          this, SLOT(abandon()));
-  connect(_ui.okButton, SIGNAL(clicked()),
-          this, SLOT(confirm()));
+  connect(_ui.cancelButton, &QPushButton::clicked, this, &WinBook::abandon);
+  connect(_ui.okButton,     &QPushButton::clicked, this, &WinBook::confirm);
 
   resetFrm();
 
@@ -25,7 +22,7 @@ winBook::winBook(winListe *ctrl, QWidget *parent) :
   _ui.cmbFormat->addItem("E-Book");
 }
 
-void winBook::resetFrm()
+void WinBook::resetFrm()
 {
   _ui.cmbFormat->setCurrentIndex(0);
   _ui.txtAuteur->setFocus();
@@ -34,13 +31,13 @@ void winBook::resetFrm()
   _ui.date->setDate(QDate::currentDate());
 }
 
-void winBook::abandon()
+void WinBook::abandon()
 {
   resetFrm();
   close();
 }
 
-void winBook::confirm()
+void WinBook::confirm()
 {
   //test des valeurs
   if (_ui.txtAuteur->text().isEmpty())
@@ -79,7 +76,7 @@ void winBook::confirm()
   abandon();
 }
 
-void winBook::setVals(const int idn)
+void WinBook::setVals(const int idn)
 {
   //verif de l'id
   if ((idn < 0) or (idn >= _ctrl->_listes->nb_Media())) return;
@@ -96,7 +93,7 @@ void winBook::setVals(const int idn)
   _modif = idn;
 }
 
-void winBook::addTo(const int idn)
+void WinBook::addTo(const int idn)
 {
   //verif de l'id
   if ((idn < 0) or (idn >= _ctrl->_listes->nb_Media())) return;

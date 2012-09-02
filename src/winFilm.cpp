@@ -1,5 +1,4 @@
-#include <QtGui>
-#include <QMessageBox>
+#include <QtWidgets/QMessageBox>
 
 #include <winFilm.h>
 #include <winListe.h>
@@ -7,16 +6,14 @@
 #include <gestion/Film.h>
 #include <gestion/Collection.h>
 
-winFilm::winFilm(winListe *ctrl, QWidget *parent) :
+WinFilm::WinFilm(WinListe *ctrl, QWidget *parent) :
   QWidget(parent),
   _ctrl(ctrl), _modif(-1)
 {
   _ui.setupUi(this);
 
-  connect(_ui.cancelButton, SIGNAL(clicked()),
-          this, SLOT(abandon()));
-  connect(_ui.okButton, SIGNAL(clicked()),
-          this, SLOT(confirm()));
+  connect(_ui.cancelButton, &QPushButton::clicked, this, &WinFilm::abandon);
+  connect(_ui.okButton,     &QPushButton::clicked, this, &WinFilm::confirm);
 
   resetFrm();
 
@@ -32,12 +29,12 @@ winFilm::winFilm(winListe *ctrl, QWidget *parent) :
   _ui.cmbGenre->addItem("Concert");
   _ui.cmbGenre->addItem("Spectacle");
   _ui.cmbGenre->addItem("Manga");
-  _ui.cmbGenre->addItem("Dessin Animé");
+  _ui.cmbGenre->addItem("Dessin AnimÃ©");
   _ui.cmbGenre->addItem("Serie");
   _ui.cmbGenre->addItem("Documentaire");
 }
 
-void winFilm::resetFrm()
+void WinFilm::resetFrm()
 {
   _modif = -1;
   _ui.cmbQualite->setCurrentIndex(0);
@@ -50,13 +47,13 @@ void winFilm::resetFrm()
   _ui.date->setDate(QDate::currentDate());
 }
 
-void winFilm::abandon()
+void WinFilm::abandon()
 {
   resetFrm();
   close();
 }
 
-void winFilm::confirm()
+void WinFilm::confirm()
 {
   //test des valeurs
   if (_ui.txtNom->text().isEmpty())
@@ -90,7 +87,7 @@ void winFilm::confirm()
   abandon();
 }
 
-void winFilm::setVals(const int idn)
+void WinFilm::setVals(const int idn)
 {
   //verif de l'id
   if ((idn < 0) or (idn >= _ctrl->_listes->nb_Media())) return;

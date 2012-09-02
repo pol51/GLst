@@ -3,18 +3,18 @@
 
 #include <ui_Options.h>
 
-class winListe;
+class WinListe;
 
-class winOptions : public QWidget
+class WinOptions : public QWidget
 {
   Q_OBJECT
 
   private:
     Ui_dialogOptions _ui;
-    winListe *_ctrl;
+    WinListe *_ctrl;
 
   public:
-    winOptions(winListe *ctrl, QWidget *parent = 0);
+    WinOptions(WinListe *ctrl, QWidget *parent = 0);
 
   public slots:
     void searchFile();
