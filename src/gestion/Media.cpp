@@ -1,5 +1,6 @@
-
 #include "Media.h"
+
+#include <QtCore/QDate>
 
 //Accesseur en ecriture sur la référence par un entier
 void Media::set_num(int nbr)
@@ -30,11 +31,7 @@ bool Media::test_num(const QString &num)
 
 bool Media::test_date(const QString &date)
 {
-  const QString Date(date.trimmed());
-  if (Date.count() != 8) return 0;
-  bool result;
-  Date.toInt(&result);
-  return result;
+  return QDate::fromString(date.trimmed(), "yyyyMMdd").isValid();
 }
 
 //Création de la première partie de la référence
