@@ -52,7 +52,7 @@ class Media
 
   public:
     //Accesseur en ecriture sur la date
-    void set_date(const QString &value) { _date = value; }
+    void set_date(const QString &value) { _date = value.trimmed(); }
 
     //Accesseur en ecriture sur le numero de boite
     void set_idBoite(const int value) { _idBoite = value; }

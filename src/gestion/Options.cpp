@@ -20,7 +20,7 @@ int Options::save() const
   QFile file(_filename);
   if (file.open(QIODevice::WriteOnly))
   {
-    file.write(data.toAscii());
+    file.write(data.toUtf8());
     file.close();
     return 1;
   }

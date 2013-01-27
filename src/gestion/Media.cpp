@@ -30,9 +30,10 @@ bool Media::test_num(const QString &num)
 
 bool Media::test_date(const QString &date)
 {
-  if (date.count() != 8) return 0;
+  const QString Date(date.trimmed());
+  if (Date.count() != 8) return 0;
   bool result;
-  date.toInt(&result);
+  Date.toInt(&result);
   return result;
 }
 
