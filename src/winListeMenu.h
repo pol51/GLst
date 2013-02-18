@@ -25,7 +25,7 @@ class WinListeMenu : public QMenu
     void updateMenu();
 
   private slots:
-    void sortListByNews(bool value);
+    void sortListByNews(bool on);
 };
 
 #endif

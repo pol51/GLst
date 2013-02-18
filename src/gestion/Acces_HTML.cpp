@@ -9,38 +9,37 @@
 #include <QtCore/QFile>
 
 //Sauvegarde du fichier
-int Acces_HTML::save(const QString &filename) const
+bool Acces_HTML::save(const QString &filename) const
 {
   QString lettres;		//utilise pour les index
   int type = 0;       //type actuel du media
-  Media* tmpM;        //media temporaire
   QChar firstcar(0);	//premier caractère du media précédent
   QChar newcar(0);		//premier caractère du media courant
 
   //vérification de listes non-vides
-  if (_collection->nb_Media() == 0)
-    return 0;
+  if (!_collection.size())
+    return false;
 
   QFile file(filename);
   QString f;
 
-  //tri par ordre alphabétique
-  _collection->sort_Media(SORT_ALPHA);
+  if (!file.open(QIODevice::WriteOnly)) return false;
 
-  if (!file.open(QIODevice::WriteOnly)) return 0;
+  //tri par ordre alphabétique
+  _collection.sort(Collection::eSTAlpha);
 
   //recup du nombre de media
-  int nb_media[4];
-  nb_media[0] = 4;	//nombre de type de media + 1
-  nb_media[TYPE_FILM] = _collection->nb_Media(TYPE_FILM);
-  nb_media[TYPE_ZIK]  = _collection->nb_Media(TYPE_ZIK);
-  nb_media[TYPE_BOOK] = _collection->nb_Media(TYPE_BOOK);
+  int nb_media[Media::eMTMax];
+  nb_media[0] = Media::eMTMax;	//nombre de type de media + 1
+  nb_media[Media::eMTFilm] = _collection.size(Media::eMTFilm);
+  nb_media[Media::eMTZik]  = _collection.size(Media::eMTZik);
+  nb_media[Media::eMTBook] = _collection.size(Media::eMTBook);
 
   //tableau du nom des medias
-  char *nom_media[4]; //taille = nombre de type de media + 1
-  char nom_film[] = "Films";		nom_media[1] = nom_film;
-  char nom_zik[]  = "Musique";	nom_media[2] = nom_zik;
-  char nom_book[] = "Livres";		nom_media[3] = nom_book;
+  char *nom_media[Media::eMTMax]; //taille = nombre de type de media + 1
+  char nom_film[] = "Films";		nom_media[Media::eMTFilm] = nom_film;
+  char nom_zik[]  = "Musique";	nom_media[Media::eMTZik]  = nom_zik;
+  char nom_book[] = "Livres";		nom_media[Media::eMTBook] = nom_book;
 
   //en-tête de document
   f.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
@@ -146,15 +145,10 @@ int Acces_HTML::save(const QString &filename) const
 
   f.append("\n\t\t</div>");
 
-  const int nb_Media = _collection->nb_Media();
-  for (int i = 0; i < nb_Media; i++)
+  foreach(const Media *M, _collection)
   {
-    //récupération du media
-    tmpM = _collection->get_Media(i);
-    if (tmpM == NULL) continue;
-
     //détection du changement de type
-    if (type != tmpM->get_type())
+    if (type != M->type())
     {
       //si pas premier enregistrement
       if (type != 0)
@@ -165,7 +159,7 @@ int Acces_HTML::save(const QString &filename) const
           append("\n\t\t</div>");
 
       //nouveau type
-      type = tmpM->get_type();
+      type = M->type();
 
       //raz première lettre
       firstcar = 0;
@@ -179,7 +173,7 @@ int Acces_HTML::save(const QString &filename) const
     }
 
     //récup du premier caractère
-    newcar = tmpM->get_firstLetter().toUpper();
+    newcar = M->firstLetter().toUpper();
 
     //regroupement des premières caractères non-lettres
     if (newcar < 'A') newcar = '0';
@@ -204,7 +198,7 @@ int Acces_HTML::save(const QString &filename) const
     }
 
     //écriture d'une ligne
-    f.append(QString("\n\t\t\t\t<li>%1</li>").arg(code(tmpM)));
+    f.append(QString("\n\t\t\t\t<li>%1</li>").arg(code(*M)));
   }
 
   //clotûre de la dernière liste
@@ -229,44 +223,45 @@ int Acces_HTML::save(const QString &filename) const
   return 1;
 }
 //Formatage d'une ligne
-const QString Acces_HTML::code(const Media* media)
+const QString Acces_HTML::code(const Media &media)
 {
   QString line;
 
   //infos spécifiques
-  switch (media->get_type())
+  switch (media.type())
   {
-    case TYPE_ZIK:
+    case Media::eMTZik:
       line.append(QString("<span class=\"nom\">%1</span>"
         ": <span class=\"titre\">%2</span>").
-        arg(((Zik*)media)->get_artiste()).
-        arg(((Zik*)media)->get_titre()));
-      if (((Zik*)media)->get_nbCd())
+        arg(((Zik&)media).artist()).
+        arg(((Zik&)media).title()));
+      if (((Zik&)media).nbCd())
         line.append(QString(" (%1cd)").
-          arg(QString::number(((Zik*)media)->get_nbCd())));
+          arg(QString::number(((Zik&)media).nbCd())));
       break;
-    case TYPE_FILM:
+    case Media::eMTFilm:
       line.append(QString("<span class=\"nom\">%1</span>").
-        arg(((Film*)media)->get_nom()));
-      if (((Film*)media)->get_nbCd() > 0)
+        arg(((Film&)media).name()));
+      if (((Film&)media).nbCd() > 0)
         line.append(QString(" (%1cd)").
-          arg(((Film*)media)->get_nbCd()));
-      if (((Film*)media)->get_nbDvd() > 0)
+          arg(((Film&)media).nbCd()));
+      if (((Film&)media).nbDvd() > 0)
         line.append(QString(" (%1dvd)").
-          arg(((Film*)media)->get_nbDvd()));
+          arg(((Film&)media).nbDvd()));
       break;
-    case TYPE_BOOK:
+    case Media::eMTBook:
       line.append(QString("<span class=\"nom\">%1</span>"
         ": <span class=\"titre\">%2</span>").
-        arg(((Book*)media)->get_auteur()).
-        arg(((Book*)media)->get_titre()));
+        arg(((Book&)media).author()).
+        arg(((Book&)media).title()));
       break;
-
+    default:
+      break;
   }
 
   //id boite
-  if (media->get_idBoite() > 0)
-    line.append(QString(" [n°%1]").arg(media->get_idBoite()));
+  if (media.idBoite())
+    line.append(QString(" [n°%1]").arg(media.idBoite()));
 
   return line;
 }

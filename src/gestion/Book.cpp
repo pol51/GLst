@@ -1,9 +1,15 @@
 #include "Book.h"
 
-//Comparaison de 2 livres par leur auteur/titre
-int Book::cmp_alpha(const Book* book1, const Book* book2)
+const QString Book::displayable(const bool moreInfo) const
 {
-  int result = book1->get_auteur().compare(book2->get_auteur());
-  if (result) return result;
-  return book1->get_titre().compare(book2->get_titre());
+  QString Line(_author);
+  Line.append(" - ");
+  Line.append(_title);
+  if (moreInfo)
+    switch (_format)
+    {
+      case Book::ePaper:    Line.append(" [papier]"); break;
+      case Book::eNumeric:  Line.append(" [e-book]"); break;
+    }
+  return Line;
 }

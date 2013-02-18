@@ -6,17 +6,16 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QLabel>
 
+#include <gestion/Collection.h>
+#include <gestion/Acces_HTML.h>
+#include <gestion/Options.h>
+
 class WinFilm;
 class WinZik;
 class WinBook;
 class WinOptions;
 class WinListeMenu;
 class WidgetListe;
-
-class Options;
-class Collection;
-class Acces;
-class Acces_HTML;
 
 #define OPTIONS_FILE "glst.cfg"
 
@@ -35,10 +34,10 @@ class WinListe : public QMainWindow
     int _currentType;
 
   public:
-    Options *_opt;
-    Collection *_listes;
-    Acces *_listDE;
-    Acces_HTML *_listHTML;
+    Options _opt;
+    Collection _listes;
+    Acces _listDE;
+    Acces_HTML _listHTML;
     WinListeMenu *_menu;
 
   private:
@@ -62,7 +61,7 @@ class WinListe : public QMainWindow
     void updateLstFromMenu();
     void refreshLst() { updateLst(_currentType); }
     void sortList();
-    void sortList(const int type);
+    void sortList(const Collection::ESortType type);
     void changeStyle(const QString &styleName);
     void refreshStyle();
     void exportHTML();

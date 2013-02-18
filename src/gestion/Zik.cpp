@@ -1,9 +1,13 @@
 #include "Zik.h"
 
-//Comparaison de 2 album par leur artiste/titre
-int Zik::cmp_alpha(const Zik* zik1, const Zik* zik2)
+const QString Zik::displayable(const bool moreInfo) const
 {
-  int result = zik1->get_artiste().compare(zik2->get_artiste());
-  if (result) return result;
-  return zik1->get_titre().compare(zik2->get_titre());
+  QString Line(_artist);
+  Line.append(" - ");
+  Line.append(_title);
+  if (_nbCd)
+    Line.append(QString(" (%1CD)").arg(_nbCd));
+  if (moreInfo && _idBoite)
+    Line.append(QString(" [#%1]").arg(_idBoite));
+  return Line;
 }

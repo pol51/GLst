@@ -50,6 +50,7 @@ UI_DIR = build/uic
 OBJECTS_DIR = build/obj
 RCC_DIR = build/rcc
 RC_FILE += GLst.rc
+CONFIG += c++11
 QT += core \
     gui \
     widgets \

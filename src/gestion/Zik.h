@@ -3,48 +3,52 @@
 
 #include <gestion/Media.h>
 
-#define TYPE_ZIK 2
-
 //Item de musique
 class Zik : public Media
 {
   protected:
     //Nom de l'artiste
-    QString _artiste;
+    QString _artist;
     //Titre de l'album
-    QString _titre;
+    QString _title;
     //Nombre de cd
-    int _nbCd;
+    int _nbCd = 0;
 
   public:
     //Constructeur
-    Zik() : Media(TYPE_ZIK), _nbCd(0) {}
-
-    //Destructeur
-    virtual ~Zik() {}
+    Zik() : Media(eMTZik) {}
 
     //Accesseur en lecture sur l'artiste
-    const QString &get_artiste() const { return _artiste; }
+    const QString &artist() const { return _artist; }
 
     //Accesseur en lecture sur le titre
-    const QString &get_titre() const { return _titre; }
+    const QString &title() const { return _title; }
 
     //Accesseur en lecture sur le nombre de cd
-    int get_nbCd() const { return _nbCd; }
+    int nbCd() const { return _nbCd; }
 
     //Renvoie la première lettre caractéristique du média
-    virtual QChar get_firstLetter() const { return _artiste[0]; }
+    QChar firstLetter() const { return _artist[0]; }
 
     //Accesseur en ecriture sur l'artiste
-    void set_artiste(const QString &value) { _artiste = value; }
+    void setArtist(const QString &value) { _artist = value; }
 
     //Accesseur en ecriture sur le titre
-    void set_titre(const QString &value) { _titre = value; }
+    void setTitle(const QString &value) { _title = value; }
 
     //Accesseur en ecriture sur le nombre de cd
-    void set_nbCd(int value) { _nbCd = value; }
+    void setNbCd(int value) { _nbCd = value; }
+
+    //Generate printable string
+    const QString displayable(const bool moreInfo) const;
 
     //Comparaison de 2 album par leur artiste/titre
-    static int cmp_alpha(const Zik* zik1, const Zik* zik2);
+    int cmpAlpha(const Media &other) const
+    {
+      const int Res(Media::cmpAlpha(other));
+      if (Res) return Res;
+      const int Artist(_artist.compare(((Zik&)other)._artist));
+      return Artist?Artist:_title.compare(((Zik&)other)._title);
+    }
 };
 #endif

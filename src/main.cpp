@@ -6,12 +6,12 @@ int main(int argc, char * argv[])
 {
   QApplication myApp(argc,argv);
 
-  WinListe *myListe = new WinListe();
+  WinListe myListe;
 
-  myListe->show();
-  myListe->refreshStyle();
-  myListe->load();
-  myListe->sortList();
+  myListe.show();
+  myListe.refreshStyle();
+  myListe.load();
+  myListe.sortList();
 
   return myApp.exec();
 }

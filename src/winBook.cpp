@@ -54,17 +54,15 @@ void WinBook::confirm()
   }
 
   //affectation des valeurs
-  Book* tmpB;
+  Book *tmpB((_modif < 0)
+             ? _ctrl->_listes.addBook()
+             : (Book*)_ctrl->_listes[_modif]);
+  tmpB->setAuthor(_ui.txtAuteur->text());
+  tmpB->setTitle(_ui.txtTitre->text());
+  tmpB->setFormat((Book::EBookFormat)_ui.cmbFormat->currentIndex());
   if (_modif < 0)
-    tmpB = _ctrl->_listes->add_Book();
-  else
-    tmpB = (Book*)_ctrl->_listes->get_Media(_modif);
-  tmpB->set_auteur(_ui.txtAuteur->text());
-  tmpB->set_titre(_ui.txtTitre->text());
-  tmpB->set_format((Book::EFormat)_ui.cmbFormat->currentIndex());
-  if (_modif < 0)
-    tmpB->set_num(_ctrl->_listes->nextref_Media(TYPE_BOOK));
-  tmpB->set_date(_ui.date->date().toString("yyyyMMdd"));
+    tmpB->setNum(_ctrl->_listes.nextref(Media::eMTBook));
+  tmpB->setDate(_ui.date->date().toString("yyyyMMdd"));
 
   //trie
   _ctrl->sortList();
@@ -79,15 +77,14 @@ void WinBook::confirm()
 void WinBook::setVals(const int idn)
 {
   //verif de l'id
-  if ((idn < 0) or (idn >= _ctrl->_listes->nb_Media())) return;
+  if ((idn < 0) or (idn >= _ctrl->_listes.size())) return;
 
   //recup des infos du media
-  Book* tmpB = (Book*)_ctrl->_listes->get_Media(idn);
-  _ui.txtAuteur->setText(tmpB->get_auteur());
-  _ui.txtTitre->setText(tmpB->get_titre());
-  _ui.cmbFormat->setCurrentIndex(tmpB->get_format());
-  QString date = tmpB->get_date();
-  _ui.date->setDate(QDate::fromString(date, "yyyyMMdd"));
+  const Book &tmpB(*(Book*)_ctrl->_listes[idn]);
+  _ui.txtAuteur->setText(tmpB.author());
+  _ui.txtTitre->setText(tmpB.title());
+  _ui.cmbFormat->setCurrentIndex(tmpB.format());
+  _ui.date->setDate(QDate::fromString(tmpB.date(), "yyyyMMdd"));
 
   //definition du mode modif
   _modif = idn;
@@ -96,11 +93,10 @@ void WinBook::setVals(const int idn)
 void WinBook::addTo(const int idn)
 {
   //verif de l'id
-  if ((idn < 0) or (idn >= _ctrl->_listes->nb_Media())) return;
+  if ((idn < 0) or (idn >= _ctrl->_listes.size())) return;
 
   //recup des infos du media
-  Book* tmpB = (Book*)_ctrl->_listes->get_Media(idn);
-  _ui.txtAuteur->setText(tmpB->get_auteur());
+  _ui.txtAuteur->setText(((Book*)_ctrl->_listes[idn])->author());
 
   // focus
   _ui.txtTitre->setFocus();

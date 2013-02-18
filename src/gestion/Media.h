@@ -12,60 +12,84 @@ class QString;
 //Item de base
 class Media
 {
+  public:
+    typedef enum MediaType
+    {
+      eMTUnknown = 0,
+      eMTFilm,
+      eMTZik,
+      eMTBook,
+      eMTMax
+    } EMediaType;
+
   protected:
-    int _type;
-    //Date d'enregistrement du media
+    //Type du media
+    EMediaType _type = eMTUnknown;
     //Numéro du contenant du media
-    int _idBoite;
+    int _idBoite = 0;
     //Reférénce du media
     QString _num;
-    //Type du media
-    QString _date;
+    //Date d'enregistrement du media
+    QString _date = "20000101";
 
   public:
-    //Constructeur
-    Media(const int type) : _type(type), _idBoite(0), _date("20000101") {}
+    //Constructor
+    Media(const EMediaType type) : _type(type) {}
 
-    //Destructeur
+    //Destructor
     virtual ~Media() {}
 
     //Accesseur en lecture sur la référence
-    const QString &get_num() const { return _num; }
+    const QString &num() const { return _num; }
 
     //Accesseur en lecture sur le type
-    int get_type() const { return _type; }
+    EMediaType type() const { return _type; }
 
     //Accesseur en lecture sur la date
-    const QString &get_date() const { return _date; }
+    const QString &date() const { return _date; }
 
     //Accesseur en lecture sur le numero de la boite
-    int get_idBoite() const { return _idBoite; }
+    int idBoite() const { return _idBoite; }
 
     //Renvoie la première lettre caractéristique du média
-    virtual QChar get_firstLetter() const = 0;
+    virtual QChar firstLetter() const = 0;
 
     //Accesseur en ecriture sur la référence
-    void set_num(const QString &value) { _num = value; }
+    void setNum(const QString &value) { _num = value; }
 
     //Accesseur en ecriture sur la référence par un entier
-    void set_num(const int nbr);
+    void setNum(const int nbr);
 
-  public:
     //Accesseur en ecriture sur la date
-    void set_date(const QString &value) { _date = value.trimmed(); }
+    void setDate(const QString &value) { _date = value.trimmed(); }
 
     //Accesseur en ecriture sur le numero de boite
-    void set_idBoite(const int value) { _idBoite = value; }
+    void setIdBoite(const int value) { _idBoite = value; }
+
+    //Generate printable string
+    virtual const QString displayable(const bool moreInfo) const = 0;
 
     //Test de la référence
-    static bool test_num(const QString &num);
-    static bool test_date(const QString &date);
+    static bool testNum(const QString &num);
+    static bool testDate(const QString &date);
 
     //Création de la première partie de la référence
-    static const QString make_num_1(const int type);
+    static const QString makeNum1(const int type);
 
     //Création de la seconde partie de la référence
-    static const QString make_num_2(const int nbr);
-    static int cmp_date(const Media* med1, const Media* med2);
+    static const QString makeNum2(const int nbr);
+
+    //Compare alpha
+    virtual int cmpAlpha(const Media &other) const
+    {
+      return _type > other._type?1:(_type < other._type?-1:0);
+    }
+
+    //Compare dates
+    int cmpDate(const Media &other) const
+    {
+      const int Date(-_date.compare(other._date));
+      return Date?Date:-_num.compare(other._num);
+    }
 };
 #endif

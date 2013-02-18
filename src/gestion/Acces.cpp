@@ -10,7 +10,7 @@
 #include <QtCore/QStringList>
 
 //Chargement du fichier
-int Acces::load(const QString &filename)
+bool Acces::load(const QString &filename)
 {
   char buffer[1025];
   QString line;
@@ -18,7 +18,7 @@ int Acces::load(const QString &filename)
 
   QFile file(filename);
 
-  if (!file.open(QIODevice::ReadOnly)) return 0;
+  if (!file.open(QIODevice::ReadOnly)) return false;
 
   int readSize = 0;
   do
@@ -36,7 +36,7 @@ int Acces::load(const QString &filename)
       continue;
 
     //test de doublon
-    if (_collection->find_Media(med_src->get_num()) >= 0)
+    if (_collection.find(med_src->num()) >= 0)
     {
       delete med_src;
       med_src = NULL;
@@ -44,16 +44,16 @@ int Acces::load(const QString &filename)
     }
 
     //ajout d'un media dans la collection
-    switch (med_src->get_type())
+    switch (med_src->type())
     {
-      case TYPE_ZIK:
-        *(_collection->add_Zik())  = *((Zik*)med_src);
+      case Media::eMTZik:
+        *_collection.addZik()  = *((Zik*)med_src);
         break;
-      case TYPE_FILM:
-        *(_collection->add_Film()) = *((Film*)med_src);
+      case Media::eMTFilm:
+        *_collection.addFilm() = *((Film*)med_src);
         break;
-      case TYPE_BOOK:
-        *(_collection->add_Book()) = *((Book*)med_src);
+      case Media::eMTBook:
+        *_collection.addBook() = *((Book*)med_src);
         break;
       default:
         delete med_src;
@@ -64,65 +64,64 @@ int Acces::load(const QString &filename)
 
   file.close();
 
-  return 1;
+  return true;
 }
 
 //Sauvegarde du fichier
-int Acces::save(const QString &filename) const
+bool Acces::save(const QString &filename) const
 {
-  QString line;
-
   QFile file(filename);
 
-  if (!file.open(QIODevice::WriteOnly)) return 0;
+  if (!file.open(QIODevice::WriteOnly)) return false;
 
-  const int nb_Media = _collection->nb_Media();
-  for (int i = 0; i < nb_Media; i++)
-    file.write(code(_collection->get_Media(i)).toUtf8());
+  foreach(const Media* M, _collection)
+    file.write(code(*M).toUtf8());
 
   file.close();
 
-  return 1;
+  return true;
 }
 
 //Formatage d'une ligne
-const QString Acces::code(const Media* media)
+const QString Acces::code(const Media &media)
 {
   QString line;
 
   //type
   line = QString("%1 %2").
-    arg(QString::number(media->get_type())).
-    arg(media->get_num());
+    arg(QString::number(media.type())).
+    arg(media.num());
 
   //infos spécifiques
-  switch (media->get_type())
+  switch (media.type())
   {
-    case TYPE_ZIK:
+    case Media::eMTZik:
       line.append(QString(" %1 %2 %3").
-        arg(Utils::sp2und(((Zik*)media)->get_artiste())).
-        arg(Utils::sp2und(((Zik*)media)->get_titre())).
-        arg(QString::number(((Zik*)media)->get_nbCd())));
+        arg(Utils::sp2und(((Zik&)media).artist())).
+        arg(Utils::sp2und(((Zik&)media).title())).
+        arg(QString::number(((Zik&)media).nbCd())));
       break;
-    case TYPE_FILM:
+    case Media::eMTFilm:
       line.append(QString(" %1 %2 %3 %4 %5").
-        arg(Utils::sp2und(((Film*)media)->get_nom())).
-        arg(QString::number(((Film*)media)->get_nbCd())).
-        arg(QString::number(((Film*)media)->get_nbDvd())).
-        arg(QString::number(((Film*)media)->get_qualite())).
-        arg(QString::number(((Film*)media)->get_genre())));
+        arg(Utils::sp2und(((Film&)media).name())).
+        arg(QString::number(((Film&)media).nbCd())).
+        arg(QString::number(((Film&)media).nbDvd())).
+        arg(QString::number(((Film&)media).quality())).
+        arg(QString::number(((Film&)media).gender())));
       break;
-    case TYPE_BOOK:
+    case Media::eMTBook:
       line.append(QString(" %1 %2 %3").
-        arg(Utils::sp2und(((Book*)media)->get_auteur())).
-        arg(Utils::sp2und(((Book*)media)->get_titre())).
-        arg(QString::number(((Book*)media)->get_format())));
+        arg(Utils::sp2und(((Book&)media).author())).
+        arg(Utils::sp2und(((Book&)media).title())).
+        arg(QString::number(((Book&)media).format())));
+      break;
+    default:
       break;
   }
 
   line.append(QString(" %1 %2\n").
-    arg(QString::number(media->get_idBoite())).
-    arg(media->get_date()));
+    arg(QString::number(media.idBoite())).
+    arg(media.date()));
 
   return line;
 }
@@ -141,13 +140,13 @@ Media* Acces::decode(const QString &ligne)
 
   switch (ligne[0].cell() - '0')
   {
-    case TYPE_ZIK:
+    case Media::eMTZik:
       {
         //test et récup
         if (data.count() != 7)                        return NULL;
 
         const QString &num = data.at(1);
-        if (!Media::test_num(num))                    return NULL;
+        if (!Media::testNum(num))                    return NULL;
         const QString &artiste = data.at(2);
         if (artiste.isEmpty())                        return NULL;
         const QString &titre = data.at(3);
@@ -157,28 +156,28 @@ Media* Acces::decode(const QString &ligne)
         const int idBoite = data.at(5).toInt(&valid);
         if (!valid)                                   return NULL;
         const QString &date = data.at(6);
-        if (!Media::test_date(date.trimmed()))	    	return NULL;
+        if (!Media::testDate(date.trimmed()))	    	return NULL;
 
         //création du media
         Zik *TmpZik = new Zik();
 
         //affectation des valeurs au media
-        TmpZik->set_artiste(Utils::und2sp(artiste));
-        TmpZik->set_titre(Utils::und2sp(titre));
-        TmpZik->set_nbCd(nbCd);
-        TmpZik->set_num(num);
-        TmpZik->set_idBoite(idBoite);
-        TmpZik->set_date(date);
+        TmpZik->setArtist(Utils::und2sp(artiste));
+        TmpZik->setTitle(Utils::und2sp(titre));
+        TmpZik->setNbCd(nbCd);
+        TmpZik->setNum(num);
+        TmpZik->setIdBoite(idBoite);
+        TmpZik->setDate(date);
         TmpMed = TmpZik;
       }
       break;
-    case TYPE_FILM:
+    case Media::eMTFilm:
       {
         //test et récup
         if (data.count() != 9)                        return NULL;
 
         const QString &num = data.at(1);
-        if (!Media::test_num(num))                    return NULL;
+        if (!Media::testNum(num))                    return NULL;
         const QString &nom = data.at(2);
         if (nom.isEmpty())                            return NULL;
         const int nbCd = data.at(3).toInt(&valid);
@@ -192,30 +191,30 @@ Media* Acces::decode(const QString &ligne)
         const int idBoite = data.at(7).toInt(&valid);
         if (!valid)                                   return NULL;
         const QString &date = data.at(8);
-        if (!Media::test_date(date.trimmed()))	    	return NULL;
+        if (!Media::testDate(date.trimmed()))	    	return NULL;
 
         //création du media
         Film *TmpFilm = new Film();
 
         //affectation des valeurs au media
-        TmpFilm->set_nom(Utils::und2sp(nom));
-        TmpFilm->set_nbCd(nbCd);
-        TmpFilm->set_nbDvd(nbDvd);
-        TmpFilm->set_qualite((Film::EQualite)qualite);
-        TmpFilm->set_genre((Film::EGenre)genre);
-        TmpFilm->set_num(num);
-        TmpFilm->set_idBoite(idBoite);
-        TmpFilm->set_date(date);
+        TmpFilm->setName(Utils::und2sp(nom));
+        TmpFilm->setNbCd(nbCd);
+        TmpFilm->setNbDvd(nbDvd);
+        TmpFilm->setQuality((Film::EQualite)qualite);
+        TmpFilm->setGender((Film::EGenre)genre);
+        TmpFilm->setNum(num);
+        TmpFilm->setIdBoite(idBoite);
+        TmpFilm->setDate(date);
         TmpMed = TmpFilm;
       }
       break;
-    case TYPE_BOOK:
+    case Media::eMTBook:
       {
         //test et récup
         if (data.count() != 7)                        return NULL;
 
         const QString &num = data.at(1);
-        if (!Media::test_num(num))                    return NULL;
+        if (!Media::testNum(num))                    return NULL;
         const QString &auteur = data.at(2);
         if (auteur.isEmpty())                         return NULL;
         const QString &titre = data.at(3);
@@ -225,18 +224,18 @@ Media* Acces::decode(const QString &ligne)
         const int idBoite = data.at(5).toInt(&valid);
         if (!valid)                                   return NULL;
         const QString &date = data.at(6);
-        if (!Media::test_date(date.trimmed()))		    return NULL;
+        if (!Media::testDate(date.trimmed()))		    return NULL;
 
         //création du media
         Book *TmpBook = new Book();
 
         //affectation des valeurs au media
-        TmpBook->set_auteur(Utils::und2sp(auteur));
-        TmpBook->set_titre(Utils::und2sp(titre));
-        TmpBook->set_format((Book::EFormat)format);
-        TmpBook->set_num(num);
-        TmpBook->set_idBoite(idBoite);
-        TmpBook->set_date(date);
+        TmpBook->setAuthor(Utils::und2sp(auteur));
+        TmpBook->setTitle(Utils::und2sp(titre));
+        TmpBook->setFormat((Book::EBookFormat)format);
+        TmpBook->setNum(num);
+        TmpBook->setIdBoite(idBoite);
+        TmpBook->setDate(date);
         TmpMed = TmpBook;
       }
       break;

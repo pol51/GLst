@@ -3,13 +3,11 @@
 
 #include <gestion/Media.h>
 
-#define TYPE_FILM 1
-
 //Item de film
 class Film : public Media
 {
   public:
-    typedef enum
+    typedef enum Genre
     {
       eFilm,
       eLive,
@@ -20,7 +18,7 @@ class Film : public Media
       eDocumentaire
     } EGenre;
 
-    typedef enum
+    typedef enum Qualite
     {
       eDVDRip,
       eScreener,
@@ -33,58 +31,61 @@ class Film : public Media
 
   protected:
     //Nom du film
-    QString _nom;
+    QString _name;
     //Nombre de cd
-    int _nbCd;
+    int _nbCd = 0;
     //Nombre de dvd
-    int _nbDvd;
+    int _nbDvd = 0;
     //Qualité du film
-    EQualite _qualite;
+    EQualite _quality = eDVDRip;
     //Genre du film
-    EGenre _genre;
+    EGenre _gender = eFilm;
 
   public:
-    //Constructeur
-    Film() : Media(TYPE_FILM),
-      _nbCd(0), _nbDvd(0), _qualite(eDVDRip), _genre(eFilm) {}
-
-    //Destructeur
-    virtual ~Film() {}
+    //Constructor
+    Film() : Media(eMTFilm) {}
 
     //Accesseur en lecture sur le nom
-    const QString get_nom() const { return _nom; }
+    const QString name() const { return _name; }
 
     //Accesseur en lecture sur le nombre de cd
-    int get_nbCd() const { return _nbCd; }
+    int nbCd() const { return _nbCd; }
 
     //Accesseur en lecture sur le nombre de dvd
-    int get_nbDvd() const { return _nbDvd; }
+    int nbDvd() const { return _nbDvd; }
 
     //Accesseur en lecture sur la qualité
-    EQualite get_qualite() const { return _qualite; }
+    EQualite quality() const { return _quality; }
 
     //Accesseur en lecture sur le genre
-    EGenre get_genre() const { return _genre; }
+    EGenre gender() const { return _gender; }
 
     //Renvoie la première lettre caractéristique du média
-    virtual QChar get_firstLetter() const { return _nom[0]; }
+    QChar firstLetter() const { return _name[0]; }
 
     //Accesseur en ecriture sur le nom
-    void set_nom(const QString &value) { _nom = value; }
+    void setName(const QString &value) { _name = value; }
 
     //Accesseur en ecriture sur le nombre de cd
-    void set_nbCd(const int value) { _nbCd = value; }
+    void setNbCd(const int value) { _nbCd = value; }
 
     //Accesseur en ecriture sur le nombre de dvd
-    void set_nbDvd(const int value) { _nbDvd = value; }
+    void setNbDvd(const int value) { _nbDvd = value; }
 
     //Accesseur en ecriture sur la qualité
-    void set_qualite(const EQualite value) { _qualite = value; }
+    void setQuality(const EQualite value) { _quality = value; }
 
     //Accesseur en ecriture sur le genre
-    void set_genre(const EGenre value) { _genre = value; }
+    void setGender(const EGenre value) { _gender = value; }
+
+    //Generate printable string
+    const QString displayable(const bool moreInfo) const;
 
     //Comparaison de 2 films par leur nom
-    static int cmp_alpha(const Film* film1, const Film* film2);
+    int cmpAlpha(const Media &other) const
+    {
+      const int Res(Media::cmpAlpha(other));
+      return Res?Res:_name.compare(((Film&)other)._name);
+    }
 };
 #endif

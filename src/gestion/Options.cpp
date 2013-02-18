@@ -3,14 +3,6 @@
 #include <QtCore/QFile>
 #include <QtCore/QStringList>
 
-//Constructeur
-Options::Options(const QString &filename) :
-  _filename(filename), _style("Plastique"),
-  _liste("listes.txt"),
-  _sortType(2) // SORT_ALPHA
-{
-}
-
 //Ecrit le fichier d'options
 int Options::save() const
 {
@@ -67,7 +59,7 @@ int Options::load()
     }
     if (data.at(0) == "<sort_type>")
     {
-      _sortType = data.at(1).trimmed().toInt();
+      _sortType = (Collection::ESortType)data.at(1).trimmed().toInt();
       found++;
       continue;
     }

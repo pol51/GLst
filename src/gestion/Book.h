@@ -3,55 +3,59 @@
 
 #include <gestion/Media.h>
 
-#define TYPE_BOOK 3
-
 //Item de livre
 class Book : public Media
 {
   public:
-    typedef enum
+    typedef enum BookFormat
     {
-      ePapier,
+      ePaper,
       eNumeric
-    } EFormat;
+    } EBookFormat;
 
   protected:
     //Nom de l'auteur
-    QString _auteur;
+    QString _author;
     //Titre du livre
-    QString _titre;
+    QString _title;
     //Format du livre
-    EFormat _format;
+    EBookFormat _format = ePaper;
 
   public:
     //Constructeur
-    Book() : Media(TYPE_BOOK), _format(ePapier) {}
-
-    //Destructeur
-    virtual ~Book() {}
+    Book() : Media(eMTBook) {}
 
     //Accesseur en lecture sur l'auteur
-    const QString &get_auteur() const { return _auteur; }
+    const QString &author() const { return _author; }
 
     //Accesseur en lecture sur le titre
-    const QString &get_titre() const { return _titre; }
+    const QString &title() const { return _title; }
 
     //Accesseur en lecture sur le format
-    EFormat get_format() const { return _format; }
+    EBookFormat format() const { return _format; }
 
     //Renvoie la première lettre caractéristique du média
-    virtual QChar get_firstLetter() const { return _auteur[0]; }
+    QChar firstLetter() const { return _author[0]; }
 
     //Accesseur en ecriture sur l'auteur
-    void set_auteur(const QString &value) { _auteur = value; }
+    void setAuthor(const QString &value) { _author = value; }
 
     //Accesseur en ecriture sur le titre
-    void set_titre(const QString &value) { _titre = value; }
+    void setTitle(const QString &value) { _title = value; }
 
     //Accesseur en ecriture sur le format
-    void set_format(EFormat value) { _format = value; }
+    void setFormat(EBookFormat value) { _format = value; }
+
+    //Generate printable string
+    const QString displayable(const bool moreInfo) const;
 
     //Comparaison de 2 livres par leur auteur/titre
-    static int cmp_alpha(const Book* book1, const Book* book2);
+    int cmpAlpha(const Media &other) const
+    {
+      const int Res(Media::cmpAlpha(other));
+      if (Res) return Res;
+      const int Author(_author.compare(((Book&)other)._author));
+      return Author?Author:_title.compare(((Book&)other)._title);
+    }
 };
 #endif

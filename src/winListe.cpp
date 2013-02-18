@@ -9,7 +9,6 @@
 
 #include <gestion/Utils.h>
 #include <gestion/Options.h>
-#include <gestion/Collection.h>
 #include <gestion/Acces.h>
 #include <gestion/Acces_HTML.h>
 
@@ -18,7 +17,8 @@
 
 WinListe::WinListe(QWidget *parent) :
   QMainWindow(parent),
-  _moreInfo(false), _currentType(TYPE_FILM)
+  _moreInfo(false), _currentType(Media::eMTFilm),
+  _opt(OPTIONS_FILE), _listDE(_listes), _listHTML(_listes)
 {
   _ui.setupUi(this);
 
@@ -33,13 +33,7 @@ WinListe::WinListe(QWidget *parent) :
   _frmOptions = new WinOptions(this);
 
   //initialisation des options
-  _opt = new Options(OPTIONS_FILE);
-  if (_opt->load() != NB_OPTIONS) _opt->save();
-
-  //initaialisation de la collection et de son AccessDE
-  _listes = new Collection();
-  _listDE = new Acces(_listes);
-  _listHTML = new Acces_HTML(_listes);
+  if (_opt.load() != NB_OPTIONS) _opt.save();
 
   //initialisation du menu des medias
   _menu = new WinListeMenu(this);
@@ -73,19 +67,19 @@ WinListe::WinListe(QWidget *parent) :
 
 void WinListe::save()
 {
-  _listDE->save(_opt->get_liste());
+  _listDE.save(_opt.liste());
 }
 
 void WinListe::load()
 {
   _lblStat.setText("Chargement...");
-  _listDE->load(_opt->get_liste());
+  _listDE.load(_opt.liste());
   refreshLst();
 }
 
 void WinListe::exportHTML()
 {
-  _listHTML->save("Listes.html");
+  _listHTML.save("Listes.html");
   refreshLst();
 }
 
@@ -96,7 +90,7 @@ void WinListe::changeStyle(const QString &styleName)
 
 void WinListe::refreshStyle()
 {
-  QApplication::setStyle(QStyleFactory::create(_opt->get_style()));
+  QApplication::setStyle(QStyleFactory::create(_opt.style()));
 }
 
 void WinListe::showAdd()
@@ -105,10 +99,10 @@ void WinListe::showAdd()
   QWidget *Form = NULL;
   switch (_currentType)
   {
-    case TYPE_FILM: Form = _frmFilm;  break;
-    case TYPE_ZIK:  Form = _frmZik;   break;
-    case TYPE_BOOK: Form = _frmBook;  break;
-    default:        Form = NULL;      break;
+    case Media::eMTFilm: Form = _frmFilm;  break;
+    case Media::eMTZik:  Form = _frmZik;   break;
+    case Media::eMTBook: Form = _frmBook;  break;
+    default:             Form = NULL;      break;
   }
   if (Form)
     #ifdef Q_OS_SYMBIAN
@@ -124,9 +118,9 @@ void WinListe::showAddTo()
   if (Id < 0) return;
   switch (_currentType)
   {
-    case TYPE_ZIK:  _frmZik->addTo(Id);   break;
-    case TYPE_BOOK: _frmBook->addTo(Id);  break;
-    default:                              break;
+    case Media::eMTZik:  _frmZik->addTo(Id);   break;
+    case Media::eMTBook: _frmBook->addTo(Id);  break;
+    default:                                   break;
   }
   showAdd();
 }
@@ -149,9 +143,9 @@ void WinListe::showMod()
 
   switch (_currentType)
   {
-    case TYPE_FILM: _frmFilm->setVals(Id); break;
-    case TYPE_ZIK:  _frmZik->setVals(Id);  break;
-    case TYPE_BOOK: _frmBook->setVals(Id); break;
+    case Media::eMTFilm: _frmFilm->setVals(Id); break;
+    case Media::eMTZik:  _frmZik->setVals(Id);  break;
+    case Media::eMTBook: _frmBook->setVals(Id); break;
   }
   showAdd();
 }
@@ -169,7 +163,7 @@ void WinListe::delMedia()
   int Id = selectedId();
   if (Id >= 0)
   {
-    _listes->del_Media(Id);
+    _listes.remove(Id);
     refreshLst();
   }
   save();
@@ -179,22 +173,21 @@ int WinListe::selectedId() const
 {
   const int Id = _ui.listM->currentRow();
   int Idn = _ui.listM->count();
-  for (int i = _listes->nb_Media(); --i >= 0; )
-    if (_listes->get_Media(i)->get_type() == _currentType && --Idn == Id) return i;
+  for (int i = _listes.size(); --i >= 0; )
+    if (_listes[i]->type() == _currentType && --Idn == Id) return i;
   return -1;
 }
 
 bool WinListe::canAddToItem() const
 {
-  Media *TmpMedia = _listes->get_Media(selectedId());
-  if (TmpMedia == NULL)
+  if (selectedId() < 0 || selectedId() >= _listes.size())
     return false;
-  switch (TmpMedia->get_type())
+  switch (_listes[selectedId()]->type())
   {
-    case TYPE_ZIK:
-    case TYPE_BOOK:
+    case Media::eMTZik:
+    case Media::eMTBook:
       return true;
-    case TYPE_FILM:
+    case Media::eMTFilm:
     default:
       return false;
   }
@@ -203,174 +196,48 @@ bool WinListe::canAddToItem() const
 void WinListe::updateLst(const int type)
 {
   _currentType = type;
-  int Nb_Cd = 0;
-  int Nb_Dvd = 0;
-  int Nb_Elem = 0;
-  QString Status;
-  QString Line;
   _ui.listM->clear();
 
   //checkbox behaviour as options :)
-  _ui.actTypeFilms->setChecked(_currentType == TYPE_FILM);
-  _ui.actTypeZik->setChecked(_currentType == TYPE_ZIK);
-  _ui.actTypeBook->setChecked(_currentType == TYPE_BOOK);
+  _ui.actTypeFilms->setChecked(_currentType == Media::eMTFilm);
+  _ui.actTypeZik->setChecked(_currentType == Media::eMTZik);
+  _ui.actTypeBook->setChecked(_currentType == Media::eMTBook);
 
   _menu->updateMenu();
-  const int Nb_Media = _listes->nb_Media();
 
-  switch (_currentType)
-  {
-    case TYPE_FILM:
-      {
-        Film *TmpFilm;
-        Status.append("Film: ");
-        for (int i = 0; i < Nb_Media; i++)
-        {
-          TmpFilm = (Film*)_listes->get_Media(i);
-          if (TmpFilm->get_type() == TYPE_FILM)
-          {
-            Nb_Elem++;
-            Nb_Cd += TmpFilm->get_nbCd();
-            Nb_Dvd += TmpFilm->get_nbDvd();
-            Line = TmpFilm->get_nom();
-            if (TmpFilm->get_nbCd() > 0)
-              Line.append(QString(" (%1CD)").
-                arg(QString::number(TmpFilm->get_nbCd())));
-            if (TmpFilm->get_nbDvd() > 0)
-              Line.append(QString(" (%1DVD)").
-                arg(QString::number(TmpFilm->get_nbDvd())));
-            if (_moreInfo)
-            {
-              if (TmpFilm->get_idBoite() > 0)
-                Line.append(QString(" [#%1]").
-                  arg(QString::number(
-                  TmpFilm->get_idBoite())));
-              switch (TmpFilm->get_qualite())
-              {
-                case Film::eDVDRip:       Line.append(" [DvdRip]"); break;
-                case Film::eScreener:     Line.append(" [Scr]");    break;
-                case Film::eDVD:          Line.append(" [Dvd]");    break;
-                case Film::eTVRip:        Line.append(" [TvRip]");  break;
-                case Film::ePub:          Line.append(" [Pub]");    break;
-                case Film::eDVDScreener:  Line.append(" [DvdScr]"); break;
-                case Film::eVCD:          Line.append(" [Vcd]");    break;
-              }
-              switch (TmpFilm->get_genre())
-              {
-                case Film::eFilm:
-                  Line.append(" <Film>");         break;
-                case Film::eLive:
-                  Line.append(" <Concert>");      break;
-                case Film::eSpectacle:
-                  Line.append(" <Spectacle>");    break;
-                case Film::eManga:
-                  Line.append(" <Manga>");        break;
-                case Film::eAnime:
-                  Line.append(" <Dessin Anime>"); break;
-                case Film::eSerie:
-                  Line.append(" <Serie>");        break;
-                case Film::eDocumentaire:
-                  Line.append(" <Documentaire>"); break;
-              }
-            }
-            _ui.listM->addItem(Line);
-          }
-        }
-        Status.append(QString("%1 => %2CD + %3DVD").
-          arg(QString::number(Nb_Elem)).
-          arg(QString::number(Nb_Cd)).
-          arg(QString::number(Nb_Dvd)));
-        _lblStat.setText(Status);
-      }
-      break;
-    case TYPE_ZIK:
-      {
-        Zik *TmpZik;
-        Status.append("Zik: ");
-        _lblStat.setText("Zik: ");
-        for (int i = 0; i < Nb_Media; i++)
-        {
-          TmpZik = (Zik*)_listes->get_Media(i);
-          if (TmpZik->get_type() == TYPE_ZIK)
-          {
-            Nb_Elem++;
-            Nb_Cd += TmpZik->get_nbCd();
-            Line = TmpZik->get_artiste();
-            Line.append(" - ");
-            Line.append(TmpZik->get_titre());
-            if (TmpZik->get_nbCd() > 0)
-              Line.append(QString(" (%1CD)").
-                arg(QString::number(TmpZik->get_nbCd())));
-            if (_moreInfo && TmpZik->get_idBoite() > 0)
-              Line.append(QString(" [#%1]").
-                arg(QString::number(TmpZik->get_idBoite())));
-            _ui.listM->addItem(Line);
-          }
-        }
-        Status.append(QString("%1 => %2CD").
-          arg(QString::number(Nb_Elem)).
-          arg(QString::number(Nb_Cd)));
-        _lblStat.setText(Status);
-      }
-      break;
-    case TYPE_BOOK:
-      {
-        Book *TmpBook;
-        Status.append("Livres: ");
-        _lblStat.setText("Livres: ");
-        for (int i = 0; i < Nb_Media; i++)
-        {
-          TmpBook = (Book*)_listes->get_Media(i);
-          if (TmpBook->get_type() == TYPE_BOOK)
-          {
-            Nb_Elem++;
-            Line = TmpBook->get_auteur();
-            Line.append(" - ");
-            Line.append(TmpBook->get_titre());
-            if (_moreInfo)
-              switch (TmpBook->get_format())
-              {
-                case Book::ePapier:  Line.append(" [papier]"); break;
-                case Book::eNumeric: Line.append(" [e-book]"); break;
-              }
-            _ui.listM->addItem(Line);
-          }
-        }
-        Status.append(QString::number(Nb_Elem));
-        _lblStat.setText(Status);
-      }
-      break;
-    default:
-      break;
-  }
+  foreach (const Media *TmpM, _listes)
+    if (TmpM->type() == _currentType)
+      _ui.listM->addItem(TmpM->displayable(_moreInfo));
+
   _menu->updateMenu();
+  _lblStat.setText("Done!");
 }
 
 void WinListe::updateLstFromMenu()
 {
   const QObject *Sender = sender();
   if (Sender == _ui.actTypeFilms)
-    updateLst(TYPE_FILM);
+    updateLst(Media::eMTFilm);
   if (Sender == _ui.actTypeZik)
-    updateLst(TYPE_ZIK);
+    updateLst(Media::eMTZik);
   if (Sender == _ui.actTypeBook)
-    updateLst(TYPE_BOOK);
+    updateLst(Media::eMTBook);
 }
 
 void WinListe::sortList()
 {
-  sortList(-1);
+  sortList(Collection::eSTUnsorted);
 }
 
-void WinListe::sortList(const int type)
+void WinListe::sortList(const Collection::ESortType type)
 {
-  const int Type = (type >= 0) ? type : _opt->get_sortType();
+  const Collection::ESortType Type((type != Collection::eSTUnsorted) ? type : _opt.sortType());
 
   // trie de la liste
-  _listes->sort_Media(Type);
+  _listes.sort(Type);
   refreshLst();
 
   //sauvegarde dans les options
-  _opt->set_sortType(Type);
-  _opt->save();
+  _opt.setSortType(Type);
+  _opt.save();
 }

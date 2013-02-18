@@ -58,16 +58,16 @@ void WinZik::confirm()
   }
 
   //affectation des valeurs
-  Zik* TmpZ = (_modif < 0)
-              ? _ctrl->_listes->add_Zik()
-              : (Zik*)_ctrl->_listes->get_Media(_modif);
-  TmpZ->set_artiste(_ui.txtArtiste->text());
-  TmpZ->set_titre(_ui.txtTitre->text());
-  TmpZ->set_nbCd(_ui.spinNbCd->value());
-  TmpZ->set_idBoite(_ui.spinIdBoite->value());
+  Zik *TmpZ((_modif < 0)
+            ? _ctrl->_listes.addZik()
+            : (Zik*)_ctrl->_listes[_modif]);
+  TmpZ->setArtist(_ui.txtArtiste->text());
+  TmpZ->setTitle(_ui.txtTitre->text());
+  TmpZ->setNbCd(_ui.spinNbCd->value());
+  TmpZ->setIdBoite(_ui.spinIdBoite->value());
   if (_modif < 0)
-    TmpZ->set_num(_ctrl->_listes->nextref_Media(TYPE_ZIK));
-  TmpZ->set_date(_ui.date->date().toString("yyyyMMdd"));
+    TmpZ->setNum(_ctrl->_listes.nextref(Media::eMTZik));
+  TmpZ->setDate(_ui.date->date().toString("yyyyMMdd"));
 
   //trie
   _ctrl->sortList();
@@ -82,15 +82,15 @@ void WinZik::confirm()
 void WinZik::setVals(const int idn)
 {
   //verif de l'id
-  if ((idn < 0) or (idn >= _ctrl->_listes->nb_Media())) return;
+  if ((idn < 0) or (idn >= _ctrl->_listes.size())) return;
 
   //recup des infos du media
-  Zik* TmpZ = (Zik*)_ctrl->_listes->get_Media(idn);
-  _ui.txtArtiste->setText(TmpZ->get_artiste());
-  _ui.txtTitre->setText(TmpZ->get_titre());
-  _ui.spinNbCd->setValue(TmpZ->get_nbCd());
-  _ui.spinIdBoite->setValue(TmpZ->get_idBoite());
-  _ui.date->setDate(QDate::fromString(TmpZ->get_date(), "yyyyMMdd"));
+  const Zik &TmpZ(*(Zik*)_ctrl->_listes[idn]);
+  _ui.txtArtiste->setText(TmpZ.artist());
+  _ui.txtTitre->setText(TmpZ.title());
+  _ui.spinNbCd->setValue(TmpZ.nbCd());
+  _ui.spinIdBoite->setValue(TmpZ.idBoite());
+  _ui.date->setDate(QDate::fromString(TmpZ.date(), "yyyyMMdd"));
 
   //definition du mode modif
   _modif = idn;
@@ -99,10 +99,10 @@ void WinZik::setVals(const int idn)
 void WinZik::addTo(const int idn)
 {
   //verif de l'id
-  if ((idn < 0) or (idn >= _ctrl->_listes->nb_Media())) return;
+  if ((idn < 0) or (idn >= _ctrl->_listes.size())) return;
 
   //recup des infos du media
-  _ui.txtArtiste->setText(((Zik*)_ctrl->_listes->get_Media(idn))->get_artiste());
+  _ui.txtArtiste->setText((*(Zik*)_ctrl->_listes[idn]).artist());
 
   // focus
   _ui.txtTitre->setFocus();
