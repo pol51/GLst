@@ -1,6 +1,6 @@
 #include <QtWidgets/QApplication>
 
-#include <winListe.h>
+#include <ui/winListe.h>
 
 int main(int argc, char * argv[])
 {

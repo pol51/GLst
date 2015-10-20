@@ -1,7 +1,7 @@
 #ifndef _ZIK_H
 #define _ZIK_H
 
-#include <gestion/Media.h>
+#include "Media.h"
 
 //Item de musique
 class Zik : public Media

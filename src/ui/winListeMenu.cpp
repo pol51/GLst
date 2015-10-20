@@ -1,8 +1,8 @@
 #include "winListeMenu.h"
 
-#include <winListe.h>
+#include "winListe.h"
 
-#include <gestion/Options.h>
+#include <core/Options.h>
 
 WinListeMenu::WinListeMenu(WinListe *parent) :
   QMenu(parent),

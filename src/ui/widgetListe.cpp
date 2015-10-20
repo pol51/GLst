@@ -1,7 +1,7 @@
 #include "widgetListe.h"
 
-#include <winListe.h>
-#include <winListeMenu.h>
+#include "winListe.h"
+#include "winListeMenu.h"
 
 #include <QtGui/QMouseEvent>
 

@@ -1,10 +1,10 @@
 #include <QtWidgets/QMessageBox>
 
-#include <winFilm.h>
-#include <winListe.h>
+#include "winFilm.h"
+#include "winListe.h"
 
-#include <gestion/Film.h>
-#include <gestion/Collection.h>
+#include <core/Film.h>
+#include <core/Collection.h>
 
 WinFilm::WinFilm(WinListe *ctrl, QWidget *parent) :
   QWidget(parent),

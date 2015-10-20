@@ -1,16 +1,16 @@
 #include "winListe.h"
 
-#include <winFilm.h>
-#include <winZik.h>
-#include <winBook.h>
-#include <winOptions.h>
-#include <winListeMenu.h>
-#include <widgetListe.h>
+#include "winFilm.h"
+#include "winZik.h"
+#include "winBook.h"
+#include "winOptions.h"
+#include "winListeMenu.h"
+#include "widgetListe.h"
 
-#include <gestion/Utils.h>
-#include <gestion/Options.h>
-#include <gestion/Acces.h>
-#include <gestion/Acces_HTML.h>
+#include <core/Utils.h>
+#include <core/Options.h>
+#include <core/Acces.h>
+#include <core/Acces_HTML.h>
 
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QStyleFactory>
@@ -46,8 +46,7 @@ WinListe::WinListe(QWidget *parent) :
   refreshStyle();
 
   //evenements
-  connect(_ui.listM, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
-          this, SLOT(showMod()));
+  connect(_ui.listM, &QListWidget::itemDoubleClicked, this, &WinListe::showMod);
 
   _ui.actFind->setVisible(false);
 

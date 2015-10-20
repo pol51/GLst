@@ -3,7 +3,7 @@
 
 #include <ui_Zik.h>
 
-#include <gestion/Zik.h>
+#include <core/Zik.h>
 
 class WinListe;
 

@@ -1,9 +1,9 @@
 #ifndef _ACCES_HTML_H
 #define _ACCES_HTML_H
 
-#include <QString>
+#include <QtCore/QString>
 
-#include <gestion/Acces.h>
+#include "Acces.h"
 
 class Collection;
 class Media;

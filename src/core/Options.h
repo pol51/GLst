@@ -1,9 +1,9 @@
 #ifndef _OPTIONS_H
 #define _OPTIONS_H
 
-#include <QString>
+#include <QtCore/QString>
 
-#include <gestion/Collection.h>
+#include "Collection.h"
 
 #define NB_OPTIONS 3
 

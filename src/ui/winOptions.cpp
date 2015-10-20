@@ -3,11 +3,11 @@
 #include <QtWidgets/QFileDialog>
 #include <qt5/QtWidgets/QComboBox>
 
-#include <winOptions.h>
-#include <winListe.h>
+#include "winOptions.h"
+#include "winListe.h"
 
-#include <gestion/Options.h>
-#include <gestion/Collection.h>
+#include <core/Options.h>
+#include <core/Collection.h>
 
 WinOptions::WinOptions(WinListe *ctrl, QWidget *parent) :
   QWidget(parent),

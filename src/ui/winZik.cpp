@@ -1,10 +1,10 @@
 #include <QtWidgets/QMessageBox>
 
-#include <winListe.h>
-#include <winZik.h>
+#include "winListe.h"
+#include "winZik.h"
 
-#include <gestion/Zik.h>
-#include <gestion/Collection.h>
+#include <core/Zik.h>
+#include <core/Collection.h>
 
 WinZik::WinZik(WinListe *ctrl, QWidget *parent) :
   QWidget(parent),

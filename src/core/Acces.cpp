@@ -1,9 +1,9 @@
 #include "Acces.h"
 
-#include <gestion/Collection.h>
-#include <gestion/Zik.h>
-#include <gestion/Film.h>
-#include <gestion/Book.h>
+#include "Collection.h"
+#include "Zik.h"
+#include "Film.h"
+#include "Book.h"
 
 #include <QtCore/QFile>
 #include <QtCore/QString>

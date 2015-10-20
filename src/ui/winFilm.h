@@ -3,7 +3,7 @@
 
 #include <ui_Film.h>
 
-#include <gestion/Film.h>
+#include <core/Film.h>
 
 class WinListe;
 

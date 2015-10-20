@@ -3,7 +3,7 @@
 
 #include <ui_Book.h>
 
-#include <gestion/Book.h>
+#include <core/Book.h>
 
 class WinListe;
 

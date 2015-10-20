@@ -1,9 +1,9 @@
 #include "Collection.h"
 
-#include <gestion/Media.h>
-#include <gestion/Book.h>
-#include <gestion/Film.h>
-#include <gestion/Zik.h>
+#include "Media.h"
+#include "Book.h"
+#include "Film.h"
+#include "Zik.h"
 
 #include <QtCore/QtCore>
 

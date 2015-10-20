@@ -6,9 +6,9 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QLabel>
 
-#include <gestion/Collection.h>
-#include <gestion/Acces_HTML.h>
-#include <gestion/Options.h>
+#include <core/Collection.h>
+#include <core/Acces_HTML.h>
+#include <core/Options.h>
 
 class WinFilm;
 class WinZik;
