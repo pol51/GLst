@@ -15,19 +15,36 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff/>
-   </iconset>
+    <normaloff>.</normaloff>.</iconset>
   </property>
   <layout class="QVBoxLayout">
    <property name="spacing">
     <number>6</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>9</number>
+   </property>
+   <property name="topMargin">
+    <number>9</number>
+   </property>
+   <property name="rightMargin">
+    <number>9</number>
+   </property>
+   <property name="bottomMargin">
     <number>9</number>
    </property>
    <item>
     <layout class="QGridLayout">
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <property name="spacing">
@@ -107,7 +124,16 @@
      <property name="spacing">
       <number>6</number>
      </property>
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
@@ -129,8 +155,8 @@
         <string>&amp;OK</string>
        </property>
        <property name="icon">
-        <iconset resource="../res/res.qrc">
-         <normaloff>:/icons/button/accept.svg</normaloff>:/icons/button/accept.svg</iconset>
+        <iconset>
+         <normaloff>:/images/accept.svg</normaloff>:/images/accept.svg</iconset>
        </property>
       </widget>
      </item>
@@ -140,8 +166,8 @@
         <string>&amp;Annuler</string>
        </property>
        <property name="icon">
-        <iconset resource="../res/res.qrc">
-         <normaloff>:/icons/button/cancel.svg</normaloff>:/icons/button/cancel.svg</iconset>
+        <iconset>
+         <normaloff>:/images/cancel.svg</normaloff>:/images/cancel.svg</iconset>
        </property>
       </widget>
      </item>
@@ -157,8 +183,5 @@
   <tabstop>okButton</tabstop>
   <tabstop>cancelButton</tabstop>
  </tabstops>
- <resources>
-  <include location="../res/res.qrc"/>
- </resources>
  <connections/>
 </ui>

@@ -17,8 +17,8 @@
    <string>MainWindow</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../res/res.qrc">
-    <normaloff>:/icons/button/edit.svg</normaloff>:/icons/button/edit.svg</iconset>
+   <iconset>
+    <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -68,8 +68,8 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actOptions">
    <property name="icon">
-    <iconset resource="../res/res.qrc">
-     <normaloff>:/icons/button/misc.svg</normaloff>:/icons/button/misc.svg</iconset>
+    <iconset>
+     <normaloff>:/images/misc.svg</normaloff>:/images/misc.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Options</string>
@@ -77,8 +77,8 @@
   </action>
   <action name="actQuit">
    <property name="icon">
-    <iconset resource="../res/res.qrc">
-     <normaloff>:/icons/button/finish.svg</normaloff>:/icons/button/finish.svg</iconset>
+    <iconset>
+     <normaloff>:/images/finish.svg</normaloff>:/images/finish.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Quitter</string>
@@ -86,8 +86,8 @@
   </action>
   <action name="actExHTML">
    <property name="icon">
-    <iconset resource="../res/res.qrc">
-     <normaloff>:/icons/button/www.svg</normaloff>:/icons/button/www.svg</iconset>
+    <iconset>
+     <normaloff>:/images/www.svg</normaloff>:/images/www.svg</iconset>
    </property>
    <property name="text">
     <string>&amp;Exporter</string>
@@ -98,7 +98,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Films</string>
+    <string>&amp;Films</string>
    </property>
   </action>
   <action name="actTypeZik">
@@ -106,7 +106,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Musique</string>
+    <string>&amp;Musique</string>
    </property>
   </action>
   <action name="actTypeBook">
@@ -114,7 +114,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Livres</string>
+    <string>&amp;Livres</string>
    </property>
   </action>
   <action name="actFind">
@@ -127,12 +127,9 @@
   <customwidget>
    <class>WidgetListe</class>
    <extends>QListWidget</extends>
-   <header>src/widgetListe.h</header>
+   <header>src/ui/widgetListe.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../res/res.qrc"/>
- </resources>
  <connections>
   <connection>
    <sender>actQuit</sender>

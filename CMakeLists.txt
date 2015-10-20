@@ -16,7 +16,6 @@ endif()
 
 # Qt5
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED)
@@ -35,10 +34,11 @@ file(APPEND ${gslt_images_qrc} "    </qresource>\n</RCC>")
 
 # Build
 file(GLOB_RECURSE glst_src src/*.cpp src/*.h)
-file(GLOB_RECURSE glst_ui src/ui/*.ui)
+file(GLOB_RECURSE glst_ui ui/*.ui)
 include_directories(AFTER SYSTEM src ${CMAKE_BINARY_DIR})
 
 qt5_add_resources(glst_rcc ${gslt_images_qrc})
+qt5_wrap_ui(glst_uic ${glst_ui})
 
 add_executable(${PROJECT_NAME} ${glst_src} ${glst_moc} ${glst_rcc} ${gslt_images_qrc} ${glst_images} ${glst_ui} ${glst_uic})
 target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui Qt5::Widgets)

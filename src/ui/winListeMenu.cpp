@@ -10,10 +10,10 @@ WinListeMenu::WinListeMenu(WinListe *parent) :
 {
   setTitle("Media");
 
-  _actAdd   = addAction(QIcon(":/icons/button/add.svg"), "&Ajouter");
-  _actAddTo = addAction(QIcon(":/icons/button/add.svg"), "A&jouter à  ...");
-  _actMod   = addAction(QIcon(":/icons/button/edit.svg"), "&Modifier");
-  _actDel   = addAction(QIcon(":/icons/button/remove.svg"), "&Supprimer");
+  _actAdd   = addAction(QIcon(":/images/add.svg"), "&Ajouter");
+  _actAddTo = addAction(QIcon(":/images/add.svg"), "A&jouter à  ...");
+  _actMod   = addAction(QIcon(":/images/edit.svg"), "&Modifier");
+  _actDel   = addAction(QIcon(":/images/remove.svg"), "&Supprimer");
   addSeparator();
   _actSortByNews = addAction("News");
   _actSortByNews->setCheckable(true);
