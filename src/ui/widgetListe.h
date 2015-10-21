@@ -10,10 +10,10 @@ class WidgetListe : public QListWidget
   Q_OBJECT
 
   private:
-    WinListe *_ctrl;
+    WinListe *_ctrl = NULL;
 
   public:
-    WidgetListe(QWidget *parent = NULL) : QListWidget(parent), _ctrl(NULL) {}
+    WidgetListe(QWidget *parent = NULL) : QListWidget(parent) {}
     virtual ~WidgetListe() {}
 
     void setCtrl(WinListe *ctrl = NULL) { _ctrl = ctrl; }

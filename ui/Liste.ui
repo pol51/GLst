@@ -17,7 +17,7 @@
    <string>MainWindow</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="../build/images.qrc">
     <normaloff>:/images/edit.svg</normaloff>:/images/edit.svg</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -47,7 +47,6 @@
     <property name="title">
      <string>&amp;Fichier</string>
     </property>
-    <addaction name="actFind"/>
     <addaction name="actExHTML"/>
     <addaction name="separator"/>
     <addaction name="actOptions"/>
@@ -68,7 +67,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actOptions">
    <property name="icon">
-    <iconset>
+    <iconset resource="../build/images.qrc">
      <normaloff>:/images/misc.svg</normaloff>:/images/misc.svg</iconset>
    </property>
    <property name="text">
@@ -77,7 +76,7 @@
   </action>
   <action name="actQuit">
    <property name="icon">
-    <iconset>
+    <iconset resource="../build/images.qrc">
      <normaloff>:/images/finish.svg</normaloff>:/images/finish.svg</iconset>
    </property>
    <property name="text">
@@ -86,7 +85,7 @@
   </action>
   <action name="actExHTML">
    <property name="icon">
-    <iconset>
+    <iconset resource="../build/images.qrc">
      <normaloff>:/images/www.svg</normaloff>:/images/www.svg</iconset>
    </property>
    <property name="text">
@@ -117,11 +116,6 @@
     <string>&amp;Livres</string>
    </property>
   </action>
-  <action name="actFind">
-   <property name="text">
-    <string>&amp;Rechercher</string>
-   </property>
-  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -130,6 +124,9 @@
    <header>src/ui/widgetListe.h</header>
   </customwidget>
  </customwidgets>
+ <resources>
+  <include location="../build/images.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>actQuit</sender>

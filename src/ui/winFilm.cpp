@@ -7,8 +7,7 @@
 #include <core/Collection.h>
 
 WinFilm::WinFilm(WinListe *ctrl, QWidget *parent) :
-  QWidget(parent),
-  _ctrl(ctrl), _modif(-1)
+  WinMedia(ctrl, parent)
 {
   _ui.setupUi(this);
 

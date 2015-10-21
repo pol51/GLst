@@ -4,14 +4,16 @@
 
 int main(int argc, char * argv[])
 {
-  QApplication myApp(argc,argv);
+  QApplication App(argc,argv);
+  App.setOrganizationName("PLab");
+  App.setApplicationName("GLst");
 
-  WinListe myListe;
+  WinListe Liste;
 
-  myListe.show();
-  myListe.refreshStyle();
-  myListe.load();
-  myListe.sortList();
+  Liste.show();
+  Liste.refreshStyle();
+  Liste.load();
+  Liste.sortList();
 
-  return myApp.exec();
+  return App.exec();
 }

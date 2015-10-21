@@ -28,7 +28,7 @@ WinOptions::WinOptions(WinListe *ctrl, QWidget *parent) :
 void WinOptions::resetFrm()
 {
   _ui.tabOptions->setCurrentIndex(0);
-  _ui.txtFilename->setText(_ctrl->_opt.liste());
+  _ui.txtFilename->setText(_ctrl->_opt.filename());
   _ui.cmbStyle->setCurrentIndex(_ui.cmbStyle->findText(_ctrl->_opt.style()));
 }
 
@@ -36,7 +36,7 @@ void WinOptions::searchFile()
 {
   _ui.txtFilename->setText(
     QFileDialog::getOpenFileName(this, tr("Listes"),
-                                 _ctrl->_opt.liste(),
+                                 _ctrl->_opt.filename(),
                                  tr("Fichiers listes (*.txt)")));
 }
 
@@ -54,11 +54,11 @@ void WinOptions::confirm()
   _ctrl->_opt.save();
 
   //fichier
-  if (_ctrl->_opt.liste() != _ui.txtFilename->text())
+  if (_ctrl->_opt.filename() != _ui.txtFilename->text())
   {
     _ctrl->save();
     _ctrl->_listes.clear();
-    _ctrl->_opt.setListe(_ui.txtFilename->text());
+    _ctrl->_opt.setFilename(_ui.txtFilename->text());
     _ctrl->load();
     _ctrl->sortList();
   }

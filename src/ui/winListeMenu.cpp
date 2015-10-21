@@ -17,7 +17,7 @@ WinListeMenu::WinListeMenu(WinListe *parent) :
   addSeparator();
   _actSortByNews = addAction("News");
   _actSortByNews->setCheckable(true);
-  _actSortByNews->setChecked(_ctrl->_opt.sortType() == Collection::eSTAlpha);
+  _actSortByNews->setChecked(_ctrl->_opt.sortType() == Collection::eSTDate);
   _actDisplayMore = addAction("More Info");
   _actDisplayMore->setCheckable(true);
 

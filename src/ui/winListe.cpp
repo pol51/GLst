@@ -16,48 +16,56 @@
 #include <QtWidgets/QStyleFactory>
 
 WinListe::WinListe(QWidget *parent) :
-  QMainWindow(parent),
-  _moreInfo(false), _currentType(Media::eMTFilm),
-  _opt(OPTIONS_FILE), _listDE(_listes), _listHTML(_listes)
+  QMainWindow(parent)
 {
   _ui.setupUi(this);
 
   setWindowTitle("GLst");
 
-  //initialisation des dialogues de saisie
-  _frmZik = new WinZik(this);
-  _frmFilm = new WinFilm(this);
-  _frmBook = new WinBook(this);
+  // init media forms
+  _frm[Media::eMTUnknown] = NULL;
+  _frm[Media::eMTZik]   = new WinZik(this);
+  _frm[Media::eMTFilm]  = new WinFilm(this);
+  _frm[Media::eMTBook]  = new WinBook(this);
 
-  //initialisation du dialogue d'optionss
+  // init settings form
   _frmOptions = new WinOptions(this);
 
-  //initialisation des options
-  if (_opt.load() != NB_OPTIONS) _opt.save();
-
-  //initialisation du menu des medias
+  // init media menu
   _menu = new WinListeMenu(this);
   _ui.menuBar->addMenu(_menu);
 
-  //attribution du controlleur de ui.listM
+  // set list controler
   _ui.listM->setCtrl(this);
 
-  //chargement du style
+  // load style
   refreshStyle();
 
-  //evenements
+  // group media type menu actions
+  QActionGroup *CurrentMediaActionGroup = new QActionGroup(this);
+  CurrentMediaActionGroup->addAction(_ui.actTypeFilms);
+  CurrentMediaActionGroup->addAction(_ui.actTypeZik);
+  CurrentMediaActionGroup->addAction(_ui.actTypeBook);
+
+  // check the current media type
+  switch (_opt.mediaType())
+  {
+    case Media::eMTFilm:  _ui.actTypeFilms->setChecked(true); break;
+    case Media::eMTZik:   _ui.actTypeZik->setChecked(true); break;
+    case Media::eMTBook:  _ui.actTypeBook->setChecked(true); break;
+  }
+
+  // events
   connect(_ui.listM, &QListWidget::itemDoubleClicked, this, &WinListe::showMod);
 
-  _ui.actFind->setVisible(false);
-
-  //evenements du menu
+  // menu events
   connect(_ui.actOptions,   &QAction::triggered,  this, &WinListe::showOptions);
   connect(_ui.actExHTML,    &QAction::triggered,  this, &WinListe::exportHTML);
   connect(_ui.actTypeFilms, &QAction::triggered,  this, &WinListe::updateLstFromMenu);
   connect(_ui.actTypeZik,   &QAction::triggered,  this, &WinListe::updateLstFromMenu);
   connect(_ui.actTypeBook,  &QAction::triggered,  this, &WinListe::updateLstFromMenu);
 
-  //initialisation de la status bar
+  // init status bar
   _ui.statusBar->addWidget(&_lblStat, 1);
   _lblStat.setText("Chargement...");
 
@@ -66,19 +74,19 @@ WinListe::WinListe(QWidget *parent) :
 
 void WinListe::save()
 {
-  _listDE.save(_opt.liste());
+  Acces(_listes).save(_opt.filename());
 }
 
 void WinListe::load()
 {
   _lblStat.setText("Chargement...");
-  _listDE.load(_opt.liste());
+  Acces(_listes).load(_opt.filename());
   refreshLst();
 }
 
 void WinListe::exportHTML()
 {
-  _listHTML.save("Listes.html");
+  Acces_HTML(_listes).save("Listes.html");
   refreshLst();
 }
 
@@ -95,32 +103,15 @@ void WinListe::refreshStyle()
 void WinListe::showAdd()
 {
   closeAll();
-  QWidget *Form = NULL;
-  switch (_currentType)
-  {
-    case Media::eMTFilm: Form = _frmFilm;  break;
-    case Media::eMTZik:  Form = _frmZik;   break;
-    case Media::eMTBook: Form = _frmBook;  break;
-    default:             Form = NULL;      break;
-  }
-  if (Form)
-    #ifdef Q_OS_SYMBIAN
-    Form->showMaximized();
-    #else
-    Form->show();
-    #endif
+  _frm[_opt.mediaType()]->show();
 }
 
 void WinListe::showAddTo()
 {
-  int Id = selectedId();
+  const int Id = selectedId();
   if (Id < 0) return;
-  switch (_currentType)
-  {
-    case Media::eMTZik:  _frmZik->addTo(Id);   break;
-    case Media::eMTBook: _frmBook->addTo(Id);  break;
-    default:                                   break;
-  }
+
+  _frm[_opt.mediaType()]->addTo(Id);
   showAdd();
 }
 
@@ -128,11 +119,7 @@ void WinListe::showOptions()
 {
   closeAll();
   _frmOptions->resetFrm();
-  #ifdef Q_OS_SYMBIAN
-  _frmOptions->showMaximized();
-  #else
   _frmOptions->show();
-  #endif
 }
 
 void WinListe::showMod()
@@ -140,20 +127,14 @@ void WinListe::showMod()
   int Id = selectedId();
   if (Id < 0) return;
 
-  switch (_currentType)
-  {
-    case Media::eMTFilm: _frmFilm->setVals(Id); break;
-    case Media::eMTZik:  _frmZik->setVals(Id);  break;
-    case Media::eMTBook: _frmBook->setVals(Id); break;
-  }
+  _frm[_opt.mediaType()]->setVals(Id);
   showAdd();
 }
 
 void WinListe::closeAll()
 {
-  _frmFilm->close();
-  _frmZik->close();
-  _frmBook->close();
+  for (WinMedia *win = _frm[Media::eMTMax-1]; win; --win)
+    win->close();
   _frmOptions->close();
 }
 
@@ -173,7 +154,7 @@ int WinListe::selectedId() const
   const int Id = _ui.listM->currentRow();
   int Idn = _ui.listM->count();
   for (int i = _listes.size(); --i >= 0; )
-    if (_listes[i]->type() == _currentType && --Idn == Id) return i;
+    if (_listes[i]->type() == _opt.mediaType() && --Idn == Id) return i;
   return -1;
 }
 
@@ -181,31 +162,18 @@ bool WinListe::canAddToItem() const
 {
   if (selectedId() < 0 || selectedId() >= _listes.size())
     return false;
-  switch (_listes[selectedId()]->type())
-  {
-    case Media::eMTZik:
-    case Media::eMTBook:
-      return true;
-    case Media::eMTFilm:
-    default:
-      return false;
-  }
+  return ((1<<_listes[selectedId()]->type()) & ((1<<Media::eMTZik) | (1<<Media::eMTBook)));
 }
 
-void WinListe::updateLst(const int type)
+void WinListe::updateLst(const Media::EMediaType type)
 {
-  _currentType = type;
+  _opt.setMediaType(type);
   _ui.listM->clear();
-
-  //checkbox behaviour as options :)
-  _ui.actTypeFilms->setChecked(_currentType == Media::eMTFilm);
-  _ui.actTypeZik->setChecked(_currentType == Media::eMTZik);
-  _ui.actTypeBook->setChecked(_currentType == Media::eMTBook);
 
   _menu->updateMenu();
 
   foreach (const Media *TmpM, _listes)
-    if (TmpM->type() == _currentType)
+    if (TmpM->type() == type)
       _ui.listM->addItem(TmpM->displayable(_moreInfo));
 
   _menu->updateMenu();
@@ -225,7 +193,7 @@ void WinListe::updateLstFromMenu()
 
 void WinListe::sortList()
 {
-  sortList(Collection::eSTUnsorted);
+  sortList(_opt.sortType());
 }
 
 void WinListe::sortList(const Collection::ESortType type)
@@ -236,7 +204,5 @@ void WinListe::sortList(const Collection::ESortType type)
   _listes.sort(Type);
   refreshLst();
 
-  //sauvegarde dans les options
   _opt.setSortType(Type);
-  _opt.save();
 }

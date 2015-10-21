@@ -7,17 +7,12 @@
 #include <QtWidgets/QLabel>
 
 #include <core/Collection.h>
-#include <core/Acces_HTML.h>
 #include <core/Options.h>
 
-class WinFilm;
-class WinZik;
-class WinBook;
+class WinMedia;
 class WinOptions;
 class WinListeMenu;
 class WidgetListe;
-
-#define OPTIONS_FILE "glst.cfg"
 
 class WinListe : public QMainWindow
 {
@@ -25,19 +20,14 @@ class WinListe : public QMainWindow
 
   private:
     Ui_mwListe _ui;
-    WinZik *_frmZik;
-    WinFilm *_frmFilm;
-    WinBook *_frmBook;
+    WinMedia *_frm[Media::eMTMax];
     WinOptions *_frmOptions;
     QLabel _lblStat;
-    bool _moreInfo;
-    int _currentType;
+    bool _moreInfo   = false;
 
   public:
     Options _opt;
     Collection _listes;
-    Acces _listDE;
-    Acces_HTML _listHTML;
     WinListeMenu *_menu;
 
   private:
@@ -53,13 +43,13 @@ class WinListe : public QMainWindow
     void delMedia();
 
   public:
-    WinListe(QWidget *parent = 0);
+    WinListe(QWidget *parent = NULL);
     bool canAddToItem() const;
 
   public slots:
-    void updateLst(const int type);
+    void updateLst(const Media::EMediaType type);
     void updateLstFromMenu();
-    void refreshLst() { updateLst(_currentType); }
+    void refreshLst() { updateLst(_opt.mediaType()); }
     void sortList();
     void sortList(const Collection::ESortType type);
     void changeStyle(const QString &styleName);

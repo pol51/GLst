@@ -5,53 +5,34 @@
 
 #include "Collection.h"
 
-#define NB_OPTIONS 3
-
 //Gestion des options
 class Options
 {
   protected:
-    //Nom du fichier des options
-    QString _filename;
     //Style (thème)
     QString _style = "Fusion";
     //Nom du fichier contenant les listes
-    QString _liste = "listes.txt";
+    QString _filename = "listes.txt";
     //Type de trie utilisé
     Collection::ESortType _sortType = Collection::eSTUnsorted;
+    //Type de media affiché
+    Media::EMediaType _mediaType = Media::eMTFilm;
 
   public:
-    //Constructeur
-    Options(const QString &filename) : _filename(filename) {}
+    Options() { load(); }
+    ~Options() { save(); }
 
-    //Accesseur en lecture sur le nom du fichier
-    const QString &filename() const { return _filename; }
-
-    //Accesseur en lecture sur le style
     const QString &style() const { return _style; }
-
-    //Accesseur en lecture sur le nom du fichier des listes
-    const QString &liste() const { return _liste; }
-
-    //Accesseur en lecture sur le type de trie utilisé
+    const QString &filename() const { return _filename; }
     Collection::ESortType sortType() const { return _sortType; }
+    Media::EMediaType mediaType() const { return _mediaType; }
 
-    //Accesseur en ecriture sur le nom du fichier
-    void setFilename(const QString &value) { _filename = value; }
-
-    //Accesseur en ecriture sur le style
     void setStyle(const QString &value) { _style = value; }
-
-    //Accesseur en ecriture sur le nom du fichier des listes
-    void setListe(const QString &value) { _liste = value; }
-
-    //Accesseur en écriture sur le type de trie utilisé
+    void setFilename(const QString &value) { _filename = value; }
     void setSortType(const Collection::ESortType value) { _sortType = value; }
+    void setMediaType(const Media::EMediaType value) { _mediaType = value; }
 
-    //Ecrit le fichier d'options
-    int save() const;
-
-    //Lit le fichier d'options
-    int load();
+    void save() const;
+    void load();
 };
 #endif

@@ -7,8 +7,7 @@
 #include <core/Collection.h>
 
 WinZik::WinZik(WinListe *ctrl, QWidget *parent) :
-  QWidget(parent),
-  _ctrl(ctrl), _modif(-1)
+  WinMedia(ctrl, parent)
 {
   _ui.setupUi(this);
 
