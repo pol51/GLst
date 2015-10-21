@@ -14,7 +14,7 @@ class WinOptions : public QWidget
     WinListe *_ctrl;
 
   public:
-    WinOptions(WinListe *ctrl, QWidget *parent = 0);
+    WinOptions(WinListe *ctrl, QWidget *parent = NULL);
 
   public slots:
     void searchFile();

@@ -65,10 +65,7 @@ WinListe::WinListe(QWidget *parent) :
   connect(_ui.actTypeZik,   &QAction::triggered,  this, &WinListe::updateLstFromMenu);
   connect(_ui.actTypeBook,  &QAction::triggered,  this, &WinListe::updateLstFromMenu);
 
-  // init status bar
-  _ui.statusBar->addWidget(&_lblStat, 1);
-  _lblStat.setText("Chargement...");
-
+  // update menu
   _menu->updateMenu();
 }
 
@@ -79,7 +76,6 @@ void WinListe::save()
 
 void WinListe::load()
 {
-  _lblStat.setText("Chargement...");
   Acces(_listes).load(_opt.filename());
   refreshLst();
 }
@@ -102,7 +98,7 @@ void WinListe::refreshStyle()
 
 void WinListe::showAdd()
 {
-  closeAll();
+  emit closeChildWin();
   _frm[_opt.mediaType()]->show();
 }
 
@@ -117,7 +113,7 @@ void WinListe::showAddTo()
 
 void WinListe::showOptions()
 {
-  closeAll();
+  emit closeChildWin();
   _frmOptions->resetFrm();
   _frmOptions->show();
 }
@@ -129,13 +125,6 @@ void WinListe::showMod()
 
   _frm[_opt.mediaType()]->setVals(Id);
   showAdd();
-}
-
-void WinListe::closeAll()
-{
-  for (WinMedia *win = _frm[Media::eMTMax-1]; win; --win)
-    win->close();
-  _frmOptions->close();
 }
 
 void WinListe::delMedia()
@@ -177,7 +166,6 @@ void WinListe::updateLst(const Media::EMediaType type)
       _ui.listM->addItem(TmpM->displayable(_moreInfo));
 
   _menu->updateMenu();
-  _lblStat.setText("Done!");
 }
 
 void WinListe::updateLstFromMenu()

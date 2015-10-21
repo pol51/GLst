@@ -4,7 +4,6 @@
 #include <ui_Liste.h>
 
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QLabel>
 
 #include <core/Collection.h>
 #include <core/Options.h>
@@ -22,8 +21,7 @@ class WinListe : public QMainWindow
     Ui_mwListe _ui;
     WinMedia *_frm[Media::eMTMax];
     WinOptions *_frmOptions;
-    QLabel _lblStat;
-    bool _moreInfo   = false;
+    bool _moreInfo = false;
 
   public:
     Options _opt;
@@ -38,7 +36,6 @@ class WinListe : public QMainWindow
     void showOptions();
     void showAdd();
     void showAddTo();
-    void closeAll();
     void showMod();
     void delMedia();
 
@@ -58,6 +55,9 @@ class WinListe : public QMainWindow
     void save();
     void load();
     void displayMoreInfo(const bool value) { _moreInfo = value; refreshLst(); }
+
+  signals:
+    void closeChildWin();
 };
 
 #endif

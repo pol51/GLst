@@ -16,9 +16,10 @@ WinOptions::WinOptions(WinListe *ctrl, QWidget *parent) :
   _ui.setupUi(this);
 
   //evenements
-  connect(_ui.btnCancel,      &QPushButton::clicked, this,  &WinOptions::abandon);
-  connect(_ui.btnOk,          &QPushButton::clicked, this,  &WinOptions::confirm);
-  connect(_ui.btnSearchFile,  &QPushButton::clicked, this,  &WinOptions::searchFile);
+  connect(ctrl,               &WinListe::closeChildWin, this, &QWidget::close);
+  connect(_ui.btnCancel,      &QPushButton::clicked,    this,  &WinOptions::abandon);
+  connect(_ui.btnOk,          &QPushButton::clicked,    this,  &WinOptions::confirm);
+  connect(_ui.btnSearchFile,  &QPushButton::clicked,    this,  &WinOptions::searchFile);
   connect(_ui.cmbStyle,       static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::activated), _ctrl, &WinListe::changeStyle);
 
   //affectation des valeurs aux éléments
